@@ -12,19 +12,55 @@
 <body>
 
 <div class="content" id="main-content">
-    <div class="container1">
-        <div class="fieldStat">
+    <div class="greeting">
+        <h1 id="grettingUser">Hello, user!</h1>
+    </div>
+
+    <div class="mainContainer">
+        <div class="statContainer">
             <h1>Number of current fields</h1>
-            <h2 id="fieldNum">Test</h2> 
+            <h2 id="fieldNum"></h2> 
+        </div>
+    
+        <div class="statContainer">
+            <h1>Crops</h1><br>
+            <h2 id="cropNum">Test</h2> 
         </div>
 
-        
-    </div>
-    <div class="container1">
-        <div class="cropStat">
-            <h1>Crops</h1>
+        <div class="statContainer">
+            <h1>Tasks In Progress</h1>
+            <h2 id="cropNum">Test</h2> 
         </div>
+
+        <div class="statContainer">
+            <h1>Tasks Completed</h1>
+            <h2 id="cropNum">Test</h2> 
+        </div>
+
     </div>
+
+    <div class="container1">
+        <button class="add-pest-btn">Add Field</button>    
+        <div class="row">
+            <div class="col-12"> 
+                <div class="data_table">  
+                    <table id="example" class="table table-striped table-bordered">
+                        <thead class="table-dark">
+                            <tr> 
+                                <th>Field Name</th>
+                                <th>Crop</th>
+                                <th>UserID</th>
+                            </tr> 
+                        </thead>  
+                        <tbody id="equipment-table"> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <!--add overlay here-->
 </div>
 
 </body>

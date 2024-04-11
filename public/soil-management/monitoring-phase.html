@@ -1,1 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css"> 
+<script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>
+</head>
+<body>
 
+<div class="content" id="main-content">
+  <div class="container1">
+    <h2>Soil Nutrients Monitoring</h2>
+    <div class="input-form">
+      <input type="text" id="searchbar" placeholder="Search" name="searchbar">
+      <button id="search-button" class="searchicon"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <input type="text" id="startdate" placeholder="Start" name="startbar" style="margin-left: 20px;">
+      <button id="start-button" class="searchicon"><i class="fa-solid fa-calendar"></i></button>
+      <input type="text" id="enddate" placeholder="End" name="endbar" style="margin-left: 20px;">
+      <button id="end-button" class="searchicon"><i class="fa-solid fa-calendar"></i></button>
+      <input type="submit" id="update" value="Update" name="update" style="margin-left: 20px;">
+    </div>
+    <button class="add-task">Add Nutrients</button>   
+    <div id="overlay" class="overlay"></div> 
+
+    <div id="popupN" class="popupN">
+        <span class="close" onclick="closePopupN()">&times;</span>
+        <h2>Add Nutrients</h2>
+        <form id="nutrientForm" enctype="multipart/form-data" >
+          <label for="datesampled" class="custom-label">Date Sampled:</label>
+          <input type="text" id="datesampled" class="custom-input-n">
+          <button id="end-button" class="searchicon"><i class="fa-solid fa-calendar"></i></button>
+          <div style="display:flex;">
+            <div>
+              <label for="nitrogen" class="custom-label">Nitrogen (N):</label>
+              <input type="text" id="nitrogen" class="custom-input-n">
+              <label for="potassium" class="custom-label">Potassium (K):</label>
+              <input type="text" id="potassium" class="custom-input-n">
+              <label for="sulfur" class="custom-label">Sulfur (S):</label>
+              <input type="text" id="sulfur" class="custom-input-n">
+              <label for="boron" class="custom-label">Boron (B):</label>
+              <input type="text" id="boron" class="custom-input-n">
+            </div>
+            <div style="padding-left: 10px;">
+              <label for="phosphorus" class="custom-label">Phosphorus (P):</label>
+              <input type="text" id="phosphorus" class="custom-input-n">
+              <label for="magnesium" class="custom-label">Magnesium (Mg):</label>
+              <input type="text" id="magnesium" class="custom-input-n">
+              <label for="calcium" class="custom-label">Calcium (Ca):</label>
+              <input type="text" id="calcium" class="custom-input-n">
+              <label for="copper" class="custom-label">Copper (Cu):</label>
+              <input type="text" id="copper" class="custom-input-n">
+            </div>
+          </div>
+          <button class="custom-button" type="submit">Add Nutrients</button>
+        </form>
+    </div> 
+    <div class="row">
+        <div class="col-12">
+            <div class="data_table">  
+                <button id="tableid" class="tableid" onclick="displayTable()" autofocus>Table</button><button id="visualid" class="visualid" onclick="displayVis()">Visualization</button>
+                <div id="table-content">
+                <table id="example" class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr> 
+                          <th>Field</th>
+                          <th>N</th>
+                          <th>K</th>
+                          <th>S</th>
+                          <th>B</th>
+                          <th>P</th>
+                          <th>Mg</th>
+                          <th>Ca</th>
+                          <th>Cu</th>
+                          <th>Date Sampled</th>
+                        </tr> 
+                    </thead>  
+                    <tbody id="equipment-table"> 
+                    </tbody>
+                </table>
+                </div>
+                <div id="visualization-content"">
+                  <div id="togglebut" style="padding-left: 800px; display: none;"><button style="width: 50px;height: 30px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" onclick="displayGraph()"><i class="fa-solid fa-chart-line"></i></button><button style="width: 50px;height: 30px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;" onclick="displayChart()"><i class="fa-solid fa-chart-pie"></i></button></div>
+                  <div id="chart-container-1" style="display: none;padding-top: 5px;">
+                    <div style="display: flex;padding-left: 200px;">
+                      <div>North<br><div style="padding-right: 100px;"><img src="dummy graph.png" width="260px" height="139px"></div></div>
+                      <div>South<br><div><img src="dummy graph.png" width="260px" height="139px"></div></div>
+                    </div>
+                    <div style="display: flex;padding-left:200px;">
+                      <div>East<br><div style="padding-right: 100px;"><img src="dummy graph.png" width="260px" height="139px"></div></div>
+                      <div>West<br><div><img src="dummy graph.png" width="260px" height="139px"></div></div>
+                    </div>
+                  </div>
+                  <div id="chart-container-2" style="display: none;padding-top: 5px;">
+                    <div style="display: flex;padding-left: 200px;">
+                      <div>North<br><div style="padding-right: 170px;"><img src="pie-chart.png" width="140px" height="130px"></div></div>
+                      <div>South<br><div><img src="pie-chart.png" width="140px" height="140px"></div></div>
+                    </div>
+                    <div style="display: flex;padding-left: 200px;">
+                      <div>East<br><div style="padding-right: 170px;"><img src="pie-chart.png" width="140px" height="130px"></div></div>
+                      <div>West<br><div><img src="pie-chart.png" width="140px" height="140px"></div></div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+  </div>
+</div>
+
+<script>
+  window.onload = function() {
+    var monitoringLink = document.querySelector('a[href="monitoring-phase.html"]');
+    
+    if (monitoringLink) {
+      monitoringLink.click();
+    }
+  };
+</script>
+
+</body>
+</html>

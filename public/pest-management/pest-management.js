@@ -1,3 +1,58 @@
+function fetchPestData() {
+    return new Promise((resolve, reject) => {  
+        fetch('/getPestInfo', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
+
+
+fetchPestData()
+.then(data => { 
+    // adding some delay to ensure jquery is fully loaded 
+    setTimeout(function() {
+
+        //the table
+        var table = $('#example').DataTable(); 
+        table.destroy();
+
+        // Map data and create rows 
+        data.forEach(item => {
+            const row = `<tr> 
+                <td>${item.currentPest}</td>  
+                <td>${item.pest_description}</td>
+                <td>${item.treatmentPlan}</td>
+                <td>${item.treatment_description}</td> 
+                <td>${item.amountApplied}</td> 
+            </tr>`;
+
+            // Add the row to the table
+            table.row.add($(row).get(0));
+        }); 
+        // Redraw the table  
+        table.draw();
+    }, 100);
+}) 
+.catch(error => {
+    console.error('Error fetching equipment data:', error);
+});
+
 function newPage(name) {
     console.log(name);
 }
@@ -17,13 +72,13 @@ function closePopup() {
     document.getElementById('overlay').style.display = 'none';
 }
 
-// submit form original 
+// submit form
 document.getElementById('pestForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
     
     // Fetch form inputs
     const name = document.getElementById('name').value.trim();
-    const field = document.getElementById('field').value.trim(); 
+    const field = document.getElementById('field').value.trim();
     const pestDesc = document.getElementById('pestDesc').value.trim();
     const treatment = document.getElementById('treatment').value.trim();
     const treatmentDesc = document.getElementById('treatmentDesc').value.trim();
@@ -43,23 +98,6 @@ document.getElementById('pestForm').addEventListener('submit', function(event) {
 
     fetchUserID()
     .then(userID => { 
-        // Construct form data to be sent to the API
-        // const formData = new FormData(); 
-        // console.log('User ID fetched:', userID);
-        
-        // formData.append('name', name);
-        // formData.append('treatment', treatment);
-        // formData.append('field', field);
-        // formData.append('product', product);
-        // formData.append('inventoryUsed', inventoryUsed);
-        // formData.append('treatmentStartDate', treatmentStartDate);
-        // formData.append('pestDesc', pestDesc);
-        // formData.append('pic', pic);
-        // formData.append('amount', amount);
-        // formData.append('treatmentDesc', treatmentDesc);
-        
-        // console.log('All data appended');
-
         // Submit the form data to the API 
         return fetch('/submit_pest', {
             method: 'POST',
@@ -84,8 +122,6 @@ document.getElementById('pestForm').addEventListener('submit', function(event) {
     }); 
 
 });
-
-
 
 function fetchUserID() {
     return new Promise((resolve, reject) => {  

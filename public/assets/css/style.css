@@ -59,6 +59,8 @@ color: gray; }
     width: 200px;
     height: 200px;
     align-items: center;
+
+    border-radius: 20px;
 }
 
 .statContainer h1{
@@ -68,9 +70,18 @@ color: gray; }
     margin-top: 10px;
 }
 
+.statContainer .content-wrapper{
+    display: flex;
+    align-items: center;
+}
+
 .statContainer h2{
     font-size: 20px;
     margin-left: 10px;
+}
+
+.statContainer a {
+    margin-left: 50px; /* Adjust margin as needed */
 }
 
 ol,

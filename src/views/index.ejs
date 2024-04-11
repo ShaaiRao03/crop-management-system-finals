@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>  
+    <title>Crop Management System</title>
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="css/bootstrap.min.css">    
+    <link rel="stylesheet" href="css/datatables.min.css">  
+    <link rel="stylesheet" href="css/style.css">    
+     
+  </head> 
+  <body> 
+    
+    <div class="wrapper d-flex align-items-stretch">  
+      <nav id="sidebar"> 
+        <div class="p-4 pt-5">
+            <!-- <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/logo.jpg);"></a> -->
+            <ul class="list-unstyled components mb-5"> 
+              <li class="active">
+                 <a href="#" onclick="changeActive(this.parentNode,false);"><i class="fa-solid fa-table-columns"></i> <span style="margin-left: 15px;">Dashboard</span></a> 
+              </li>
+              <li>
+                <a href="#" onclick="changeActive(this.parentNode,false);"><i class="fa-solid fa-list-check"></i> <span style="margin-left: 15px;">Task Management</span></a> 
+              </li> 
+              <li>
+                <a href="#" onclick="changeActive(this.parentNode,false,'pest-management/pest-management.html' , 'pest-management/pest-management.js');"><i class="fa-solid fa-bug-slash"></i> <span style="margin-left: 15px;">Pest Management</span></a> 
+
+              </li>  
+              <li>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onclick="changeActive(this.parentNode,true);"><i class="fa-solid fa-solar-panel"></i><span style="margin-left: 15px;">Soil Management</span></a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode);">Initiation Phase</a></li>
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode);">Monitoring Phase</a></li>
+                </ul>
+              </li>
+              <li> 
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onclick="changeActive(this.parentNode,true,'resource-allocation/equipment.html' , 'resource-allocation/equipment.js');"><i class="fa-solid fa-key"></i><span style="margin-left: 15px;">Resource Allocation</span></a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode,'resource-allocation/equipment.html' , 'resource-allocation/equipment.js');">Equipment</a></li>
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode);">Inventory</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="#" onclick="changeActive(this.parentNode,false,'resource-allocation/equipment.html' , 'resource-allocation/equipment.js');"><i class="fa-solid fa-book"></i><span style="margin-left: 15px;"></span> Tutorials</a>
+              </li>
+              <li>
+                <a href="#"  onclick="changeActive(this.parentNode,false);"><i class="fa-solid fa-gear"></i> <span style="margin-left: 15px;"></span>Settings</a>
+              </li> 
+            </ul>
+
+            <!-- put this in settings later-->
+            <div>
+              <button onclick="logout()" class="log-out-button"> Log out</button>
+              <!-- <button onclick="logout()"> Log out</button> -->
+            </div>
+
+          </div>
+        </nav>
+
+        <div class="content" id="main-content"> 
+
+
+          
+        </div>
+
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script>
+ 
+        var username = "<%= user.username %>";
+        console.log(username);  
+
+        function changeActive(li,isContainSubItem,page,script) {
+            // Remove active class from all list items
+            document.querySelectorAll('#sidebar li').forEach(item => {
+                item.classList.remove('active'); 
+            }); 
+ 
+            document.querySelectorAll('.collapse.show').forEach(item => {
+                item.classList.remove('show');
+            });
+
+
+            // Add active class to the clicked list item 
+            li.classList.add('active');
+            
+            if(isContainSubItem){
+                var submenu = li.querySelector('.collapse');
+
+                // Add active class to the first submenu item
+                var firstSubmenuItem = submenu.querySelector('li:first-child');
+                console.log(firstSubmenuItem)
+                if (firstSubmenuItem) {
+                    firstSubmenuItem.classList.add('active');
+                }
+            }
+            loadTablePage(page,script)
+        }
+
+
+        // Used for sub items
+        function changeActiveSub(currentNode, parentNode,page,script) {
+            // Remove active class from all list items
+            document.querySelectorAll('#sidebar li').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            currentNode.classList.add('active');
+            parentNode.classList.add('active');             
+            loadTablePage(page,script)
+        } 
+
+        
+        function fetchPageContent(event, pageURL) { 
+            event.preventDefault(); // Prevent default behavior 
+            
+            fetch(pageURL)
+                .then(response => response.text())
+                .then(data => {
+                    var doc = new DOMParser().parseFromString(data, 'text/html');
+                    var newContent = doc.querySelector("#main-content").innerHTML;          
+                    document.getElementById("main-content").innerHTML = newContent;
+                })
+                .catch(error => console.error('Error fetching page content:', error));
+        }
+
+        function loadTablePage(page,scriptPage) {
+            fetchPageContent(event, page); 
+            loadDataTablesScripts(scriptPage);  
+        }
+        
+
+        function loadDataTablesScripts(scriptPage) {  
+            const head = document.getElementsByTagName('head')[0];
+            const scriptsToRemove = head.querySelectorAll('script[data-remove-on-reload]');
+
+            // Remove all previously loaded script elements
+            scriptsToRemove.forEach(script => {
+                script.parentNode.removeChild(script); 
+            });
+
+            const scripts = [
+                'js/data-table/jquery-3.6.0.min.js',
+                'js/data-table/datatables.min.js',
+                'js/data-table/pdfmake.min.js',
+                'js/data-table/vfs_fonts.js',
+                'js/data-table/custom.js',
+            ];
+
+            // Function to load each script sequentially
+            function loadScript(index) {
+                if (index >= scripts.length) return; // Exit if all scripts are loaded 
+                const scriptTag = document.createElement('script');
+                scriptTag.src = scripts[index];
+                scriptTag.setAttribute('data-remove-on-reload', 'true'); // Add a custom attribute to mark for removal
+                scriptTag.onload = function() {
+                    loadScript(index + 1); // Load next script after current one is loaded
+                };
+                head.appendChild(scriptTag);
+            }
+
+            // Start loading scripts from the beginning of the array
+            loadScript(0);
+
+            const uniqueScript = document.createElement('script');
+            uniqueScript.src = scriptPage; 
+            uniqueScript.setAttribute('data-remove-on-reload', 'true');
+            head.appendChild(uniqueScript);  
+
+        } 
+
+
+
+        function logout() {
+            window.location.href = "/logout";
+        }
+
+    </script>
+  </body>
+</html>

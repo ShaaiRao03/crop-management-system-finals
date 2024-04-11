@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crop Management System</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css">
+<script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>    
+</head>
+
+<body>
+    <div class="content" id="main-content"> 
+
+        <div class="container1">
+            <button class="add-pest-btn">Add Pest</button>    
+            <div class="row">
+                <div class="col-12"> 
+                    <div class="data_table">  
+                        <table id="example" class="table table-striped table-bordered">
+                            <thead class="table-dark">
+                                <tr> 
+                                    <th>Pest Name</th>
+                                    <th>Treatment</th> 
+                                    <th>Inventory Used</th> 
+                                    <th>Date</th>  
+                                    <th>Amount Used</th>
+                                </tr> 
+                            </thead>  
+                            <tbody id="equipment-table"> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> 
+        </div>
+
+        <div id="overlay" class="overlay"></div> 
+ 
+    <div id="popup" class="popup"> 
+        <span class="close" onclick="closePopup()">&times;</span>    
+        <label class="form-title">Add New Pest</label>
+        <!-- <form id="equipmentForm" action="/submit_equipment" method="POST" enctype="multipart/form-data"> -->
+        <form id="pestForm" enctype="multipart/form-data">
+            <label for="name">Pest Name:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="type">Field:</label>
+            <input type="text" id="field" name="field"><br>
+        
+            <label for="pestDesc">Pest description:</label> <!--autofill-->
+            <input type="text" id="pestDesc" name="pestDesc"><br>
+        
+            <label for="treatment">Treatment Plan:</label>
+            <input type="text" id="treatment" name="treatment"><br>
+        
+            <label for="treatmentDesc">Treatment Description:</label> <!--autofill-->
+            <input type="text" id="treatmentDesc" name="treatmentDesc"><br>
+
+            <label for="treatmentStartDate">Treatment Start Date:</label>
+            <input type="text" id="treatmentStartDate" name="treatmentStartDate"><br>
+        
+            <label for="product">Product Recommended:</label>
+            <input type="text" id="product" name="product"><br>
+        
+            <label for="inventoryUsed">Inventory Used:</label>
+            <input type="text" id="inventoryUsed" name="inventoryUsed"><br>
+        
+            <label for="pic">Person In Charge:</label>
+            <input type="text" id="pic" name="pic"><br>
+           
+            
+            <!-- <label for="leasePurchaseDate">Lease or Purchase Date:</label>
+            <input type="date" id="leasePurchaseDate" name="leasePurchaseDate"><br> -->
+        
+            <label for="amount">Amount Applied:</label>
+            <input type="text" id="amount" name="amount"><br>
+            
+            <!--
+            <div class="radio-buttons">   
+                <label>Leased or Purchased:</label>
+                <input type="radio" id="leased" name="leasePurchase" value="Leased">
+                <label for="leased">Leased</label><br>
+                <input type="radio" id="purchased" name="leasePurchase" value="Purchased">
+                <label for="purchased">Purchased</label><br>
+            </div>
+        
+            <label for="image">Upload Image:</label> 
+            <input type="file" id="image" name="image"><br>
+        -->
+        
+            <div class="button-container">
+                <button type="submit">Submit</button>
+                <button class="clear-btn">Clear</button>
+            </div>
+
+        </form>         
+    </div> 
+</body>
+
+</html>

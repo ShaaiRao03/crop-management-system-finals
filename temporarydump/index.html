@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>  
+    <title>Crop Management System</title>
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/public/assets/css/style.css">
+  </head> 
+  <body>
+    
+    <div class="wrapper d-flex align-items-stretch">  
+      <nav id="sidebar">
+        <div class="p-4 pt-5">
+            <!-- <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/logo.jpg);"></a> -->
+            <ul class="list-unstyled components mb-5">
+              <li class="active">
+                 <a href="#" onclick="changeActive(this.parentNode,false); return false;"><i class="fa-solid fa-table-columns"></i> <span style="margin-left: 15px;">Dashboard</span></a> 
+              </li>
+              <li>
+                <a href="#" onclick="changeActive(this.parentNode,false); return false;"><i class="fa-solid fa-list-check"></i> <span style="margin-left: 15px;">Task Management</span></a> 
+              </li> 
+              <li>
+                <a href="#" onclick="changeActive(this.parentNode,false); return false;"><i class="fa-solid fa-bug-slash"></i> <span style="margin-left: 15px;">Pest Management</span></a> 
+              </li>  
+              <li>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onclick="changeActive(this.parentNode,true); return false;"><i class="fa-solid fa-solar-panel"></i><span style="margin-left: 15px;">Soil Management</span></a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode); return false;">Initiation Phase</a></li>
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode); return false;">Monitoring Phase</a></li>
+                </ul>
+              </li>
+              <li> 
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onclick="changeActive(this.parentNode,true); return false;"><i class="fa-solid fa-key"></i><span style="margin-left: 15px;">Resource Allocation</span></a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode); return false;">Equipment</a></li>
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode); return false;">Inventory</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="#" onclick="changeActive(this.parentNode,false); return false;"><i class="fa-solid fa-book"></i><span style="margin-left: 15px;"></span> Tutorials</a>
+              </li>
+              <li>
+                <a href="#"  onclick="changeActive(this.parentNode,false); return false;"><i class="fa-solid fa-gear"></i> <span style="margin-left: 15px;"></span>Settings</a>
+              </li>
+            </ul>
+
+            <!-- put this in settings -->
+            <!-- <div>
+              <button class="logout-button">Log out</button>
+            </div> -->
+
+          </div>
+        </nav>
+
+        <div id="content" class="main-content"> 
+
+          
+        </div>
+
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script>
+
+
+        function changeActive(li,isContainSubItem) {
+            // Remove active class from all list items
+            document.querySelectorAll('#sidebar li').forEach(item => {
+                item.classList.remove('active');
+            }); 
+
+            document.querySelectorAll('.collapse.show').forEach(item => {
+                item.classList.remove('show');
+            });
+
+
+            // Add active class to the clicked list item 
+            li.classList.add('active');
+            
+            if(isContainSubItem){
+                var submenu = li.querySelector('.collapse');
+
+                // Add active class to the first submenu item
+                var firstSubmenuItem = submenu.querySelector('li:first-child');
+                console.log(firstSubmenuItem)
+                if (firstSubmenuItem) {
+                    firstSubmenuItem.classList.add('active');
+                }
+            }  
+        }
+
+
+        // Used for sub items
+        function changeActiveSub(currentNode, parentNode) {
+            // Remove active class from all list items
+            document.querySelectorAll('#sidebar li').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            currentNode.classList.add('active');
+            parentNode.classList.add('active');             
+        } 
+
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,528 @@
+/* handles the line height  */
+body {
+margin: 0;
+font-family: "Poppins", Arial, sans-serif;
+font-size: 14px;
+line-height: 2.4;
+font-weight: normal;
+background: fff;
+color: gray; }
+
+
+.content {  
+    margin-left: 15px;
+    margin-top: 15px;   
+} 
+
+.container1 { 
+    padding-top: 10px;
+    width: 1200px; 
+    padding: 20px;  
+    background-color: #fff; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: auto;
+    display: block;
+}
+
+.container2 {  
+    padding-top: 10px;
+    width: 1200px; 
+    padding: 20px;  
+    background-color: #fff; 
+    border-radius: 5px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: auto;
+    display: block;
+}
+
+ol,
+ul,
+dl {
+margin-top: 0;
+margin-bottom: 1rem; }
+
+ol ol,
+ul ul,
+ol ul,
+ul ol {
+margin-bottom: 0; }
+
+
+a {
+text-decoration: none;
+}
+
+
+.list-unstyled {
+padding-left: 0;
+list-style: none; }
+
+
+.collapse:not(.show) {
+display: none; }
+
+/* the collapse delay */
+.collapsing {
+position: relative;
+height: 0;
+overflow: hidden;
+-webkit-transition: height 0.35s ease;
+-o-transition: height 0.35s ease;
+transition: height 0.35s ease; }
+@media (prefers-reduced-motion: reduce) {
+    .collapsing {
+    -webkit-transition: none;
+    -o-transition: none;
+    transition: none; } }
+
+
+.dropdown-toggle {
+white-space: nowrap; }
+.dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent; }
+.dropdown-toggle:empty::after {
+    margin-left: 0; }
+
+/* this is the part that gives the sidebar full height */
+.d-flex {
+display: -webkit-box !important;
+display: -ms-flexbox !important;
+display: flex !important; }
+
+.p-4 {
+padding: 1.5rem !important; }
+
+.pt-5,
+.py-5 {
+padding-top: 3rem !important; }
+
+
+a {
+-webkit-transition: .3s all ease;
+-o-transition: .3s all ease;
+transition: .3s all ease;
+color: #f8b739; }
+a:hover, a:focus {
+    text-decoration: none !important;
+    outline: none !important;
+    -webkit-box-shadow: none;
+    box-shadow: none; }
+
+
+#sidebar {
+min-width: 280px;
+max-width: 280px;
+/* background: #1d1919; */
+background: #062f05;
+color: #fff;
+-webkit-transition: all 0.3s;
+-o-transition: all 0.3s;
+transition: all 0.3s; }
+#sidebar.active {
+    margin-left: -300px; }
+#sidebar .logo {
+    display: block;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto; }
+    #sidebar .logo span {
+    display: block; }
+#sidebar ul.components {
+    padding: 0; }
+#sidebar ul li {
+    font-size: 16px; }
+    #sidebar ul li > ul {
+    margin-left: 10px; }
+    #sidebar ul li > ul li {
+        font-size: 14px; }
+    #sidebar ul li a {
+    padding: 10px 0;
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+    #sidebar ul li a:hover {
+        /* color: #f8b739;  */  
+        color: #ccffb5; 
+    } 
+    #sidebar ul li.active > a {
+    background: transparent;  
+    /* color: #f8b739;  */
+    color: #ccffb5; 
+}
+
+
+
+a[data-toggle="collapse"] {
+position: relative; }
+
+/* handles the position of toggle */
+.dropdown-toggle::after {
+display: block;
+position: absolute;
+top: 50%;
+right: 0;
+-webkit-transform: translateY(-50%);
+-ms-transform: translateY(-50%);
+transform: translateY(-50%); }
+
+
+/* also handles the height of the sidebar */
+#content {
+width: 100%;
+padding: 0;
+min-height: 100vh;
+-webkit-transition: all 0.3s;
+-o-transition: all 0.3s; 
+transition: all 0.3s; }
+
+
+/*--------------------------- Button styling ----------------------------*/ 
+button {
+    width: 170px; 
+    padding: 10px;
+    background-color: #349631; 
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+
+button:hover {
+    background-color: #277425;
+}
+
+.red-button {
+    background-color: #f44336;
+}
+
+.red-button:hover { 
+    background-color: #d32f2f; /* Darker red */
+}
+
+.log-out-button {
+    /* background-color: #e84034;  */
+    background-color: rgba(232, 64, 52, 0.4);
+    color: white;
+    border: #f44336;
+    padding: 10px 20px;
+    margin-top: 140px;
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+  }
+  
+.log-out-button:hover { 
+background-color: #d32f2f; /* Darker red */
+}
+
+.button-container2 {
+    display: flex; /* Use flexbox to arrange the buttons */
+    /* justify-content: space-between; */
+    margin-top: 10px; /* Adjust margin as needed */
+}
+
+
+.clear-btn {
+    margin-left: 10px;
+    background-color: rgb(198, 42, 42); /* Example background color */
+}
+
+.clear-btn:hover {
+    background-color: #d32f2f; /* Example hover background color */
+}
+
+/* --------------------------------- Data table styling --------------------------------- */
+
+.data_table{
+    background: #fff;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    border-radius: 5px;
+}
+   
+.data_table .btn{
+margin-top: 5px;
+margin-bottom: 5px;
+margin-right: 5px;
+width: 80px; 
+}
+
+.data_table th {
+background-color: #094108; 
+border-color: #062f05;
+}
+
+.data_table .dt-buttons .btn {
+background-color: #349631; 
+border-color: #30832d; 
+}
+
+.data_table .dt-buttons .btn:hover {
+    background-color: #30832d;
+}
+
+
+.table-link{
+    color: #46cd41;
+    cursor: pointer;
+}
+
+.table-link:hover{
+    color: #30832d;
+    cursor: pointer;
+}
+
+
+/* --------------------- Overlay and popup ----------------- */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    display: none;
+}
+
+
+.popup { 
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+  
+.popup-record { 
+    display: none;  
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+form { 
+    margin-top: 10px;
+}
+
+label {
+    display: block; 
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="file"] {
+    width: 100%;
+    padding: 4px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.radio-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.radio-buttons input[type="radio"],
+.radio-buttons label {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    margin-bottom: 0px;
+}
+
+
+.form-title{
+    font-size: 30px;
+    font-weight: bold;
+    color: rgb(54, 53, 53);
+    margin-bottom: 10px;
+}
+
+/* equipment details styling */
+
+.top-section {
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.button-container{
+    margin-top: 0px;
+    height: 60px;
+}
+
+.button-overwiew {  
+    display: inline-block; 
+    border-width: 1px;
+    border-color: #d7d7d7;
+    background: transparent; 
+    width: 50%;
+    height: 50px;
+    font-size: large;
+    border-radius: 0px;
+    line-height: 30px; /* Vertically center the text */
+}
+
+.button-overwiew:hover, 
+.button-overwiew:focus {
+    background-color: #094108; 
+    color: white;
+}
+
+.button-overwiew.highlight { 
+    background-color: #094108; 
+    color: #ccffb5;
+}
+
+.button-overwiew:not(.highlight) { 
+    background-color: #094108;
+    border: 1px solid #b7b7b7; 
+}
+
+.button-overwiew:not(.highlight):hover { 
+    background-color: #094108; 
+    color: #ccffb5;
+}
+
+#edit-delete-button{ 
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-evenly;    
+}
+
+p{
+    margin-bottom: 5px; 
+}
+
+.details-section {
+    padding-top: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+}
+ 
+
+
+.image-container {
+flex: 0 0 auto; /* Fixed size for image container */ 
+margin-right: 20px; /* Adjust spacing between image and details */
+}
+
+.image-container img {
+border-radius: 10px;
+border: 3px solid #ddd; /* Add border */ 
+height: 300px;
+width: 360px;
+}
+   
+.details-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; 
+    font-size: large;
+}
+
+.details-label { 
+    color: #7f7f7f;
+    flex: 0 0 200px;  
+    margin-right: 5px; /* Adjust as needed */
+}
+.details-info {
+    flex: 1;
+    width: 400px;
+    margin-left: 30px;
+    color: black; 
+}
+
+
+#detailsButton{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+#maintenanceButton{ 
+    border-top-right-radius: 10px; 
+    border-bottom-right-radius: 10px; 
+}
+
+.details-container{
+    margin-left: 40px;
+}
+
+container3-maintenancetable{
+    margin-top: 10px;
+    width: 1160px; 
+    padding: 20px;  
+    background-color: #fff; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: auto;
+    /* display: block; */
+}
+
+.container3-equipmentdetails{ 
+    margin-top: 10px;
+    width: 1160px; 
+    padding: 20px;  
+    background-color: #fff; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: auto; 
+}   
+   
+.maintenance-section{
+    margin-top: 10px;
+    width: 1160px; 
+    padding: 20px;  
+    background-color: #fff; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: auto;
+}
+
+.disabled {
+    opacity: 0.5; /* Reduce opacity to visually indicate disabled state */
+    pointer-events: none; /* Disable pointer events to prevent button from being clicked */
+    /* Add any other styles to visually indicate the button is disabled */
+}
+
+#editButton{
+    display: block;
+}

@@ -231,6 +231,37 @@ app.post('/submit_record', (req, res) => {
 // Resource allocation (Equipment) ends ------------------------- 
 
 // Pest management starts ------------------------- 
+app.post('/getPestInfo', (req, res) => {
+
+    const { username } = req.body; 
+
+    const sqlQuery1 = `SELECT * FROM pest_management
+    JOIN user ON user.userID = pest_management.userID
+    WHERE username = "${username}"`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
 app.post('/submit_pest', (req, res) =>{ 
     // Access form data
     console.log('insert statement starts');
@@ -262,6 +293,7 @@ app.post('/submit_pest', (req, res) =>{
 
 // Pest management ends -------------------------
 
+<<<<<<< Updated upstream
 // Soil relocation (Monitoring) starts -------------------------
 
 app.post('/getMonitoringInfo', (req, res) => {
@@ -327,7 +359,40 @@ app.post('/submit_nutrients', upload.single('image'), (req, res) => {
 
 
 // Soil relocation (Monitoring) ends ------------------------- 
+=======
+// Dashboard starts -------------------------
+>>>>>>> Stashed changes
 
+app.post('/getFieldNum', (req, res) => {
+    const { username } = req.body;
+
+    const sqlQuery1 = 'SELECT COUNT(*) AS num_rows FROM field';  
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => {
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1); 
+                }
+            });
+        }); 
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+
+});
+
+// Dashboard ends -------------------------
 
 
 app.use("/",require("./src/routes/pages"));     

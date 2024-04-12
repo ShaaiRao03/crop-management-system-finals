@@ -12,19 +12,67 @@
 <body>
 
 <div class="content" id="main-content">
-    <div class="container1">
-        <div class="fieldStat">
-            <h1>Number of current fields</h1>
-            <h2 id="fieldNum">Test</h2> 
+
+    <div class="greeting">
+        <h1 id="greetingUser">Hello, <span id="username"></span>!</h1>
+    </div>
+
+    <div class="mainContainer">
+        <div class="statContainer">
+            <div class="heading"><h1>Fields</h1></div>
+            <div id="fieldWrapper" class="content-wrapper">
+                <h2 id="fieldNum"></h2>
+                <img src="/img/tractor.png" alt="image of tractor">
+            </div> 
+        </div>
+    
+        <div class="statContainer">
+            <div class="heading"><h1>Crops</h1></div>
+            <div class="content-wrapper">
+                <h2 id="cropNum"></h2>
+                <img src="/img/plant.png" alt="image of plant">
+            </div>
         </div>
 
-        
-    </div>
-    <div class="container1">
-        <div class="cropStat">
-            <h1>Crops</h1>
+        <div class="statContainer">
+            <div class="heading"><h1>Tasks in Progress</h1></div>
+            <div class="content-wrapper">
+                <h2 id="tasksInProgress">5</h2>
+                <img src="/img/clock.png" alt="image of clock">
+            </div> 
         </div>
+
+        <div class="statContainer">
+            <div class="heading"><h1>Tasks Completed</h1></div>
+            <div class="content-wrapper">
+                <h2 id="tasksCompleted">8</h2>
+                <img src="/img/check-mark.png" alt="image of checkmark">
+            </div>
+        </div>
+
     </div>
+
+    <div class="container1">
+        <button class="add-pest-btn">Add Field</button>    
+        <div class="row">
+            <div class="col-12"> 
+                <div class="data_table">  
+                    <table id="example" class="table table-striped table-bordered">
+                        <thead class="table-dark">
+                            <tr> 
+                                <th>Field Name</th>
+                                <th>Crop</th>
+                            </tr> 
+                        </thead>  
+                        <tbody id="equipment-table"> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <!--add overlay here-->
 </div>
 
 </body>

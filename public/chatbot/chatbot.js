@@ -2,7 +2,7 @@ function fetchMessage(query) {
     return new Promise((resolve, reject) => {    
         fetch('/getMessage', { 
                 method: 'POST',
-                headers: {
+                headers: { 
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ query }),
@@ -18,7 +18,7 @@ function fetchMessage(query) {
                 // Select the label element with the class "generated-message"
                 const labelElement = document.querySelector('.generated-message');
 
-                if (labelElement) {
+                if (labelElement) { 
                     labelElement.textContent = data.message; // Change 'New message' to whatever message you want to set
                 } else {
                     console.error('Label element with class "generated-message" not found.');
@@ -28,8 +28,8 @@ function fetchMessage(query) {
             })
             .catch(error => { 
                 reject(error); // Reject with the error
-            }); 
-    });
+            });   
+    }); 
 } 
   
 function sendMessage(){

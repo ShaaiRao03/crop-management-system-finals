@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crop Management System</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css">
+<script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+ 
+<div class="content" id="main-content"> 
+ 
+    <div class="inventory-details" style="display: none;">  
+        <div class="container2">
+            <div class="top-section"> 
+                <button class="button" id="backButton">Back</button>   
+                <p class="overview-label">Farmall 140A Pro Tractor Overview</p>
+            </div>
+                
+            <div class="button-container2">  
+                <button class="button-overwiew highlight " id="detailsButton">Details</button>
+                <button class="button-overwiew" id="usageButton">Usage Record</button>  
+            </div> 
+                
+            <!-- The content you see once you clicked the hyperlink in the table -->
+            <div class="container3-inventoryDetails" style="display: block;"> 
+                <div id="detailsSection" class="details-section"> 
+                    <div class="image-container"> 
+                        <img id="inventory-image" src="img/no image available.jpg" alt="Placeholder Image">
+                        <div id="edit-delete-button"> 
+                            <button style="display: block;" class="button" id="editButton">Edit</button>  
+                            <button style="display: none;" class="button" id="updateButton">Update</button>
+                            <button class="button red-button" id="deleteButton">Delete</button>
+                        </div>
+                    </div> 
+                    <div class="details-container"> 
+                        <div class="details-item"><span class="details-label">Name</span>:<span class="details-info name">Farmall 140A Pro tractor</span></div>
+                        <div class="details-item"><span class="details-label">Type</span>:<span class="details-info type">Tractor</span></div>
+                        <div class="details-item"><span class="details-label">Brand</span>:<span class="details-info brand">Case IH</span></div>
+                        <div class="details-item"><span class="details-label">Threshold</span>:<span class="details-info threshold">Farmall 140A Pro</span></div>
+                        <div class="details-item"><span class="details-label">Manufacturer</span>:<span class="details-info manufacturer">Maintenance</span></div>
+                        <div class="details-item"><span class="details-label">Manufacturer Number</span>:<span class="details-info manufacturer-number">123456789</span></div>
+                    </div>        
+                </div> 
+            </div>
+    
+     
+            <!-- The table that shows the usages --> 
+            <div class="container3-usagetable"  style="display: none;">
+                <div class="usage-section"> 
+                    <div id="addRecordbutton">  
+                        <button class="add-record-btn" id="add-record">Add record</button>
+                    </div>
+                    
+                    <div class="row"> 
+                        <div class="col-12"> 
+                            <div class="data_table">  
+                                <table id="example2" class="table table-striped table-bordered">
+                                    <thead class="table-dark">
+                                        <tr> 
+                                            <!-- Lets say it is being 'Restocked' , then the 'Used' will become "-" and vice-versa -->
+                                            <th>Restocked</th>
+                                            <th>Used</th>
+                                            <th>Balance</th>
+                                            <th>Date</th> 
+                                        </tr> 
+                                    </thead>  
+                                    <tbody id="usage-table">    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- the main table (the table you see once you open the page) --> 
+    <div class="container1"  style="display: block;">  
+        <button class="add-inventory-btn">Add Inventory</button>     
+        <div class="row"> 
+            <div class="col-12"> 
+                <div class="data_table">  
+                    <table id="example" class="table table-striped table-bordered">
+                        <thead class="table-dark">
+                            <tr> 
+                                <th>Name</th>
+                                <th>Type</th>     
+                                <th>Manufacturer</th> 
+                                <th>Balance</th>
+                                <th>Threshold</th> 
+                                <th>Status</th> 
+
+                                 <!-- Threshold is the threshold value  -->
+                                 
+                                 <!-- Status can be either "Need to Refill" , "Sufficient" , "Insufficient" ... "Need to Refill" when balance approach threshold (20% margin) 
+                                    
+                                    Say, threshold = 5000 , currentBalance = 5500  , for simplicity , by default we use 20% margin ..  
+
+                                    Calculation : 
+                                    currentBalance - threshold
+                                    5500 - 5000 = 500 
+                                    
+                                    500/5000 * 100 = 10% .. 
+                                    since the value is below the margin (value is < 20) , we will show "Need to Refill" 
+                                    if value is < 0 , then "Insufficient"
+                                    if value is > 20  , then "Sufficient"
+        
+                                -->
+                            </tr> 
+                        </thead>  
+                        <tbody id="equipment-table">  
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> 
+    </div>
+  
+
+    <div id="overlay" class="overlay"></div> 
+ 
+    <!-- Add Inventory-->
+    <div id="popup" class="popup">  
+        <span class="close" onclick="closePopup()">&times;</span>    
+        <label class="form-title">Add Inventory</label>
+        <form id="inventoryForm" enctype="multipart/form-data">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br>
+        
+            <label for="inventory-brand">Brand:</label>
+            <input type="text" id="inventory-brand" name="inventory-brand"><br>
+            
+            <label for="inventory-type">Inventory type:</label>
+            <input type="text" id="inventory-type" name="inventory-type"><br>
+
+            <label for="inventory-threshold">Critical Threshold:</label>
+            <input type="text" id="inventory-threshold" name="inventory-threshold"><br>
+        
+            <label for="inventory-manufacturer">Manufacturer:</label>
+            <input type="text" id="inventory-manufacturer" name="inventory-manufacturer"><br>
+         
+            <label for="inventory-manufacturerNum">Manufacturer Number:</label>
+            <input type="text" id="inventory-manufacturerNum" name="inventory-manufacturerNum"><br>
+        
+            <label for="image">Upload Image:</label>  
+            <input type="file" id="image" name="image"><br>
+        
+            <div class="button-container"> 
+                <button type="submit">Submit</button>
+                <button class="clear-btn">Clear</button>
+            </div>
+        </form>           
+    </div>  
+ 
+    <!-- Update usage -->
+    <div id="popup-record" class="popup-record">  
+        <span class="close" onclick="closePopup()">&times;</span>    
+        <label class="form-title">Add record</label> 
+        <form id="usageForm" enctype="multipart/form-data">
+
+
+            <label for="amount">Amount :</label>
+            <input type="text" id="amount" name="amount" required><br> 
+        
+            <label for="date">Date:</label> 
+            <input type="date" id="date" name="date"><br>
+
+            <div class="radio-buttons">   
+                <label>Restock or used:</label> 
+                <input type="radio" id="restock" name="stock-restock" value="Restocked">
+                <label for="restock">Restocked</label><br>
+                <input type="radio" id="used" name="stock-used" value="Used">
+                <label for="used">Used</label><br>
+            </div>
+           
+            <div class="button-container"> 
+                <button type="submit">Submit</button>
+                <button class="clear-btn">Clear</button>
+            </div> 
+        </form>         
+    </div> 
+    
+</div>
+
+
+</body>
+</html> 

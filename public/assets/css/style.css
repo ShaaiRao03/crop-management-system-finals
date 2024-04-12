@@ -56,7 +56,7 @@ color: gray; }
     margin-bottom: 20px;
     margin-left: 40px;
 
-    width: 200px;
+    width: 220px;
     height: 200px;
     align-items: center;
 
@@ -64,24 +64,30 @@ color: gray; }
 }
 
 .statContainer h1{
-    font-size: 25px;
+    font-size: 20px;
     margin-bottom: 50px;
     margin-left: 10px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .statContainer .content-wrapper{
     display: flex;
     align-items: center;
+    margin-top: 15px;
+    padding-top: 20px;
+}
+
+.statContainer #fieldWrapper{
+    padding-top: 0px;
 }
 
 .statContainer h2{
-    font-size: 20px;
-    margin-left: 10px;
+    font-size: 30px;
+    margin-left: 20px;
 }
 
 .statContainer a {
-    margin-left: 50px; /* Adjust margin as needed */
+    margin-left: 70px; /* Adjust margin as needed */
 }
 
 ol,

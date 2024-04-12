@@ -423,6 +423,40 @@ app.post('/getCropNum', (req, res) => {
 
 });
 
+// Field + crop name data
+app.post('/getFieldInfo', (req, res) => {
+
+    const { username } = req.body; 
+
+    const sqlQuery1 = `SELECT * FROM user_field
+    JOIN user ON user.userID = user_field.userID
+    JOIN field_crop ON field_crop.fieldID = user_field.fieldID
+    JOIN field ON field.fieldID = user_field.fieldID
+    WHERE username = "${username}"`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
 // Dashboard ends -------------------------
 
 app.use("/",require("./src/routes/pages"));     

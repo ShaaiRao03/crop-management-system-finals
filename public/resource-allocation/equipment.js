@@ -165,7 +165,7 @@ fetchEquipmentData()
 }
 
 
-
+ 
 // Add equipment starts --------------------
 
 document.getElementsByClassName("add-equipment-btn")[0].addEventListener('click', function() {
@@ -180,6 +180,7 @@ function openPopup() {
 
 function closePopup() {
     document.getElementById('popup').style.display = 'none';
+    document.getElementById('popup-record').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
 }
 

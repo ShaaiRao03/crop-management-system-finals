@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crop Management System</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css">
+<script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+ 
+<div class="content" id="main-content"> 
+
+    <div class="container1">
+        <label class="large-label" for="query">Query :</label>
+        <input type="text" id="query-input" name="query" required><br>
+    <div class="button-container"> 
+        <button onclick="sendMessage()">Send Query</button>  
+        <button class="red-button" onclick="clearResult()">Clear Message</button>  
+    </div>
+    </div>
+
+    <div class="container4"> 
+        <label class="large-label" for="message-result">Result :</label> 
+        <div class="message-box">
+            <label class="generated-message" for="message">No result available</label>  
+        </div>
+    </div>
+    
+</div> 
+
+
+</body>
+</html> 

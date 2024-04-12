@@ -23,6 +23,7 @@ app.use("/settings",express.static(__dirname + "/public/settings"));
 app.use("/soil-management",express.static(__dirname + "/public/soil-management")); 
 app.use("/task-management",express.static(__dirname + "/public/task-management")); 
 app.use("/tutorials",express.static(__dirname + "/public/tutorials")); 
+app.use("/chatbot",express.static(__dirname + "/public/chatbot"));  
  
 
 app.set("view engine","ejs");      
@@ -35,6 +36,55 @@ db.connect((err)=>{
     if(err) throw err;
     console.log("Connected to database");  
 });  
+
+// Chatbot starts -------
+
+"use strict";
+const Groq = require("groq-sdk");
+const groq = new Groq({
+    apiKey: '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' 
+});
+ 
+app.post('/getMessage', async (req, res) => {
+
+    const { query } = req.body;
+
+    try { 
+        const messageChatbot = await getMessageFromChatbot(query);
+        res.status(200).json({ message: messageChatbot });  
+        console.log(messageChatbot)   
+    }catch(error){
+        console.error("An error occurred:", error);
+        res.status(500).json({ error: 'An error occurred' })
+    } 
+}); 
+  
+async function getMessageFromChatbot(query){
+    try {
+        const chatCompletion = await getGroqChatCompletion(query);
+        const message = chatCompletion.choices[0]?.message?.content || "";
+        // process.stdout.write(chatCompletion.choices[0]?.message?.content || ""); 
+        console.log(chatCompletion.choices[0]?.message?.content || "")
+        return message
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+}
+async function getGroqChatCompletion(query) {
+    return groq.chat.completions.create({
+        messages: [
+            {
+                role: "user",
+                content: `${query}`
+            }
+        ],
+        model: "mixtral-8x7b-32768"
+    });
+}
+
+
+// Chatbot ends ----------
+
 
 
 // Information about user starts ---------------------------
@@ -136,7 +186,7 @@ app.post('/getEquipmentInfo', (req, res) => {
 
 app.post('/getEquipmentInfoBySerialNum', (req, res) => {
 
-    const { serialNum } = req.body; 
+    const { serialNum } = req.body;  
 
     const sqlQuery1 = `SELECT * FROM equipment 
     JOIN user ON user.userID = equipment.user_id
@@ -201,7 +251,6 @@ app.post('/getMaintenanceRecord', (req, res) => {
 
 
 
-
 app.post('/submit_equipment', upload.single('image'), (req, res) => {
     // Access form data
     const formData = req.body;
@@ -257,6 +306,7 @@ app.post('/submit_record', (req, res) => {
 
 // Resource allocation (Equipment) ends ------------------------- 
 
+
 // Pest management starts ------------------------- 
 
 app.post('/getPestInfo', (req, res) => {
@@ -290,19 +340,12 @@ app.post('/getPestInfo', (req, res) => {
         });
 }); 
 
+
 app.post('/submit_pest', (req, res) =>{ 
     // Access form data
     console.log('insert statement starts');
     const {name, treatment, field, product, inventoryUsed, treatmentStartDate, pestDesc, pic, amount, treatmentDesc} = req.body;
  
-    console.log(name) 
-    // console.log("Server : ",formData) 
-    // console.log(formData.userID) 
-
-    // Insert form data into the database 
-    //const sql = 'INSERT INTO pest_management (equipmentName, type, brand, model, serialNum, equipmentStatusID, plateNum, lastService, purchaseTypeID, dealerNumber, img, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    //const values = [formData.name, formData.type, formData.brand, formData.model, formData.serialNumber, 1, formData.plateNumber, formData.lastServiced, 1, formData.dealerNumber, fileData,formData.userID]; 
-
     const sql = 'INSERT INTO pest_management (currentPest, treatmentPlan, field_crop_id, productUsed, inventoryUsed, treatmentStartDate, pest_description, userID, amountApplied, treatment_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     // const values = [formData.name, formData.treatment, formData.field, formData.product, formData.inventoryUsed, formData.treatmentStartDate, formData.pestDesc, formData.pic, formData.amount, formData.treatmentDesc];
     const values = [name, treatment, field, product, inventoryUsed, treatmentStartDate, pestDesc, pic, amount, treatmentDesc];
@@ -319,7 +362,39 @@ app.post('/submit_pest', (req, res) =>{
     });
 });
 
-// Pest management ends -------------------------
+// Pest management ends -------------------------------
+
+
+app.post('/getFieldNum', (req, res) => {
+    const { username } = req.body;
+
+    const sqlQuery1 = `SELECT COUNT(*) AS num_rows FROM field`;  
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => {
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1); 
+                }
+            });
+        }); 
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+});
+
+
+
 
 // Soil relocation (Monitoring) starts -------------------------
 

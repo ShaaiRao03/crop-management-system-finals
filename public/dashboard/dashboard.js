@@ -1,3 +1,4 @@
+
 // get user name
 function fetchUserName() {
     return new Promise((resolve, reject) => {  
@@ -69,6 +70,7 @@ function fetchFieldNum(){
             }); 
     }); 
 }
+
 
 fetchFieldNum()
 .then(data =>{

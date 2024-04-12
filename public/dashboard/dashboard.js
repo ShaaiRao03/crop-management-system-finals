@@ -89,10 +89,6 @@ fetchFieldNum()
     console.error('Error fetching field data:', error);
 });
 
-function newPage(name) {
-    console.log(name);
-}
-
 //get crop data
 function fetchCropNum(){
     return new Promise((resolve, reject) => {  
@@ -185,6 +181,90 @@ fetchFieldData()
 }) 
 .catch(error => {
     console.error('Error fetching equipment data:', error);
+});
+
+//get tasks in progress
+function fetchTasksInProgress(){
+    return new Promise((resolve, reject) => {  
+        fetch('/getTasksInProgress', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            }) 
+            .catch(error => { 
+                reject(error); // Reject with the error
+            }); 
+    }); 
+}
+
+fetchTasksInProgress()
+.then(data =>{
+        const tasksInProgressCount = data[0].num_rows;
+        console.log(tasksInProgressCount);
+
+        const tasksInProgressStatElement = document.getElementById('tasksInProgress');
+        if (tasksInProgressStatElement) { 
+            tasksInProgressStatElement.textContent = tasksInProgressCount;
+        } else {
+            console.error('tasks in progress element not found');
+        }
+    console.log(data);
+})
+.catch(error => {
+    console.error('Error fetching task in progress data:', error);
+});
+
+//get tasks in progress
+function fetchTasksCompleted(){
+    return new Promise((resolve, reject) => {  
+        fetch('/getTasksCompleted', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            }) 
+            .catch(error => { 
+                reject(error); // Reject with the error
+            }); 
+    }); 
+}
+
+fetchTasksCompleted()
+.then(data =>{
+        const tasksCompletedCount = data[0].num_rows;
+        console.log(tasksCompletedCount);
+
+        const tasksCompletedStatElement = document.getElementById('tasksCompleted');
+        if (tasksCompletedStatElement) { 
+            tasksCompletedStatElement.textContent = tasksCompletedCount;
+        } else {
+            console.error('tasks completed element not found');
+        }
+    console.log(data);
+})
+.catch(error => {
+    console.error('Error fetching tasks completed data:', error);
 });
 
 function newPage(name) {

@@ -559,6 +559,72 @@ app.post('/getFieldInfo', (req, res) => {
         });
 }); 
 
+// Tasks in progress
+app.post('/getTasksInProgress', (req, res) => {
+
+    const { username } = req.body; 
+
+    const sqlQuery1 = `SELECT COUNT(*) as num_rows FROM task_association
+    JOIN user ON user.userID = task_association.user_id
+    JOIN task_status ON task_status.taskStatusID = task_association.taskStatusID
+    WHERE username = "${username}" AND task_association.taskStatusID = '1'`   
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+// Tasks Completed
+app.post('/getTasksCompleted', (req, res) => {
+
+    const { username } = req.body; 
+
+    const sqlQuery1 = `SELECT COUNT(*) as num_rows FROM task_association
+    JOIN user ON user.userID = task_association.user_id
+    JOIN task_status ON task_status.taskStatusID = task_association.taskStatusID
+    WHERE username = "${username}" AND task_association.taskStatusID = '2'`   
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
 // Dashboard ends -------------------------
 
 app.use("/",require("./src/routes/pages"));     

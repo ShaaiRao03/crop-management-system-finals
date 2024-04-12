@@ -231,6 +231,7 @@ app.post('/submit_record', (req, res) => {
 // Resource allocation (Equipment) ends ------------------------- 
 
 // Pest management starts ------------------------- 
+
 app.post('/getPestInfo', (req, res) => {
 
     const { username } = req.body; 
@@ -293,8 +294,75 @@ app.post('/submit_pest', (req, res) =>{
 
 // Pest management ends -------------------------
 
+// Soil relocation (Monitoring) starts -------------------------
+
+app.post('/getMonitoringInfo', (req, res) => {
+
+    // const { username } = req.body; 
+
+    const sqlQuery1 = `SELECT * FROM nutrients_monitoring`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+
+app.post('/submit_nutrients', upload.single('image'), (req, res) => {
+    // Access form data
+    const formData = req.body;
+    const imageFile = req.file; // Uploaded image file (if any)
+
+    console.log("Server : ",formData)
+
+    // Handle file upload
+    let fileData = null;
+    if (imageFile) {
+        fileData = fs.readFileSync(imageFile.path); // Read the file synchronously
+        fs.unlinkSync(imageFile.path); // Remove the temporary file after reading
+    }
+
+    console.log(formData.userID)
+
+    // Insert form data into the database 
+    const sql = 'INSERT INTO nutrients_monitoring (nitrogen_N, potassium_K, sulphur_S, boron_B, phosphorus_P, magnesium_Mg, calcium_Ca, copper_Cu, date, field_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const values = [formData.nitrogen, formData.potassium, formData.sulfur, formData.boron, formData.phosphorus, formData.magnesium, formData.calcium, formData.copper, formData.datesampled, 1]; 
+
+    db.query(sql, values, (err, result) => {  
+        if (err) { 
+            console.error('Error inserting data into database:', err);
+            res.status(500).json({ message: 'Error submitting form.' });
+            return;
+        }
+        console.log('Form data inserted successfully'); 
+        res.status(200).json({ message: 'Form submitted successfully!' });
+    });
+});
+
+
+// Soil relocation (Monitoring) ends ------------------------- 
+
 // Dashboard starts -------------------------
-// Field data
+
+//Field data
 app.post('/getFieldNum', (req, res) => {
     const { username } = req.body;
 
@@ -307,6 +375,7 @@ app.post('/getFieldNum', (req, res) => {
                 if (error) {
                     reject({ error: 'Error querying table2' });
                 } else {
+
                     resolve(results); 
                 }
             });
@@ -355,7 +424,6 @@ app.post('/getCropNum', (req, res) => {
 });
 
 // Dashboard ends -------------------------
-
 
 app.use("/",require("./src/routes/pages"));     
 app.use("/api", require("./src/controllers/auth"));  

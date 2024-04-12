@@ -1,3 +1,4 @@
+//get field data
 function fetchFieldNum(){
     return new Promise((resolve, reject) => {  
         fetch('/getFieldNum', { 
@@ -38,6 +39,53 @@ fetchFieldNum()
 })
 .catch(error => {
     console.error('Error fetching field data:', error);
+});
+
+function newPage(name) {
+    console.log(name);
+}
+
+//get crop data
+function fetchCropNum(){
+    return new Promise((resolve, reject) => {  
+        fetch('/getCropNum', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            }) 
+            .catch(error => { 
+                reject(error); // Reject with the error
+            }); 
+    }); 
+}
+
+
+fetchCropNum()
+.then(data =>{
+        const cropCount = data[0].num_rows;
+        console.log(cropCount);
+
+        const cropStatElement = document.getElementById('cropNum');
+        if (cropStatElement) { 
+            cropStatElement.textContent = cropCount;
+        } else {
+            console.error('cropStat h2 element not found');
+        }
+    console.log(data);
+})
+.catch(error => {
+    console.error('Error fetching field data:', error);
 });
 
 function newPage(name) {

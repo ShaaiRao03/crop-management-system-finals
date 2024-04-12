@@ -294,20 +294,50 @@ app.post('/submit_pest', (req, res) =>{
 // Pest management ends -------------------------
 
 // Dashboard starts -------------------------
-
+// Field data
 app.post('/getFieldNum', (req, res) => {
     const { username } = req.body;
 
-    const sqlQuery1 = 'SELECT COUNT(*) AS num_rows FROM field';  
+    const sqlQuery = 'SELECT COUNT(*) AS num_rows FROM field';  
 
     // Wrapping the database query inside a promise
     const executeQuery = () => {
         return new Promise((resolve, reject) => {
-            db.query(sqlQuery1, (error1, results1) => {
-                if (error1) {
+            db.query(sqlQuery, (error, results) => {
+                if (error) {
                     reject({ error: 'Error querying table2' });
                 } else {
-                    resolve(results1); 
+                    resolve(results); 
+                }
+            });
+        }); 
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+
+});
+
+// Crop Data
+app.post('/getCropNum', (req, res) => {
+    const { username } = req.body;
+
+    const sqlQuery = 'SELECT COUNT(*) AS num_rows FROM field_crop';  
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery, (error, results) => {
+                if (error) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results); 
                 }
             });
         }); 

@@ -65,16 +65,25 @@ color: gray; }
 
 .statContainer h1{
     font-size: 20px;
-    margin-bottom: 50px;
+}
+
+.heading {
+    height: 20px;
     margin-left: 10px;
-    margin-top: 15px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+.statContainer img{
+    max-width: 70px;
+    max-height: 70px;
+    margin-bottom: 20px;
+    margin-left: 80px;
 }
 
 .statContainer .content-wrapper{
     display: flex;
     align-items: center;
-    margin-top: 15px;
-    padding-top: 20px;
 }
 
 .statContainer #fieldWrapper{

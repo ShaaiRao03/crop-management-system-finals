@@ -627,6 +627,79 @@ app.post('/getTasksCompleted', (req, res) => {
 
 // Dashboard ends -------------------------
 
+
+// Resource allocation (Inventory) starts -------------------------  
+
+app.post('/getInventoryInfo', (req, res) => {
+
+    const { username } = req.body; 
+
+    const sqlQuery1 = `SELECT * FROM inventory
+    JOIN user ON user.userID = inventory.user_id 
+    JOIN inventorytype ON inventorytype.inventoryTypeID = inventory.inventoryTypeID
+    JOIN inventory_stock ON inventory_stock.inventoryID = inventory.inventoryID
+    WHERE username = "${username}"`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+app.post('/submit_inventory', upload.single('image'), (req, res) => {
+    // Access form data
+    const formData = req.body;
+    const imageFile = req.file; // Uploaded image file (if any)
+
+    console.log("Server : ",formData)  
+
+    // Handle file upload
+    let fileData = null;
+    if (imageFile) {
+        fileData = fs.readFileSync(imageFile.path); // Read the file synchronously
+        fs.unlinkSync(imageFile.path); // Remove the temporary file after reading
+    }
+
+    // console.log(formData.inventory-brand)
+    console.log(formData.userID)
+    console.log('insert statement starts'); 
+  
+    // Insert form data into the database 
+    const sql = 'INSERT INTO inventory (inventoryName, brand, flagThreshold, manufacturer, manufacturerNumber, img, inventoryTypeID, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const values = [formData.name, formData.brand, formData.threshold, formData.manufacturer, formData.manufacturerNum, fileData, formData.type, formData.userID];
+ 
+    db.query(sql, values, (err, result) => {  
+        if (err) { 
+            console.error('Error inserting data into database:', err);
+            res.status(500).json({ message: 'Error submitting form.' });
+            return;
+        }
+        console.log('Form data inserted successfully'); 
+        res.status(200).json({ message: 'Form submitted successfully!' });
+    });
+});
+
+// Resource allocation (inventory) ends ------------------------- 
+
+
+
 app.use("/",require("./src/routes/pages"));     
 app.use("/api", require("./src/controllers/auth"));  
 

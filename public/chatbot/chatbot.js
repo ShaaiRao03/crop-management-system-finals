@@ -5,7 +5,7 @@ function fetchMessage(query) {
                 headers: { 
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ query }),
+                body: JSON.stringify({ query }), 
             })
             .then(response => {
                 if (!response.ok) {  
@@ -14,24 +14,24 @@ function fetchMessage(query) {
                 return response.json();
             })   
             .then(data => {
-
+ 
                 // Select the label element with the class "generated-message"
                 const labelElement = document.querySelector('.generated-message');
 
                 if (labelElement) { 
                     labelElement.textContent = data.message; // Change 'New message' to whatever message you want to set
                 } else {
-                    console.error('Label element with class "generated-message" not found.');
+                    console.error('Label element with class "generated-message" not found.'); 
                 }
  
                 resolve(data); // Resolve with the fetched data  
             })
             .catch(error => { 
                 reject(error); // Reject with the error
-            });   
+            });     
     }); 
 } 
-  
+   
 function sendMessage(){
     const inputElement = document.getElementById('query-input');
     const message = inputElement.value;
@@ -40,10 +40,10 @@ function sendMessage(){
         alert("No message is being sent")
     }else {
         fetchMessage(message)
-    } 
+    }  
 }
 
- 
+
 function clearResult(){
     const labelElement = document.querySelector('.generated-message');
     const inputElement = document.getElementById('query-input');

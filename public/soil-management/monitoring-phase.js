@@ -58,16 +58,197 @@ fetchNutrientData()
     console.error('Error fetching monitoring data:', error);
 });
 
- 
-// function newPage(name) {
-//     console.log(name);
-// }
+function fetchFieldNames() {
+    return new Promise((resolve, reject) => {  
+        fetch('/getFieldNames', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
+
+fetchFieldNames()
+.then(data => { 
+    // Clear existing options
+    $('#chartSelect').empty();
+
+    // Add a default option
+    $('#chartSelect').append($('<option>', {
+        value: '',
+        text: 'Select a field'
+    }));
+
+    // Map data and create options
+    data.forEach(item => {
+        // Decide which attributes to use for value and display text
+        const value = item.fieldID;
+        const text = item.fieldName;
+        
+        // Create the option element
+        const option = $('<option>', {
+            value: value,
+            text: text
+        });
+
+        // Append the option to the select element
+        $('#chartSelect').append(option);
+    });
+}) 
+
+function fetchFieldNames2() {
+    return new Promise((resolve, reject) => {  
+        fetch('/getFieldNames', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
+
+fetchFieldNames2()
+.then(data => { 
+    // Clear existing options
+    $('#fieldSelect').empty();
+
+    // Add a default option
+    $('#fieldSelect').append($('<option>', {
+        value: '',
+        text: 'Select a field'
+    }));
+
+    // Map data and create options
+    data.forEach(item => {
+        // Decide which attributes to use for value and display text
+        const value = item.fieldID;
+        const text = item.fieldName;
+        
+        // Create the option element
+        const option = $('<option>', {
+            value: value,
+            text: text
+        });
+
+        // Append the option to the select element
+        $('#fieldSelect').append(option);
+    });
+}) 
+
+.catch(error => {
+    console.error('Error fetching data:', error);
+});
 
 document.getElementsByClassName("add-task")[0].addEventListener('click', function() {
     console.log('clicked');
     openPopupN()
 }); 
 
+
+// for the chart (start)
+
+function fetchFieldData(username) {
+    return new Promise((resolve, reject) => {
+      fetch('/getFieldData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        resolve(data);
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  }
+
+  fetchFieldData(username)
+  .then(data => {
+    const xValues = data.map(item => item.date);
+
+    const datasets = [{
+        label: 'Nitrogen',
+        data: data.map(item => item.nitrogen_N),
+        borderColor: "red",
+        fill:false
+    },{
+        label: 'Potassium',
+        data: data.map(item => item.potassium_K),
+        borderColor: "blue",
+        fill:false
+    }]
+
+  datasets.forEach(dataset => {
+    console.log(`Label: ${dataset.label}`);
+    console.log('Data:', dataset.data);
+  });
+    
+    renderChart(xValues, datasets);
+  })
+  .catch(error => {
+    console.error('Error fetching field data:', error);
+  });
+
+  function renderChart(xValues, datasets) {
+    new Chart("myCharte", {
+      type: "line",
+      data: {
+        labels: xValues,
+        datasets: datasets
+      },
+      options: {
+        legend: { display: true }
+      }
+    });
+  }
+
+  // Function to generate random color
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+//for the chart (end)
 
 function openPopupN() {
     document.getElementById('popupN').style.display = 'block';
@@ -79,24 +260,26 @@ function openPopupN() {
     document.getElementById('overlay').style.display = 'none';
 }
 
-function displayTable(){
+document.getElementById('tableButton').addEventListener('click', function() {
     document.getElementById('table-content').style.display = 'block';
     document.getElementById('visualization-content').style.display = 'none';
     document.getElementById('togglebut').style.display = 'none';
-    document.getElementById('chart-container-1').style.display = 'none';
-    document.getElementById('chart-container-2').style.display = 'none';
-    document.getElementById('tableid').classList.add('highlight');
-    document.getElementById('visualid').classList.remove('highlight');
-}
-function displayVis(){
+    // document.getElementById('chart-container-1').style.display = 'none';
+    // document.getElementById('chart-container-2').style.display = 'none';
+    document.getElementById('tableButton').classList.add('highlight'); 
+    document.getElementById('visualButton').classList.remove('highlight');   
+}); 
+ 
+document.getElementById('visualButton').addEventListener('click', function() {
     document.getElementById('table-content').style.display = 'none';
     document.getElementById('visualization-content').style.display = 'block';
     document.getElementById('togglebut').style.display = 'block';
-    document.getElementById('chart-container-1').style.display = 'block';
-    document.getElementById('chart-container-2').style.display = 'none';
-    document.getElementById('tableid').classList.remove('highlight');
-    document.getElementById('visualid').classList.add('highlight');
-}
+    // document.getElementById('chart-container-1').style.display = 'block';
+    // document.getElementById('chart-container-2').style.display = 'none';
+    document.getElementById('tableButton').classList.remove('highlight'); 
+    document.getElementById('visualButton').classList.add('highlight'); 
+});
+
 function displayGraph(){
     document.getElementById('table-content').style.display = 'none';
     document.getElementById('visualization-content').style.display = 'block';
@@ -115,6 +298,7 @@ document.getElementById('nutrientForm').addEventListener('submit', function(even
     event.preventDefault(); // Prevent default form submission
     
     // Fetch form inputs
+    const fieldID = document.getElementById('fieldSelect').value.trim();
     const datesampled = document.getElementById('datesampled').value.trim();
     const nitrogen = document.getElementById('nitrogen').value.trim();
     const potassium = document.getElementById('potassium').value.trim();
@@ -126,7 +310,7 @@ document.getElementById('nutrientForm').addEventListener('submit', function(even
     const copper = document.getElementById('copper').value.trim();
 
     // Validate required fields
-    if (!datesampled || !nitrogen || !potassium || !sulfur || !boron || !phosphorus || !magnesium || !calcium || !copper) {
+    if (!fieldID | !datesampled || !nitrogen || !potassium || !sulfur || !boron || !phosphorus || !magnesium || !calcium || !copper) {
         alert('Please fill in all required fields.');
         return; // Exit the function
     }
@@ -135,6 +319,7 @@ document.getElementById('nutrientForm').addEventListener('submit', function(even
     .then(userID => { 
         // Construct form data to be sent to the API
         const formData = new FormData(); 
+        formData.append('fieldID', fieldID);
         formData.append('datesampled', datesampled);
         formData.append('nitrogen', nitrogen);
         formData.append('potassium', potassium);

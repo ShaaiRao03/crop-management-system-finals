@@ -33,12 +33,13 @@ fetchPestData()
         table.destroy();
 
         // Map data and create rows 
+        //current pest, treatmentPlan, inventoryUsed, Date, amount applied
         data.forEach(item => {
             const row = `<tr> 
                 <td>${item.currentPest}</td>  
-                <td>${item.pest_description}</td>
                 <td>${item.treatmentPlan}</td>
-                <td>${item.treatment_description}</td> 
+                <td>${item.inventoryUsed}</td>
+                <td>${item.treatmentStartDate}</td> 
                 <td>${item.amountApplied}</td> 
             </tr>`;
 

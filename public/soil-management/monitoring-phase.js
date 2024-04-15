@@ -32,8 +32,13 @@ fetchNutrientData()
         var table = $('#example').DataTable(); 
         table.destroy();
 
+        
+
         // Map data and create rows 
         data.forEach(item => {
+            const data_date = item.date
+            const date = data_date.split('T');
+
             const row = `<tr> 
                 <td>${item.field_ID}</td>
                 <td>${item.nitrogen_N}</td>
@@ -44,7 +49,7 @@ fetchNutrientData()
                 <td>${item.magnesium_Mg}</td>
                 <td>${item.calcium_Ca}</td>
                 <td>${item.copper_Cu}</td>
-                <td>${item.date}</td>
+                <td>${date[0]}</td>
             </tr>`;
 
             // Add the row to the table
@@ -161,10 +166,10 @@ fetchFieldNames2()
         $('#fieldSelect').append(option);
     });
 }) 
-
 .catch(error => {
     console.error('Error fetching data:', error);
 });
+
 
 document.getElementsByClassName("add-task")[0].addEventListener('click', function() {
     console.log('clicked');
@@ -200,8 +205,11 @@ function fetchFieldData(username) {
 
   fetchFieldData(username)
   .then(data => {
-    const xValues = data.map(item => item.date);
-
+    const xValues = data.map(item => {
+        const data_date = item.date;
+        const dateParts = data_date.split('T');
+        return dateParts[0]; // Assuming you want to use only the date part
+    }); 
     const datasets = [{
         label: 'Nitrogen',
         data: data.map(item => item.nitrogen_N),
@@ -213,6 +221,7 @@ function fetchFieldData(username) {
         borderColor: "blue",
         fill:false
     }]
+
 
   datasets.forEach(dataset => {
     console.log(`Label: ${dataset.label}`);
@@ -283,14 +292,14 @@ document.getElementById('visualButton').addEventListener('click', function() {
 function displayGraph(){
     document.getElementById('table-content').style.display = 'none';
     document.getElementById('visualization-content').style.display = 'block';
-    document.getElementById('chart-container-1').style.display = 'block';
-    document.getElementById('chart-container-2').style.display = 'none';
+    // document.getElementById('chart-container-1').style.display = 'block';
+    // document.getElementById('chart-container-2').style.display = 'none';
 }
 function displayChart(){
     document.getElementById('table-content').style.display = 'none';
     document.getElementById('visualization-content').style.display = 'block';
-    document.getElementById('chart-container-1').style.display = 'none';
-    document.getElementById('chart-container-2').style.display = 'block';
+    // document.getElementById('chart-container-1').style.display = 'none'; 
+    // document.getElementById('chart-container-2').style.display = 'block';
 }
 
 // submit form

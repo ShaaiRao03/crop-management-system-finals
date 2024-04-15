@@ -561,7 +561,7 @@ width: 360px;
     margin-left: 40px;
 }
 
-container3-maintenancetable{
+.container3-maintenancetable{
     margin-top: 10px;
     width: 1160px; 
     padding: 20px;  
@@ -633,6 +633,7 @@ container3-maintenancetable{
 .input-form{
     padding-top: 20px;
     padding-bottom: 20px;
+    display: flex;
   }
   .input-form input{
     height:45px;
@@ -645,6 +646,12 @@ container3-maintenancetable{
     padding-left: 15px;;
     border-width:1px;
   }
+
+  .input-form input[type="date"]{
+    width:200px;
+    padding-left: 15px;;
+    border-width:1px;
+  }
   
   .input-form input[type="submit"]{
     background-color: #28b704;
@@ -652,17 +659,6 @@ container3-maintenancetable{
     width:150px;
     border:none;
   }
-
-  .searchicon {
-    opacity: 0.5;
-    margin-left: -40px;
-    top: 50%;
-    width:25px;
-    height:25px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-}
 
 .add-button,.add-task{
     padding: 10px;
@@ -706,31 +702,3 @@ container3-maintenancetable{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 9999;
   }
-
-  /* .tableid, .visualid{
-    padding-top: 5px;
-    padding-bottom: 30px;
-    font-family:Arial, sans-serif
-  } */
-  
-  /* .tableid, .visualid{
-    border-radius: 2px;
-    padding: 0px;
-    border-width: 1px;
-    border-color: black;
-    background: transparent;
-    width:450px;
-    height:50px;
-    font-size: large;
-    color: black;
-  }
-  
-  .tableid:hover, .visualid:hover, .tableid:focus .visualid:focus{
-    transition-duration: 0.4s;
-    background-color: #28b704;
-    color: white;
-  } */
-
-#togglebut button{
-    padding: 0px;
-}

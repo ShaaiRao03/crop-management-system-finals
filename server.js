@@ -400,10 +400,15 @@ app.post('/getFieldNum', (req, res) => {
 
 app.post('/getMonitoringInfo', (req, res) => {
 
-    const { username } = req.body; 
+    const { username, startDate, endDate } = req.body; 
+    let sqlQuery1;
 
-    const sqlQuery1 = `SELECT * FROM nutrients_monitoring WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}');`     
-
+    if (!startDate || !endDate){
+        sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}');`     
+    }
+    else{
+        sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}') AND date BETWEEN '${startDate}' AND '${endDate}';`;
+    }
     // Wrapping the database query inside a promise
     const executeQuery = () => {
         return new Promise((resolve, reject) => {
@@ -425,7 +430,7 @@ app.post('/getMonitoringInfo', (req, res) => {
         .catch((error) => {
             res.status(500).json(error); // Send the error back to the client
         });
-}); 
+});
 
 
 app.post('/submit_nutrients', upload.single('image'), (req, res) => {
@@ -490,9 +495,9 @@ app.post('/getFieldNames', (req, res) => {
 
 app.post('/getFieldData', (req, res) => {
 
-    const { username } = req.body; 
+    const { username, fieldID } = req.body; 
 
-    const sqlQuery1 = `SELECT nitrogen_N, potassium_K, sulphur_S, boron_B, phosphorus_P, magnesium_Mg, calcium_Ca, copper_Cu, date FROM nutrients_monitoring WHERE (field_ID) IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}' AND user_field.fieldID = '1' ORDER BY date ASC);`     
+    const sqlQuery1 = `SELECT nitrogen_N, potassium_K, sulphur_S, boron_B, phosphorus_P, magnesium_Mg, calcium_Ca, copper_Cu, date FROM nutrients_monitoring WHERE (field_ID) IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}' AND user_field.fieldID = '${fieldID}' ORDER BY date ASC);`     
 
     // Wrapping the database query inside a promise
     const executeQuery = () => {

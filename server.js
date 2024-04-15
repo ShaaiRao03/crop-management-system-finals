@@ -400,9 +400,9 @@ app.post('/getFieldNum', (req, res) => {
 
 app.post('/getMonitoringInfo', (req, res) => {
 
-    // const { username } = req.body; 
+    const { username } = req.body; 
 
-    const sqlQuery1 = `SELECT * FROM nutrients_monitoring`     
+    const sqlQuery1 = `SELECT * FROM nutrients_monitoring WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}');`     
 
     // Wrapping the database query inside a promise
     const executeQuery = () => {
@@ -446,7 +446,7 @@ app.post('/submit_nutrients', upload.single('image'), (req, res) => {
 
     // Insert form data into the database 
     const sql = 'INSERT INTO nutrients_monitoring (nitrogen_N, potassium_K, sulphur_S, boron_B, phosphorus_P, magnesium_Mg, calcium_Ca, copper_Cu, date, field_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    const values = [formData.nitrogen, formData.potassium, formData.sulfur, formData.boron, formData.phosphorus, formData.magnesium, formData.calcium, formData.copper, formData.datesampled, 1]; 
+    const values = [formData.nitrogen, formData.potassium, formData.sulfur, formData.boron, formData.phosphorus, formData.magnesium, formData.calcium, formData.copper, formData.datesampled, formData.fieldID]; 
 
     db.query(sql, values, (err, result) => {  
         if (err) { 
@@ -458,6 +458,64 @@ app.post('/submit_nutrients', upload.single('image'), (req, res) => {
         res.status(200).json({ message: 'Form submitted successfully!' });
     });
 });
+
+app.post('/getFieldNames', (req, res) => {
+
+    const { username } = req.body; 
+
+    const sqlQuery1 = `SELECT fieldID, fieldName FROM field WHERE (fieldID) IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}');`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error getting field names' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+app.post('/getFieldData', (req, res) => {
+
+    const { username } = req.body; 
+
+    const sqlQuery1 = `SELECT nitrogen_N, potassium_K, sulphur_S, boron_B, phosphorus_P, magnesium_Mg, calcium_Ca, copper_Cu, date FROM nutrients_monitoring WHERE (field_ID) IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}' AND user_field.fieldID = '1' ORDER BY date ASC);`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error getting field data' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
 
 
 // Soil relocation (Monitoring) ends ------------------------- 

@@ -161,10 +161,10 @@ fetchFieldNames2()
         $('#fieldSelect').append(option);
     });
 }) 
-
 .catch(error => {
     console.error('Error fetching data:', error);
 });
+
 
 document.getElementsByClassName("add-task")[0].addEventListener('click', function() {
     console.log('clicked');
@@ -213,6 +213,7 @@ function fetchFieldData(username) {
         borderColor: "blue",
         fill:false
     }]
+
 
   datasets.forEach(dataset => {
     console.log(`Label: ${dataset.label}`);
@@ -283,14 +284,14 @@ document.getElementById('visualButton').addEventListener('click', function() {
 function displayGraph(){
     document.getElementById('table-content').style.display = 'none';
     document.getElementById('visualization-content').style.display = 'block';
-    document.getElementById('chart-container-1').style.display = 'block';
-    document.getElementById('chart-container-2').style.display = 'none';
+    // document.getElementById('chart-container-1').style.display = 'block';
+    // document.getElementById('chart-container-2').style.display = 'none';
 }
 function displayChart(){
     document.getElementById('table-content').style.display = 'none';
     document.getElementById('visualization-content').style.display = 'block';
-    document.getElementById('chart-container-1').style.display = 'none';
-    document.getElementById('chart-container-2').style.display = 'block';
+    // document.getElementById('chart-container-1').style.display = 'none'; 
+    // document.getElementById('chart-container-2').style.display = 'block';
 }
 
 // submit form

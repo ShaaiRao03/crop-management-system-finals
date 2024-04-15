@@ -298,7 +298,7 @@ app.post('/submit_record', (req, res) => {
             res.status(500).json({ message: 'Error submitting form.' });
             return;
         }
-        console.log('Form data inserted successfully'); 
+        console.log('Form data inserted successfully');  
         res.status(200).json({ message: 'Form submitted successfully!' });
     });
 });

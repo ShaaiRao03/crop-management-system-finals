@@ -486,7 +486,7 @@ app.post('/getFieldNames', (req, res) => {
     // Call the function that returns the promise
     executeQuery()
         .then((data) => {
-            res.status(200).json(data); // Send the result back to the client
+            res.status(200).json(data); // gitSend the result back to the client
         })
         .catch((error) => {
             res.status(500).json(error); // Send the error back to the client
@@ -700,6 +700,7 @@ app.post('/getInventoryInfo', (req, res) => {
     const sqlQuery1 = `SELECT * FROM inventory
     JOIN user ON user.userID = inventory.user_id 
     JOIN inventorytype ON inventorytype.inventoryTypeID = inventory.inventoryTypeID  
+    JOIN inventory_stock ON inventory_stock.inventoryID = inventory.inventoryID
     WHERE username = "${username}"`     
  
     // Wrapping the database query inside a promise
@@ -758,6 +759,29 @@ app.post('/submit_inventory', upload.single('image'), (req, res) => {
     });
 });
 
+// -------------------- TBA ----------------------
+app.post('/submit_usage', (req, res) => { 
+    // Access form data 
+    const {inventoryID, amount , date , restockUsed} = req.body;
+ 
+    console.log("Server :  " , inventoryID, amount, date, restockUsed) 
+
+    // Insert form data into the database 
+    //const sql = `INSERT INTO maintenancerecord (serialNum, serviceDescription, date) VALUES ("${currSerialNum}", "${description}", "${date}")`;
+    const sql = `INSERT INTO inventory_stock (inventoryID, restocked, used, balance, date) VALUES ("${inventoryID}", "${restocked}", "${amount}", "${balance}", "${date}")`;
+
+    db.query(sql, (err, result) => {   
+        if (err) { 
+            console.error('Error inserting data into database:', err);
+            res.status(500).json({ message: 'Error submitting form.' });
+            return;
+        }
+        console.log('Form data inserted successfully'); 
+        res.status(200).json({ message: 'Form submitted successfully!' });
+    });
+});
+
+// Resource allocation (inventory) ends ------------------------- 
 
 // Resource allocation (inventory) ends ------------------------- 
 

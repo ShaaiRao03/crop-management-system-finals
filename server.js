@@ -688,15 +688,15 @@ app.post('/submit_inventory', upload.single('image'), (req, res) => {
         if (err) { 
             console.error('Error inserting data into database:', err);
             res.status(500).json({ message: 'Error submitting form.' });
-            return;
+            return; 
         }
         console.log('Form data inserted successfully'); 
         res.status(200).json({ message: 'Form submitted successfully!' });
     });
 });
 
-// Resource allocation (inventory) ends ------------------------- 
 
+// Resource allocation (inventory) ends ------------------------- 
 
 
 app.use("/",require("./src/routes/pages"));     

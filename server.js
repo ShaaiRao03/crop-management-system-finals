@@ -726,6 +726,39 @@ app.post('/getInventoryInfo', (req, res) => {
         });
 }); 
 
+//TBA
+app.post('/getInventoryInfoByID', (req, res) => {
+
+    const { inventoryID } = req.body;  
+
+    //need inventory ID, action, amount, date
+    const sqlQuery1 = `SELECT * FROM inventory
+    JOIN inventory_stock ON inventory_stock.inventoryID = inventory.inventoryID
+    WHERE inventory.inventoryID = "${inventoryID}"` 
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client 
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+});
+
 app.post('/submit_inventory', upload.single('image'), (req, res) => {
     // Access form data
     const formData = req.body;

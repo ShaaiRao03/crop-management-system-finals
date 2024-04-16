@@ -520,6 +520,13 @@ function makeDetailsEditable() {
         input.setAttribute('type', 'text');
         input.setAttribute('value', info.textContent.trim());
 
+        // Set input field styles to match original details-info class
+        input.style.width = info.offsetWidth + 'px'; // Set width to match
+        input.style.padding = '0'; // Reset padding to match original
+        input.style.marginLeft = '30px';
+        input.style.marginBottom = '0px';
+
+
         // Replace the details info span with the input field
         info.parentNode.replaceChild(input, info);
     });

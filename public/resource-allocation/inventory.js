@@ -430,39 +430,37 @@ document.getElementById('usageForm').addEventListener('submit', function(event) 
     const restockUsed = document.querySelector('input[name="stock-restock-used"]:checked');
 
     // Validate required fields
-    if (!date || !!amount || !restockUsed) {
+    if (!date || !amount || !restockUsed) {
         alert('Please fill in all required fields.');
         return; // Exit the function
     }
       
-    console.log(amount , date , restockUsed) 
+    console.log(amount , date , restockUsed)
+    const restockUsedValue = restockUsed.value;
 
-    
-
-    return new Promise((resolve, reject) => { 
-        fetch('/submit_usage', {  
-            method: 'POST',   
-            headers: { 
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({inventoryID, restockUsed, amount , date}),     
-        }).then(response => { 
-            if (response.ok) { 
-                // Form submitted successfully    
-                alert('Form submitted successfully!');
-                reUpdateUsageRecord(inventoryID);
-                closePopup()  
-            } else { 
-                throw new Error('Error submitting form.'); 
-            }
-        }).catch(error => {
-            reject(error) 
-            alert('An error occurred while submitting the form. Please try again.');
-        });
-
-
+    fetch('/submit_usage', {  
+        method: 'POST',   
+        headers: { 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({inventoryID, restockUsedValue, amount , date}),     
     })
+    .then(response => { 
+        if (response.ok) { 
+            // Form submitted successfully    
+            alert('Form submitted successfully!');
+            reUpdateUsageRecord(inventoryID);
+            closePopup();  
+        } else { 
+            throw new Error('Error submitting form.'); 
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error); 
+        alert('An error occurred while submitting the form. Please try again.');
+    });
 });
+
 
 // Equipment details ends --------------------
 

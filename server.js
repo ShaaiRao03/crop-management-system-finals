@@ -778,8 +778,8 @@ app.post('/submit_inventory', upload.single('image'), (req, res) => {
     console.log('insert statement starts'); 
   
     // Insert form data into the database 
-    const sql = 'INSERT INTO inventory (inventoryName, brand, flagThreshold, manufacturer, manufacturerNumber, img, inventoryTypeID, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const values = [formData.name, formData.brand, formData.threshold, formData.manufacturer, formData.manufacturerNum, fileData, formData.type, formData.userID];
+    const sql = 'INSERT INTO inventory (inventoryName, brand, flagThreshold, manufacturer, manufacturerNumber, img, inventoryTypeID, user_id, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const values = [formData.name, formData.brand, formData.threshold, formData.manufacturer, formData.manufacturerNum, fileData, formData.type, formData.userID, formData.balance];
  
     db.query(sql, values, (err, result) => {  
         if (err) { 
@@ -792,7 +792,6 @@ app.post('/submit_inventory', upload.single('image'), (req, res) => {
     });
 });
 
-// -------------------- TBA ----------------------
 app.post('/submit_usage', (req, res) => { 
     // Access form data 
     const { inventoryID, amount, date, restockUsedValue } = req.body;

@@ -190,13 +190,14 @@ document.getElementById('inventoryForm').addEventListener('submit', function(eve
     const name = document.getElementById('name').value.trim();
     const brand = document.getElementById('inventory-brand').value.trim();
     const type = document.getElementById('inventory-type').value.trim();
+    const balance = document.getElementById('inventory-balance').value.trim();
     const threshold = document.getElementById('inventory-threshold').value.trim();
     const manufacturer = document.getElementById('inventory-manufacturer').value.trim();
     const manufacturerNum = document.getElementById('inventory-manufacturerNum').value.trim();
     const image = document.getElementById('image').files[0]; // Get the first selected file (if any) 
 
     // Validate required fields
-    if (!name || !type || !brand || !threshold || !manufacturer || !manufacturerNum) {
+    if (!name || !type || !balance || !brand || !threshold || !manufacturer || !manufacturerNum) {
         alert('Please fill in all required fields.');
         return; // Exit the function
     }
@@ -211,6 +212,7 @@ document.getElementById('inventoryForm').addEventListener('submit', function(eve
         formData.append('name', name); 
         formData.append('brand', brand);  
         formData.append('type', type);
+        formData.append('balance', balance);
         formData.append('threshold', threshold);
         formData.append('manufacturer', manufacturer);
         formData.append('manufacturerNum', manufacturerNum);

@@ -251,7 +251,7 @@ transition: all 0.3s; }
 
 
 /*--------------------------- Button styling ----------------------------*/ 
-button {
+button { 
     width: 170px; 
     padding: 10px;
     background-color: #349631; 
@@ -603,7 +603,7 @@ width: 360px;
 
 .container3-equipmentdetails{ 
     margin-top: 10px;
-    width: 1160px; 
+    width: 1160px;  
     padding: 20px;  
     background-color: #fff; 
     border-radius: 5px;

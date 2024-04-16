@@ -796,15 +796,15 @@ app.post('/submit_inventory', upload.single('image'), (req, res) => {
 // -------------------- TBA ----------------------
 app.post('/submit_usage', (req, res) => { 
     // Access form data 
-    const {inventoryID, amount , date , restockUsed} = req.body;
- 
-    console.log("Server :  " , inventoryID, amount, date, restockUsed) 
+    const { inventoryID, amount, date, restockUsedValue } = req.body;
 
-    // Insert form data into the database 
-    //const sql = `INSERT INTO maintenancerecord (serialNum, serviceDescription, date) VALUES ("${currSerialNum}", "${description}", "${date}")`;
-    const sql = `INSERT INTO inventory_stock (inventoryID, restocked, used, balance, date) VALUES ("${inventoryID}", "${restocked}", "${amount}", "${balance}", "${date}")`;
+    console.log("Server : ", inventoryID, amount, date, restockUsedValue);
 
-    db.query(sql, (err, result) => {   
+    // Insert form data into the database using parameterized query
+    const sql = `INSERT INTO inventory_stock (inventoryID, date, quantity, action) VALUES (?, ?, ?, ?)`;
+    const values = [inventoryID, date, amount, restockUsedValue];
+
+    db.query(sql, values, (err, result) => {   
         if (err) { 
             console.error('Error inserting data into database:', err);
             res.status(500).json({ message: 'Error submitting form.' });

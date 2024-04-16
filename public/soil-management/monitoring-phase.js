@@ -201,12 +201,12 @@ function fetchFieldData(username) {
         reject(error);
       });
     });
-  }
+  } 
 
   fetchFieldData(username)
   .then(data => {
     const xValues = data.map(item => {
-        const data_date = item.date;
+        const data_date = item.date; 
         const dateParts = data_date.split('T');
         return dateParts[0]; // Assuming you want to use only the date part
     }); 

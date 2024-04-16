@@ -400,9 +400,38 @@ border-color: #30832d;
     z-index: 9999;
 }
 
+.popup-pestDetection{
+    display: none;  
+    position: fixed; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+.preview-container {
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+    margin-top: 20px;
+}
+
+.preview-image {
+max-width: 200px; 
+max-height: 200px;
+margin-right: 10px;
+}
+ 
 form { 
     margin-top: 10px;
-}
+} 
 
 label {
     display: block; 

@@ -41,7 +41,7 @@ function sendMessage(){
     }else {
         fetchMessage(message)
     }  
-}
+} 
 
 
 function clearResult(){

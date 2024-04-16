@@ -452,6 +452,7 @@ document.getElementById('usageForm').addEventListener('submit', function(event) 
             // Form submitted successfully    
             alert('Form submitted successfully!');
             reUpdateUsageRecord(inventoryID);
+            repopulateData();
             closePopup();  
         } else { 
             throw new Error('Error submitting form.'); 

@@ -799,17 +799,41 @@ app.post('/submit_usage', (req, res) => {
     console.log("Server : ", inventoryID, amount, date, restockUsedValue);
 
     // Insert form data into the database using parameterized query
-    const sql = `INSERT INTO inventory_stock (inventoryID, date, quantity, action) VALUES (?, ?, ?, ?)`;
-    const values = [inventoryID, date, amount, restockUsedValue];
+    const sqlInsert = `INSERT INTO inventory_stock (inventoryID, date, quantity, action) VALUES (?, ?, ?, ?)`;
+    const valuesInsert = [inventoryID, date, amount, restockUsedValue];
 
-    db.query(sql, values, (err, result) => {   
-        if (err) { 
+    let sqlUpdate = '', valuesUpdate = [];
+    // Update balance of inventory item 
+    if (restockUsedValue == 'Restock') {
+        sqlUpdate = `UPDATE inventory SET balance = (balance + ? ) WHERE inventoryID = ? `;
+        valuesUpdate = [amount, inventoryID];
+    } else if (restockUsedValue == 'Used') {
+        sqlUpdate = `UPDATE inventory SET balance = (balance - ? ) WHERE inventoryID = ? `;
+        valuesUpdate = [amount, inventoryID];
+    } else {
+        console.log("Value does not exist");
+        res.status(500).json({ message: 'Error updating balance.' });
+        return;
+    }
+
+    db.query(sqlInsert, valuesInsert, (err, result) => {
+        if (err) {
             console.error('Error inserting data into database:', err);
             res.status(500).json({ message: 'Error submitting form.' });
             return;
         }
-        console.log('Form data inserted successfully'); 
-        res.status(200).json({ message: 'Form submitted successfully!' });
+        console.log('Form data inserted successfully');
+        
+        // If insertion is successful, proceed to update balance
+        db.query(sqlUpdate, valuesUpdate, (error, result) => {
+            if (error) {
+                console.error('Error updating balance from database:', error);
+                res.status(500).json({ message: 'Error updating balance.' });
+                return;
+            }
+            console.log('Balance updated successfully');
+            res.status(200).json({ message: 'Form submitted successfully! Balance updated successfully!' });
+        });
     });
 });
 

@@ -9,11 +9,12 @@
 <script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>    
 </head>
 
-<body>
-    <div class="content" id="main-content"> 
+<body> 
+    <div class="content" id="main-content">  
 
         <div class="container1">
             <button class="add-pest-btn">Add Pest</button>    
+            <button class="pest-detection-btn">Pest Detection</button>     
             <div class="row">
                 <div class="col-12"> 
                     <div class="data_table">  
@@ -68,26 +69,10 @@
         
             <label for="pic">Person In Charge:</label>
             <input type="text" id="pic" name="pic"><br>
-           
-            
-            <!-- <label for="leasePurchaseDate">Lease or Purchase Date:</label>
-            <input type="date" id="leasePurchaseDate" name="leasePurchaseDate"><br> -->
         
             <label for="amount">Amount Applied:</label>
             <input type="text" id="amount" name="amount"><br>
             
-            <!--
-            <div class="radio-buttons">   
-                <label>Leased or Purchased:</label>
-                <input type="radio" id="leased" name="leasePurchase" value="Leased">
-                <label for="leased">Leased</label><br>
-                <input type="radio" id="purchased" name="leasePurchase" value="Purchased">
-                <label for="purchased">Purchased</label><br>
-            </div>
-        
-            <label for="image">Upload Image:</label> 
-            <input type="file" id="image" name="image"><br>
-        -->
         
             <div class="button-container">
                 <button type="submit">Submit</button>
@@ -95,7 +80,35 @@
             </div>
 
         </form>         
+    </div>  
+
+    <div id="popup-pestDetection" class="popup-pestDetection">   
+        <span class="close" onclick="closePopup()">&times;</span>    
+        <label class="form-title">Pest Detection</label> 
+        <form id="recordForm" enctype="multipart/form-data">  
+            <label for="image">Upload Image:</label> 
+            <input type="file" id="image" name="image"><br>
+           
+            <div class="button-container"> 
+                <button type="submit" onclick="detectPest(event)" class="detect-pest">Detect</button> 
+                <button type="submit" onclick="clearPest(event)" class="clear-btn">Clear</button> 
+            </div>  
+        </form>          
+
+        <div class="img-preview" style="display: block;">
+            <label for="img-preview">No preview available</label> 
+        </div>
+        <div class="preview-container" style="display: none;"> 
+                <img id="preview" class="preview-image" src="#" alt="Image Preview">
+                <label id="pestName" for="pestName"></label> 
+                <label for="label-pestSolution"></label>  
+                <label for="generated-solution"></label>    
+                <button>Autofill Pest Form</button> 
+        </div> 
     </div> 
+
+
+
 </body>
 
 </html>

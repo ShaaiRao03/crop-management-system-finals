@@ -22,7 +22,6 @@ function fetchEquipmentData() {
     });
 } 
 
-
 function fetchEquipmentDataBySerialNum(serialNum) {
     return new Promise((resolve, reject) => {  
         fetch('/getEquipmentInfoBySerialNum', {  
@@ -477,7 +476,8 @@ document.getElementById('detailsButton').addEventListener('click', function() {
     document.getElementById('maintenanceButton').classList.remove('highlight');   
 }); 
  
-document.getElementById('maintenanceButton').addEventListener('click', function() {
+document.getElementById('maintenanceButton').addEventListener('click', function() { 
+    document.getElementsByClassName('maintenance-section')[0].style.display = 'block';
     document.getElementsByClassName('container3-maintenancetable')[0].style.display = 'block';
     document.getElementsByClassName('container3-equipmentdetails')[0].style.display = 'none';
     document.getElementById('detailsButton').classList.remove('highlight'); 
@@ -510,7 +510,6 @@ function showEquipmentDetails(serialNum){
  
 //  Navigation between pages ends here  ----------------
 
-// Editable starts here ------------------------------
 function makeDetailsEditable() {
     const detailsContainer = document.querySelector('.details-container');
 
@@ -520,6 +519,13 @@ function makeDetailsEditable() {
         const input = document.createElement('input');
         input.setAttribute('type', 'text');
         input.setAttribute('value', info.textContent.trim());
+
+        // Set input field styles to match original details-info class
+        input.style.width = info.offsetWidth + 'px'; // Set width to match
+        input.style.padding = '0'; // Reset padding to match original
+        input.style.marginLeft = '30px';
+        input.style.marginBottom = '0px';
+
 
         // Replace the details info span with the input field
         info.parentNode.replaceChild(input, info);
@@ -542,16 +548,23 @@ function makeDetailsEditable() {
     
     // Add event listener to the update button
     updateButton.addEventListener('click', function() {
+        // Loop through each input field and replace it with the original text content
+        detailsContainer.querySelectorAll('input[type="text"]').forEach(input => {
+            const span = document.createElement('span');
+            span.classList.add('details-info');
+            span.textContent = input.value.trim();
+            // Replace the input field with the original details info span
+            input.parentNode.replaceChild(span, input);
+        });
 
         editButton.style.display = 'block';
         updateButton.style.display = 'none'; 
         
         deleteButton.classList.remove('disabled');
         deleteButton.removeAttribute('disabled');
-
     });
-
 }
+
 
 function editButtonEventListener(){
     // Call makeDetailsEditable() when the edit button is clicked

@@ -257,6 +257,51 @@ document.getElementsByClassName("add-task")[0].addEventListener('click', functio
     .catch(error => {
       console.error('Error fetching field data:', error);
     });
+<<<<<<< HEAD
+  } 
+
+  fetchFieldData(username)
+  .then(data => {
+    const xValues = data.map(item => {
+        const data_date = item.date; 
+        const dateParts = data_date.split('T');
+        return dateParts[0]; // Assuming you want to use only the date part
+    }); 
+    const datasets = [{
+        label: 'Nitrogen',
+        data: data.map(item => item.nitrogen_N),
+        borderColor: "red",
+        fill:false
+    },{
+        label: 'Potassium',
+        data: data.map(item => item.potassium_K),
+        borderColor: "blue",
+        fill:false
+    }]
+
+
+  datasets.forEach(dataset => {
+    console.log(`Label: ${dataset.label}`);
+    console.log('Data:', dataset.data);
+  });
+    
+    renderChart(xValues, datasets);
+  })
+  .catch(error => {
+    console.error('Error fetching field data:', error);
+  });
+
+  function renderChart(xValues, datasets) {
+    new Chart("myCharte", {
+      type: "line",
+      data: {
+        labels: xValues,
+        datasets: datasets
+      },
+      options: {
+        legend: { display: true }
+      }
+=======
 });
 
 function fetchFieldData(username, fieldID) {
@@ -280,6 +325,7 @@ function fetchFieldData(username, fieldID) {
         .catch(error => {
             reject(error);
         });
+>>>>>>> 3e51fafee0d2a27d0aab792323f51202c28c4b98
     });
 }
 

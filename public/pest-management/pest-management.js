@@ -287,7 +287,7 @@ function showPossibleSolution(query) {
             document.getElementById("label-pestSolution").textContent= "Possible solutions :"
 
             var descriptions = data.message.split(/\d+\.\s/).filter(Boolean);
-            var parentContainer = document.getElementById('radioButtonsContainer');
+            var parentContainer = document.getElementById('radioButtonsContainer'); 
 
             for (var i = 0; i < descriptions.length; i++) {
                 var radioButton = document.createElement('input');

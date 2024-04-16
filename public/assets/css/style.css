@@ -741,3 +741,14 @@ width: 360px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 9999;
   }
+
+
+/* Crop management starts */
+
+.crop-recommendation-btn{   
+    width: 200px;
+}
+
+
+
+/* Crop management ends */

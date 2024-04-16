@@ -24,6 +24,7 @@ app.use("/soil-management",express.static(__dirname + "/public/soil-management")
 app.use("/task-management",express.static(__dirname + "/public/task-management")); 
 app.use("/tutorials",express.static(__dirname + "/public/tutorials")); 
 app.use("/chatbot",express.static(__dirname + "/public/chatbot"));  
+app.use("/crop-management",express.static(__dirname + "/public/crop-management"));   
  
 
 app.set("view engine","ejs");      
@@ -839,12 +840,6 @@ app.post('/submit_usage', (req, res) => {
 
 // Resource allocation (inventory) ends ------------------------- 
 
-
-app.use("/",require("./src/routes/pages"));     
-app.use("/api", require("./src/controllers/auth"));  
-
-app.listen(PORT);   
-
 // Task management starts ------------------------- 
 
 app.post('/getTaskInfo', (req, res) => {
@@ -898,3 +893,50 @@ app.post('/submit_task', (req, res) =>{
 });
 
 // Task management ends -------------------------------
+
+
+// Crop management starts -----------------------------
+
+app.post('/getCropData', (req, res) => { 
+
+    const { username } = req.body; 
+
+    const sqlQuery1 = `SELECT * FROM field_crop 
+    JOIN user_field ON user_field.fieldID = field_crop.fieldID
+    JOIN user ON user_field.userID = user.userID
+    JOIN field ON field.fieldID = field_crop.fieldID
+    WHERE username = "${username}"`      
+ 
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+
+
+// Crop management ends -----------------------------
+
+
+
+app.use("/",require("./src/routes/pages"));     
+app.use("/api", require("./src/controllers/auth"));  
+
+app.listen(PORT);   

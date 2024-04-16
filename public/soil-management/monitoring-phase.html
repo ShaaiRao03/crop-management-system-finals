@@ -17,14 +17,15 @@
   <div class="container1">
     <h2>Soil Nutrients Monitoring</h2>
     <div class="input-form">
-      <input type="text" id="searchbar" placeholder="Search" name="searchbar">
-      <button id="search-button" class="searchicon"><i class="fa-solid fa-magnifying-glass"></i></button>
-      <input type="text" id="startdate" placeholder="Start" name="startbar" style="margin-left: 20px;">
-      <button id="start-button" class="searchicon"><i class="fa-solid fa-calendar"></i></button>
-      <input type="text" id="enddate" placeholder="End" name="endbar" style="margin-left: 20px;">
-      <button id="end-button" class="searchicon"><i class="fa-solid fa-calendar"></i></button>
-      <input type="submit" id="update" value="Update" name="update" style="margin-left: 20px;">
+      <label for="startdate" style="font-size: large;">Start</label>
+      <input type="date" id="startdate" style="margin-left: 10px;">
+      
+      <label for="enddate" style="margin-left: 30px;font-size: large;">End</label>
+      <input type="date" id="enddate" style="margin-left: 10px;">
+      
+      <input type="submit" id="update" value="Filter" name="update" style="margin-left: 30px;">
     </div>
+  
     <button class="add-task">Add Nutrients</button>   
     <div id="overlay" class="overlay"></div> 
 
@@ -95,29 +96,8 @@
                       <label for="chartSelect" style="padding-left: 500px; padding-right: 20px;">Select Field:</label>
                       <select id="chartSelect" style="height: 35px;">
                       </select>
-                    <div id="togglebut" style="padding-left: 50px; display: none;"><button style="width: 50px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" onclick="displayGraph()"><i class="fa-solid fa-chart-line"></i></button><button style="width: 50px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;" onclick="displayChart()"><i class="fa-solid fa-chart-pie"></i></button></div>
                   </div>
                   <canvas id="myCharte"></canvas>
-                  <!-- <div id="chart-container-1" style="display: none;padding-top: 5px;">
-                    <div style="display: flex;padding-left: 200px;">
-                      <div>North<br><div style="padding-right: 100px;"><img src="dummy graph.png" width="260px" height="139px"></div></div>
-                      <div>South<br><div><img src="dummy graph.png" width="260px" height="139px"></div></div>
-                    </div>
-                    <div style="display: flex;padding-left:200px;">
-                      <div>East<br><div style="padding-right: 100px;"><img src="dummy graph.png" width="260px" height="139px"></div></div>
-                      <div>West<br><div><img src="dummy graph.png" width="260px" height="139px"></div></div>
-                    </div>
-                  </div>
-                  <div id="chart-container-2" style="display: none;padding-top: 5px;">
-                    <div style="display: flex;padding-left: 200px;">
-                      <div>North<br><div style="padding-right: 170px;"><img src="pie-chart.png" width="140px" height="130px"></div></div>
-                      <div>South<br><div><img src="pie-chart.png" width="140px" height="140px"></div></div>
-                    </div>
-                    <div style="display: flex;padding-left: 200px;">
-                      <div>East<br><div style="padding-right: 170px;"><img src="pie-chart.png" width="140px" height="130px"></div></div>
-                      <div>West<br><div><img src="pie-chart.png" width="140px" height="140px"></div></div>
-                    </div>
-                  </div> -->
                 </div>
             </div>
         </div>

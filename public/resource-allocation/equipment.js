@@ -22,7 +22,6 @@ function fetchEquipmentData() {
     });
 } 
 
-
 function fetchEquipmentDataBySerialNum(serialNum) {
     return new Promise((resolve, reject) => {  
         fetch('/getEquipmentInfoBySerialNum', {  
@@ -511,7 +510,6 @@ function showEquipmentDetails(serialNum){
  
 //  Navigation between pages ends here  ----------------
 
-// Editable starts here ------------------------------
 function makeDetailsEditable() {
     const detailsContainer = document.querySelector('.details-container');
 
@@ -543,16 +541,23 @@ function makeDetailsEditable() {
     
     // Add event listener to the update button
     updateButton.addEventListener('click', function() {
+        // Loop through each input field and replace it with the original text content
+        detailsContainer.querySelectorAll('input[type="text"]').forEach(input => {
+            const span = document.createElement('span');
+            span.classList.add('details-info');
+            span.textContent = input.value.trim();
+            // Replace the input field with the original details info span
+            input.parentNode.replaceChild(span, input);
+        });
 
         editButton.style.display = 'block';
         updateButton.style.display = 'none'; 
         
         deleteButton.classList.remove('disabled');
         deleteButton.removeAttribute('disabled');
-
     });
-
 }
+
 
 function editButtonEventListener(){
     // Call makeDetailsEditable() when the edit button is clicked

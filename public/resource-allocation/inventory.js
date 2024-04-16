@@ -70,6 +70,30 @@ function populateData(){
     });  
 }   
 
+function fetchInventoryByID(inventoryID) {
+    return new Promise((resolve, reject) => {  
+        fetch('/getInventoryInfoByID', {  
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                }, 
+                body: JSON.stringify({ inventoryID }),
+            })
+            .then(response => { 
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => { 
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
+
 function repopulateData(){
     fetchInventoryData()
     .then(data => { 
@@ -144,7 +168,7 @@ function fetchUserID() {
 
 document.getElementsByClassName("add-inventory-btn")[0].addEventListener('click', function() {
     console.log('clicked');
-    openPopup()
+    openPopup();
 }); 
 
 function openPopup() {  
@@ -236,7 +260,7 @@ function closePopup() {
 }
 // Add record ends ----------------------
 
-// Equipment details starts -------------------- 
+// Inventory details starts -------------------- 
 
 function updateInventoryDetails(){
     fetchInventoryData()  
@@ -323,11 +347,74 @@ function updateInventoryDetails(){
     }) 
 }
 
+//TBA
 // update usage record
+function updateUsageRecord(inventoryID){ 
+    fetchInventoryByID(inventoryID) 
+    .then(data => {   
+        console.log(data)
 
+        setTimeout(function() {
+
+            //the table
+            var table = $('#example2').DataTable(); 
+            table.clear(); 
+    
+            // Map data and create rows   
+            data.forEach(item => {
+
+                const usage_date = item.date;
+                const date = usage_date.split('T');
+
+                const row = `<tr> 
+                    <td>${item.action}</td>
+                    <td>${item.quantity}</td>
+                    <td>${date[0]}</td> 
+                </tr>`; 
+    
+                // Add the row to the table
+                table.row.add($(row).get(0));
+            }); 
+            // Redraw the table   
+            table.draw();
+        }, 100);
+
+    })
+}
 
 // reupdate usage record
+function reUpdateUsageRecord(inventoryID){ 
+    fetchInventoryByID(inventoryID) 
+    .then(data => {   
+        console.log(data)
 
+        setTimeout(function() {
+
+            //the table
+            var table = $('#example2').DataTable(); 
+            table.clear(); 
+    
+            // Map data and create rows   
+            data.forEach(item => {
+
+                const usage_date = item.date;
+                const date = usage_date.split('T');
+
+                const row = `<tr> 
+                    <td>${item.action}</td>
+                    <td>${item.quantity}</td>
+                    <td>${date[0]}</td> 
+                </tr>`;
+
+                // Add the row to the table
+                table.row.add($(row).get(0));
+            }); 
+            // Redraw the table   
+            table.draw();
+        }, 100);
+
+    })
+}
 
 // -------------------- TBA ----------------------
 // submit usageForm
@@ -389,7 +476,7 @@ document.getElementById('usageButton').addEventListener('click', function() {
     document.getElementsByClassName('container3-inventoryDetails')[0].style.display = 'none';
     document.getElementById('detailsButton').classList.remove('highlight'); 
     document.getElementById('usageButton').classList.add('highlight'); 
-    //updateMaintenanceRecord(currSerialNum) 
+    updateUsageRecord(inventoryID); //TBA
 });
  
 document.getElementById('backButton').addEventListener('click', function() { 
@@ -416,5 +503,5 @@ function showInventoryDetails(inventoryID) {
  
 //  Navigation between pages ends here  ----------------
 
-
+var inventoryID;
 populateData()  

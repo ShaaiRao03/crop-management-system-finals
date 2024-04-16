@@ -699,8 +699,7 @@ app.post('/getInventoryInfo', (req, res) => {
 
     const sqlQuery1 = `SELECT * FROM inventory
     JOIN user ON user.userID = inventory.user_id 
-    JOIN inventorytype ON inventorytype.inventoryTypeID = inventory.inventoryTypeID  
-    JOIN inventory_stock ON inventory_stock.inventoryID = inventory.inventoryID
+    JOIN inventorytype ON inventorytype.inventoryTypeID = inventory.inventoryTypeID
     WHERE username = "${username}"`     
  
     // Wrapping the database query inside a promise
@@ -779,8 +778,8 @@ app.post('/submit_inventory', upload.single('image'), (req, res) => {
     console.log('insert statement starts'); 
   
     // Insert form data into the database 
-    const sql = 'INSERT INTO inventory (inventoryName, brand, flagThreshold, manufacturer, manufacturerNumber, img, inventoryTypeID, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const values = [formData.name, formData.brand, formData.threshold, formData.manufacturer, formData.manufacturerNum, fileData, formData.type, formData.userID];
+    const sql = 'INSERT INTO inventory (inventoryName, brand, flagThreshold, manufacturer, manufacturerNumber, img, inventoryTypeID, user_id, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const values = [formData.name, formData.brand, formData.threshold, formData.manufacturer, formData.manufacturerNum, fileData, formData.type, formData.userID, formData.balance];
  
     db.query(sql, values, (err, result) => {  
         if (err) { 
@@ -793,18 +792,17 @@ app.post('/submit_inventory', upload.single('image'), (req, res) => {
     });
 });
 
-// -------------------- TBA ----------------------
 app.post('/submit_usage', (req, res) => { 
     // Access form data 
-    const {inventoryID, amount , date , restockUsed} = req.body;
- 
-    console.log("Server :  " , inventoryID, amount, date, restockUsed) 
+    const { inventoryID, amount, date, restockUsedValue } = req.body;
 
-    // Insert form data into the database 
-    //const sql = `INSERT INTO maintenancerecord (serialNum, serviceDescription, date) VALUES ("${currSerialNum}", "${description}", "${date}")`;
-    const sql = `INSERT INTO inventory_stock (inventoryID, restocked, used, balance, date) VALUES ("${inventoryID}", "${restocked}", "${amount}", "${balance}", "${date}")`;
+    console.log("Server : ", inventoryID, amount, date, restockUsedValue);
 
-    db.query(sql, (err, result) => {   
+    // Insert form data into the database using parameterized query
+    const sql = `INSERT INTO inventory_stock (inventoryID, date, quantity, action) VALUES (?, ?, ?, ?)`;
+    const values = [inventoryID, date, amount, restockUsedValue];
+
+    db.query(sql, values, (err, result) => {   
         if (err) { 
             console.error('Error inserting data into database:', err);
             res.status(500).json({ message: 'Error submitting form.' });

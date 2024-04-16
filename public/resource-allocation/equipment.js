@@ -510,6 +510,7 @@ function showEquipmentDetails(serialNum){
  
 //  Navigation between pages ends here  ----------------
 
+// Editable starts here ------------------------------
 function makeDetailsEditable() {
     const detailsContainer = document.querySelector('.details-container');
 

@@ -190,13 +190,14 @@ document.getElementById('inventoryForm').addEventListener('submit', function(eve
     const name = document.getElementById('name').value.trim();
     const brand = document.getElementById('inventory-brand').value.trim();
     const type = document.getElementById('inventory-type').value.trim();
+    const balance = document.getElementById('inventory-balance').value.trim();
     const threshold = document.getElementById('inventory-threshold').value.trim();
     const manufacturer = document.getElementById('inventory-manufacturer').value.trim();
     const manufacturerNum = document.getElementById('inventory-manufacturerNum').value.trim();
     const image = document.getElementById('image').files[0]; // Get the first selected file (if any) 
 
     // Validate required fields
-    if (!name || !type || !brand || !threshold || !manufacturer || !manufacturerNum) {
+    if (!name || !type || !balance || !brand || !threshold || !manufacturer || !manufacturerNum) {
         alert('Please fill in all required fields.');
         return; // Exit the function
     }
@@ -211,6 +212,7 @@ document.getElementById('inventoryForm').addEventListener('submit', function(eve
         formData.append('name', name); 
         formData.append('brand', brand);  
         formData.append('type', type);
+        formData.append('balance', balance);
         formData.append('threshold', threshold);
         formData.append('manufacturer', manufacturer);
         formData.append('manufacturerNum', manufacturerNum);
@@ -430,39 +432,37 @@ document.getElementById('usageForm').addEventListener('submit', function(event) 
     const restockUsed = document.querySelector('input[name="stock-restock-used"]:checked');
 
     // Validate required fields
-    if (!date || !!amount || !restockUsed) {
+    if (!date || !amount || !restockUsed) {
         alert('Please fill in all required fields.');
         return; // Exit the function
     }
       
-    console.log(amount , date , restockUsed) 
+    console.log(amount , date , restockUsed)
+    const restockUsedValue = restockUsed.value;
 
-    
-
-    return new Promise((resolve, reject) => { 
-        fetch('/submit_usage', {  
-            method: 'POST',   
-            headers: { 
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({inventoryID, restockUsed, amount , date}),     
-        }).then(response => { 
-            if (response.ok) { 
-                // Form submitted successfully    
-                alert('Form submitted successfully!');
-                reUpdateMaintenanceRecord(currSerialNum) 
-                closePopup()  
-            } else { 
-                throw new Error('Error submitting form.'); 
-            }
-        }).catch(error => {
-            reject(error) 
-            alert('An error occurred while submitting the form. Please try again.');
-        });
-
-
+    fetch('/submit_usage', {  
+        method: 'POST',   
+        headers: { 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({inventoryID, restockUsedValue, amount , date}),     
     })
+    .then(response => { 
+        if (response.ok) { 
+            // Form submitted successfully    
+            alert('Form submitted successfully!');
+            reUpdateUsageRecord(inventoryID);
+            closePopup();  
+        } else { 
+            throw new Error('Error submitting form.'); 
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error); 
+        alert('An error occurred while submitting the form. Please try again.');
+    });
 });
+
 
 // Equipment details ends --------------------
 
@@ -479,7 +479,7 @@ document.getElementById('usageButton').addEventListener('click', function() {
     document.getElementsByClassName('container3-inventoryDetails')[0].style.display = 'none';
     document.getElementById('detailsButton').classList.remove('highlight');  
     document.getElementById('usageButton').classList.add('highlight'); 
-    updateUsageRecord(inventoryID); //TBA
+    updateUsageRecord(inventoryID);
 });
  
 document.getElementById('backButton').addEventListener('click', function() { 
@@ -508,5 +508,70 @@ function showInventoryDetails(inventoryIDFromLink) {
  
 //  Navigation between pages ends here  ----------------
 
+// Editable starts here ------------------------------
+function makeDetailsEditable() {
+    const detailsContainer = document.querySelector('.details-container');
+
+    // Loop through each details item and replace it with an input field
+    detailsContainer.querySelectorAll('.details-info').forEach(info => {
+        // Create an input field
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('value', info.textContent.trim());
+
+        // Set input field styles to match original details-info class
+        input.style.width = info.offsetWidth + 'px'; // Set width to match
+        input.style.padding = '0'; // Reset padding to match original
+        input.style.marginLeft = '30px';
+        input.style.marginBottom = '0px';
+
+        // Replace the details info span with the input field
+        info.parentNode.replaceChild(input, info);
+    });
+
+    // Hide the edit button
+    const editButton = document.getElementById('editButton'); 
+    editButton.style.display = 'none';
+
+    // Show update button 
+    const updateButton = document.getElementById('updateButton'); 
+    updateButton.style.display = 'block'; 
+
+    const deleteButton = document.getElementById('deleteButton');
+    // Add a disabled class to the button
+    deleteButton.classList.add('disabled');
+
+    // Also, set the disabled attribute to prevent default button behavior
+    deleteButton.setAttribute('disabled', 'disabled');
+    
+    // Add event listener to the update button
+    updateButton.addEventListener('click', function() {
+        // Loop through each input field and replace it with the original text content
+        detailsContainer.querySelectorAll('input[type="text"]').forEach(input => {
+            const span = document.createElement('span');
+            span.classList.add('details-info');
+            span.textContent = input.value.trim();
+            // Replace the input field with the original details info span
+            input.parentNode.replaceChild(span, input);
+        });
+
+        editButton.style.display = 'block';
+        updateButton.style.display = 'none'; 
+        
+        deleteButton.classList.remove('disabled');
+        deleteButton.removeAttribute('disabled');
+    });
+}
+
+
+function editButtonEventListener(){
+    // Call makeDetailsEditable() when the edit button is clicked
+    const editButton = document.getElementById('editButton')
+    editButton.addEventListener('click', makeDetailsEditable);
+}
+
+// Editable ends here ------------------------------
+
 var inventoryID;
-populateData()  
+populateData();
+editButtonEventListener();

@@ -33,10 +33,14 @@ fetchTaskData()
         table.destroy();
 
         data.forEach(item => {
+            // Splitting the duedate string
+            const date = item.duedate.substring(0, 10); // Extract date part
+            const time = item.duedate.substring(11, 19); // Extract time part
+
             const row = `<tr> 
                 <td>${item.taskName}</td>  
                 <td>${item.fieldName}</td>
-                <td>${item.duedate}</td>
+                <td>${date} ${time}</td> <!-- Combine date and time -->
                 <td>${item.taskStatus}</td> 
                 <td>${item.assignee}</td> 
             </tr>`;

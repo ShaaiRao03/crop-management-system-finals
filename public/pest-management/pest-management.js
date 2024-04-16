@@ -82,7 +82,18 @@ function closePopup() {
     document.getElementById('popup').style.display = 'none';
     document.getElementById('popup-pestDetection').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
-}
+    document.getElementsByClassName("preview-container")[0].style.display = 'none';
+    document.getElementsByClassName("img-preview")[0].style.display = 'block';
+
+    if (container) { 
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+    } else {
+        console.error('Container element with ID "radioButtonsContainer" not found.'); 
+    }   
+
+} 
 
 // submit form
 document.getElementById('pestForm').addEventListener('submit', function(event) {
@@ -162,17 +173,21 @@ function fetchUserID() {
 
 
 function detectPest(event) { 
-    event.preventDefault(); 
+    event.preventDefault();  
+    clearPestWithoutImage(event) 
+
     // Show the preview container
-    document.getElementById("pestName").textContent= "" 
+    document.getElementById("pestName").textContent= ""  
     document.querySelector('.preview-container').style.display = 'block';
+    // document.getElementsByClassName("preview-container")[0].style.display = 'none';
+    document.getElementsByClassName("img-preview")[0].style.display = 'none';
     
     // Call the previewImage function to display the image preview
     previewImage();
   }
  
 function previewImage() {
-
+ 
     var input = document.getElementById('image');
     var preview = document.getElementById('preview');
     var file = input.files[0];
@@ -204,22 +219,26 @@ function previewImage() {
                 const obj = JSON.parse(stringifiedData[i]);
                 if (obj.score > highestScore) {
                     highestScore = obj.score;
-                    labelWithHighestScore = obj.label;
+                    labelWithHighestScore = obj.label; 
                 }
             }
 
-            console.log("Label with highest score:", labelWithHighestScore);
+            console.log("Label with highest score:", labelWithHighestScore); 
             console.log("Highest score:", highestScore);
  
             console.log(stringifiedData);
-            document.getElementById("pestName").textContent= "Predicted Pest : " + labelWithHighestScore
+            // document.getElementById("pestName").textContent= "Predicted Pest : " + labelWithHighestScore
+
             const parsedScore = parseFloat(highestScore); // Convert highestScore to a number
 
             if(parsedScore > 0.5){
-                document.getElementById("pestName").textContent= "Predicted Pest : " + labelWithHighestScore 
-                message = fetchMessage(`Can you suggest 3 pest management for the following pest "${labelWithHighestScore}" ? Keep your answer in point form and as short as possible. Give me in numbers.`)
-                console.log(message)
-            } else {
+                document.getElementById("pestName").innerHTML = "Predicted Pest: <span style='color: black;'>" + labelWithHighestScore + "</span>";
+
+                document.getElementById("label-pestSolution").textContent= "Fetching possible solutions..."
+                showPestDescription(`Can you give me a description for the following pest "${labelWithHighestScore}" ? Keep your answer as short as possible. I dont need unnecessary information. Dont use any special characters. Thank you`);
+                showPossibleSolution(`Can you suggest 3 pest management for the following pest "${labelWithHighestScore}" ? Keep your answer in point form and as short as possible. Give me in numbers and only the points. I dont need unnecessary information. Dont use any special characters other than ':'. Thank you`);
+
+            } else { 
                 document.getElementById("pestName").textContent= "Sorry, we could'nt detect the pest"
             }
 
@@ -230,21 +249,90 @@ function previewImage() {
 
 
     } else {
+        document.getElementsByClassName("preview-container")[0].style.display = 'none';
+        document.getElementsByClassName("img-preview")[0].style.display = 'block';
         alert('No file selected.'); 
-    }
+    } 
 
 } 
+
+function showPestDescription(query) { 
+    fetchMessage(query)
+    .then(data => {
+        pestDescription = document.getElementById("pestDescription") 
+                
+        if (pestDescription) {    
+            document.getElementById("label-pestDescription").textContent= "Pest Description :"
+            pestDescription.textContent = data.message;  
+            pestDescription.style.color = 'black';
+        } else {
+            console.error('Label element with class "generated-message" not found.'); 
+        }
+
+    })
+    .catch(error => {
+        console.error(error); 
+    });
+}
+
+function showPossibleSolution(query) {
+    fetchMessage(query)
+    .then(data => {
+        // console.log(data); 
+        
+        solution = document.getElementById("generated-solution")
+                
+        if (solution) {   
+
+            document.getElementById("label-pestSolution").textContent= "Possible solutions :"
+
+            var descriptions = data.message.split(/\d+\.\s/).filter(Boolean);
+            var parentContainer = document.getElementById('radioButtonsContainer');
+
+            for (var i = 0; i < descriptions.length; i++) {
+                var radioButton = document.createElement('input');
+                radioButton.type = 'radio';  
+                radioButton.id = 'option' + (i + 1);
+                radioButton.name = 'option';
+                radioButton.value = i + 1;
+                radioButton.style.width = '20px'; // Set a fixed width for the radio button
+                radioButton.style.flexShrink = 0; // Ensure radio button doesn't shrink
+            
+                var container = document.createElement('div'); // Create a container for each radio button and label
+                container.style.display = 'flex'; // Use flexbox for layout
+                container.style.alignItems = 'center'; // Align items vertically in the container
+            
+                var label = document.createElement('label');
+                label.htmlFor = 'option' + (i + 1); 
+                label.appendChild(document.createTextNode(descriptions[i]));
+                label.style.color = 'black';  
+            
+                container.appendChild(radioButton);
+                container.appendChild(label);
+                container.appendChild(document.createElement('br'));
+                parentContainer.appendChild(container); // Append the container to its parent
+            }
+
+        } else {
+            console.error('Label element with class "generated-message" not found.'); 
+        }
+
+    })
+    .catch(error => {
+        console.error(error); 
+    });
+}
 
 
 function fetchMessage(query) { 
     return new Promise((resolve, reject) => {    
-        fetch('/getMessage', { 
+        fetch('/getMessage', {  
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json', 
                 },
                 body: JSON.stringify({ query }), 
-            })
+            }) 
             .then(response => {
                 if (!response.ok) {  
                     throw new Error('Network response was not ok'); 
@@ -252,26 +340,18 @@ function fetchMessage(query) {
                 return response.json();
             })   
             .then(data => {
- 
-                // Select the label element with the class "generated-message"
-                const labelElement = document.querySelector('.generated-message');
-
-                if (labelElement) { 
-                    labelElement.textContent = data.message; // Change 'New message' to whatever message you want to set
-                } else {
-                    console.error('Label element with class "generated-message" not found.'); 
-                }
- 
+  
                 resolve(data); // Resolve with the fetched data  
             })
             .catch(error => { 
                 reject(error); // Reject with the error
-            });     
+            });      
     }); 
 } 
+ 
 
 
-async function query(imageData) {
+async function query(imageData) { 
     const API_TOKEN = "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";
     const response = await fetch(
         "https://api-inference.huggingface.co/models/Bazaar/cv_forest_pest_detection",
@@ -292,9 +372,49 @@ function clearPest(event) {
     event.preventDefault(); // Prevent form submission
 
     // Reset the form
-    document.getElementById('recordForm').reset();
+    document.getElementById('recordForm').reset();  
+    solution = document.getElementById("generated-solution")
+    solution.textContent = ""
+    document.getElementById("label-pestSolution").textContent= "" 
 
     // Hide the image preview container and show the image preview label
     document.querySelector('.img-preview').style.display = 'block';
     document.querySelector('.preview-container').style.display = 'none';
+
+    var container = document.getElementById('radioButtonsContainer');
+
+    if (container) { 
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+    } else {
+        console.error('Container element with ID "radioButtonsContainer" not found.'); 
+    }
+
+}
+
+
+function clearPestWithoutImage(event) { 
+    event.preventDefault(); // Prevent form submission
+
+    // Reset the form
+    // document.getElementById('recordForm').reset();   
+    solution = document.getElementById("generated-solution")
+    solution.textContent = ""
+    document.getElementById("label-pestSolution").textContent= "" 
+
+    // Hide the image preview container and show the image preview label
+    document.querySelector('.img-preview').style.display = 'block';
+    document.querySelector('.preview-container').style.display = 'none';
+
+    var container = document.getElementById('radioButtonsContainer');
+
+    if (container) { 
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+    } else {
+        console.error('Container element with ID "radioButtonsContainer" not found.'); 
+    }
+
 }

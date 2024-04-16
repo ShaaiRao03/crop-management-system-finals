@@ -36,6 +36,9 @@ function sendMessage(){
     const inputElement = document.getElementById('query-input');
     const message = inputElement.value;
 
+    const labelElement = document.querySelector('.generated-message');
+    labelElement.textContent = "Fetching result..."; // Change 'New message' to whatever message you want to set 
+
     if(!message){
         alert("No message is being sent")
     }else {

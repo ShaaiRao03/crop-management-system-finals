@@ -209,7 +209,7 @@ document.getElementById('inventoryForm').addEventListener('submit', function(eve
         // Construct form data to be sent to the API
         const formData = new FormData(); 
         formData.append('name', name); 
-        formData.append('brand', brand); 
+        formData.append('brand', brand);  
         formData.append('type', type);
         formData.append('threshold', threshold);
         formData.append('manufacturer', manufacturer);
@@ -262,16 +262,18 @@ function closePopup() {
 
 // Inventory details starts -------------------- 
 
-function updateInventoryDetails(){
-    fetchInventoryData()  
-    .then(data => { 
+function updateInventoryDetails(inventoryID){ 
+    fetchInventoryByID(inventoryID)     
+    .then(data => {  
 
         inventoryData = data[0] 
-        console.log(inventoryData.img)
+        // console.log(inventoryData.img)
+
+        console.log(data)
 
        // const last_serviceDate = equipmentData.lastService;
        // const last_service = last_serviceDate.split('T'); 
-
+ 
         document.querySelector('.details-info.name').textContent = inventoryData.inventoryName;  
         document.querySelector('.details-info.type').textContent = inventoryData.inventoryType;
         document.querySelector('.details-info.brand').textContent = inventoryData.brand;
@@ -313,7 +315,7 @@ function updateInventoryDetails(){
                 // console.log(existingImgElement); // Check if existingImgElement is found
                 // console.log(existingImgElement.parentNode);  
 
-                existingImgElement.parentNode.replaceChild(imgElement, existingImgElement);
+                existingImgElement.parentNode.replaceChild(imgElement, existingImgElement); 
             };
             reader.readAsDataURL(blob);
 
@@ -325,7 +327,7 @@ function updateInventoryDetails(){
             // Create a new Image element 
             var imgElement = document.createElement("img");
  
-            // Set the src attribute to the fallback image URL
+            // Set the src attribute to the fallback image URL 
             imgElement.src = fallbackImageUrl;
 
             imgElement.id = "inventory-image"
@@ -350,7 +352,8 @@ function updateInventoryDetails(){
 //TBA
 // update usage record
 function updateUsageRecord(inventoryID){ 
-    fetchInventoryByID(inventoryID) 
+    console.log("Inventory id : ",inventoryID) 
+    fetchInventoryByID(inventoryID)   
     .then(data => {   
         console.log(data)
 
@@ -362,9 +365,9 @@ function updateUsageRecord(inventoryID){
     
             // Map data and create rows   
             data.forEach(item => {
-
+                console.log(data)
                 const usage_date = item.date;
-                const date = usage_date.split('T');
+                const date = usage_date.split('T'); 
 
                 const row = `<tr> 
                     <td>${item.action}</td>
@@ -474,12 +477,13 @@ document.getElementById('detailsButton').addEventListener('click', function() {
 document.getElementById('usageButton').addEventListener('click', function() {
     document.getElementsByClassName('container3-usagetable')[0].style.display = 'block';
     document.getElementsByClassName('container3-inventoryDetails')[0].style.display = 'none';
-    document.getElementById('detailsButton').classList.remove('highlight'); 
+    document.getElementById('detailsButton').classList.remove('highlight');  
     document.getElementById('usageButton').classList.add('highlight'); 
     updateUsageRecord(inventoryID); //TBA
 });
  
 document.getElementById('backButton').addEventListener('click', function() { 
+    document.getElementsByClassName('container3-usagetable')[0].style.display = 'none'; 
     document.getElementsByClassName('inventory-details')[0].style.display = 'none'; 
     document.getElementsByClassName('container1')[0].style.display = 'block';
     document.getElementById('detailsButton').classList.add('highlight'); 
@@ -488,11 +492,12 @@ document.getElementById('backButton').addEventListener('click', function() {
     table.clear();
 }); 
 
-function showInventoryDetails(inventoryID) {   
-    console.log(inventoryID);
-    currID = inventoryID; 
- 
-    updateInventoryDetails()
+
+function showInventoryDetails(inventoryIDFromLink) {    
+    console.log("Test: ", inventoryID);  
+    inventoryID = inventoryIDFromLink; 
+  
+    updateInventoryDetails(inventoryID)
 
     document.getElementsByClassName('inventory-details')[0].style.display = 'block';
     document.getElementsByClassName('container1')[0].style.display = 'none';

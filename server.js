@@ -726,14 +726,15 @@ app.post('/getInventoryInfo', (req, res) => {
         });
 }); 
 
-//TBA
-app.post('/getInventoryInfoByID', (req, res) => {
 
+app.post('/getInventoryInfoByID', (req, res) => { 
+  
     const { inventoryID } = req.body;  
-
+ 
     //need inventory ID, action, amount, date
     const sqlQuery1 = `SELECT * FROM inventory
     JOIN inventory_stock ON inventory_stock.inventoryID = inventory.inventoryID
+    JOIN inventorytype ON inventorytype.inventoryTypeID = inventory.inventoryTypeID  
     WHERE inventory.inventoryID = "${inventoryID}"` 
 
     // Wrapping the database query inside a promise

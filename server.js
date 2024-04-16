@@ -90,7 +90,7 @@ async function getGroqChatCompletion(query) {
 // Information about user starts ---------------------------
 
 app.post('/getUserID', (req, res) => {
-    const { username } = req.body;
+    const { username } = req.body; 
 
     const sqlQuery1 = `SELECT userID FROM user WHERE username = '${username}';`;  
 
@@ -206,7 +206,7 @@ app.post('/getEquipmentInfoBySerialNum', (req, res) => {
             }); 
         });
     };
-
+ 
     // Call the function that returns the promise
     executeQuery()
         .then((data) => {
@@ -780,8 +780,6 @@ app.post('/submit_usage', (req, res) => {
         res.status(200).json({ message: 'Form submitted successfully!' });
     });
 });
-
-// Resource allocation (inventory) ends ------------------------- 
 
 // Resource allocation (inventory) ends ------------------------- 
 

@@ -230,6 +230,7 @@ function openPopupUsage() {
 }
 
 function closePopup() {
+    document.getElementById('popup').style.display = 'none';
     document.getElementById('popup-record').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
 }
@@ -400,10 +401,10 @@ document.getElementById('backButton').addEventListener('click', function() {
     table.clear();
 }); 
 
-function showInventoryDetails(inventoryID) {
+function showInventoryDetails(inventoryID) {   
     console.log(inventoryID);
-    currID = inventoryID;
-
+    currID = inventoryID; 
+ 
     updateInventoryDetails()
 
     document.getElementsByClassName('inventory-details')[0].style.display = 'block';

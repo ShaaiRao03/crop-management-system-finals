@@ -281,11 +281,11 @@ async function query(imageData) {
             body: imageData,
         }
     );
-    const result = await response.json();
+    const result = await response.json(); 
     return result;
 }
 
-
+ 
 
 
 function clearPest(event) {

@@ -699,8 +699,7 @@ app.post('/getInventoryInfo', (req, res) => {
 
     const sqlQuery1 = `SELECT * FROM inventory
     JOIN user ON user.userID = inventory.user_id 
-    JOIN inventorytype ON inventorytype.inventoryTypeID = inventory.inventoryTypeID  
-    JOIN inventory_stock ON inventory_stock.inventoryID = inventory.inventoryID
+    JOIN inventorytype ON inventorytype.inventoryTypeID = inventory.inventoryTypeID
     WHERE username = "${username}"`     
  
     // Wrapping the database query inside a promise

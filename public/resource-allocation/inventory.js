@@ -351,7 +351,6 @@ function updateInventoryDetails(inventoryID){
     }) 
 }
 
-//TBA
 // update usage record
 function updateUsageRecord(inventoryID){ 
     console.log("Inventory id : ",inventoryID) 
@@ -360,6 +359,9 @@ function updateUsageRecord(inventoryID){
         console.log(data)
 
         setTimeout(function() {
+            // Update Current Balance
+            const currBalance = data[0].balance;
+            document.getElementById("balanceVal").textContent = currBalance;
 
             //the table
             var table = $('#example2').DataTable(); 
@@ -394,6 +396,9 @@ function reUpdateUsageRecord(inventoryID){
         console.log(data)
 
         setTimeout(function() {
+            // Update Current Balance
+            const currBalance = data[0].balance;
+            document.getElementById("balanceVal").textContent = currBalance;
 
             //the table
             var table = $('#example2').DataTable(); 
@@ -573,6 +578,63 @@ function editButtonEventListener(){
 
 // Editable ends here ------------------------------
 
+// Clearing form data starts here ------------------------------
+function clearInventoryFormData(){
+    // Remove the 'required' attribute from all required fields
+    document.querySelectorAll('#inventoryForm [required]').forEach(field => {
+        field.removeAttribute('required');
+    });
+
+    // Reset the form
+    document.getElementById("inventoryForm").reset();
+
+    // Add back the 'required' attribute to required fields
+    document.querySelectorAll('#inventoryForm [data-required]').forEach(field => {
+        field.setAttribute('required', 'required');
+    });
+}
+
+function clearRecordFormData(){
+    // Remove the 'required' attribute from all required fields
+    document.querySelectorAll('#usageForm [required]').forEach(field => {
+        field.removeAttribute('required');
+    });
+
+    // Reset the form
+    document.getElementById("usageForm").reset();
+
+    // Add back the 'required' attribute to required fields
+    document.querySelectorAll('#usageForm [data-required]').forEach(field => {
+        field.setAttribute('required', 'required');
+    });
+}
+
+function clearButtonEventListener(){
+    const clearBtn = document.getElementById('clearInventoryBtn');
+    clearBtn.addEventListener('click', function(event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        
+        // Clear the form data
+        clearInventoryFormData();
+    });
+}
+
+function clearRecordButtonEventListener(){
+    const clearBtn = document.getElementById('clearRecordBtn');
+    clearBtn.addEventListener('click', function(event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        
+        // Clear the form data
+        clearRecordFormData();
+    });
+}
+
+// Clearing form data ends here ------------------------------
+
 var inventoryID;
 populateData();
 editButtonEventListener();
+clearButtonEventListener();
+clearRecordButtonEventListener();

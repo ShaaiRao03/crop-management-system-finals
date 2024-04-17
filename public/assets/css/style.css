@@ -642,6 +642,22 @@ width: 360px;
     height: auto; 
 } 
 
+/* Inventory usage (button + balance) -----------------------*/
+.recordBalanceRow {
+    display: flex;
+    justify-content: space-between; /* Items will be spaced evenly with the first item at the start and the last item at the end */
+    align-items: center; /* Align items vertically in the center */
+}
+
+#currBalanceText {
+    font-size: 40px;
+}
+
+#balanceVal {
+    font-size: 40px;
+    font-weight: 100;
+}
+
 /* Chatbot ---------------------------------------- */
 
 #query-input{ 

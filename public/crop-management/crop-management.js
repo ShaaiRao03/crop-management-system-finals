@@ -109,28 +109,44 @@ document.getElementById("backButton").addEventListener('click', function() {
 
 
 document.getElementsByClassName("crop-recommendation-btn")[0].addEventListener('click', function() {
-    console.log('clicked');
     openPopupRecommendation() 
 }); 
 
 document.getElementsByClassName("add-crop-btn")[0].addEventListener('click', function() {
-    console.log('clicked');
     openPopup() 
 });  
 
 
-
-document.getElementsByClassName("add-crop-btn")[0].addEventListener('click', function() {
-    console.log('clicked');
-    openPopup() 
-});  
- 
 
 document.getElementsByClassName("generate-plan-btn")[0].addEventListener('click', function() {
-    console.log('clicked');
     openPopupGeneratePlan();  
 });  
  
+document.getElementsByClassName("autofill-plan-form")[0].addEventListener('click', function() { 
+    openPopupAutoFillPlan();  
+});  
+
+document.getElementsByClassName("autofill-crop-form")[0].addEventListener('click', function() { 
+    const selectedCrop = document.querySelector('input[name="option"]:checked').value;
+    currentChosenCrop = selectedCrop;
+    openPopupAutoFillCrop();  
+});  
+
+
+function openPopupAutoFillCrop() {
+    document.getElementsByClassName('popup-crop-autofill')[0].style.display = 'block'; 
+    document.getElementById('popup-cropRecommendation').style.display = 'none';
+    document.getElementById('overlay').style.display = 'block';  
+    generateAutoFillCropForm(currentChosenCrop); 
+}
+
+ 
+function openPopupAutoFillPlan() {
+    document.getElementsByClassName('popup-plan-autofill')[0].style.display = 'block'; 
+    document.getElementById('popup-generatePlan').style.display = 'none';
+    document.getElementById('overlay').style.display = 'block'; 
+    generateAutoFillPlanForm(currentPlan);
+} 
 
  
 function openPopup() {  
@@ -157,10 +173,12 @@ function openPopupRecommendation() {
 }
 
 function closePopup() {
+    document.getElementsByClassName('popup-crop-autofill')[0].style.display = 'none'; 
     document.getElementById('popup-cropRecommendation').style.display = 'none';
     document.getElementById('popup').style.display = 'none'; 
     document.getElementById('overlay').style.display = 'none'; 
     document.getElementById('popup-generatePlan').style.display = 'none';
+    document.getElementsByClassName('popup-plan-autofill')[0].style.display = 'none'; 
 }
 
 
@@ -218,14 +236,19 @@ function showRecommendedCrop(query) {
             document.getElementById("label-cropPreview").textContent= "Recommended Crops :"
 
             var descriptions = data.message.split(/\d+\.\s/).filter(Boolean);
+
+
             var parentContainer = document.getElementById('radioButtonsContainer'); 
 
             for (var i = 0; i < descriptions.length; i++) {
+
+                getCropName = descriptions[i].split('-')[0].trim();
+
                 var radioButton = document.createElement('input');
                 radioButton.type = 'radio';  
                 radioButton.id = 'option' + (i + 1);
                 radioButton.name = 'option';
-                radioButton.value = i + 1;
+                radioButton.value = getCropName;   
                 radioButton.style.width = '20px'; // Set a fixed width for the radio button
                 radioButton.style.flexShrink = 0; // Ensure radio button doesn't shrink
             
@@ -444,13 +467,15 @@ function generatePlan(event){
     event.preventDefault();
     console.log("In generate plan")
     
-    var cropField = document.getElementById("crop-field-plan").value;
-    var plantDateTemp = document.getElementById("plant-date").value;
+    var plantDateTemp = document.getElementById("plant-date").value; 
     var plantDate = new Date(plantDateTemp); 
 
+    solution = document.getElementById("generated-plan")   
+
+    document.getElementById("label-planPreview").textContent= "Generating plan ..."
 
     // Check if both fields have values
-    if (cropField.trim() === '' || plantDateTemp.trim() === '') {
+    if (plantDateTemp.trim() === '') {
         alert('Please provide values for both fields');
     } else {
 
@@ -463,10 +488,8 @@ function generatePlan(event){
             fetchMessage(`Given ${data[0].cropName} as the preferred crop to be planted in Malaysia. Can you give me a full plan in terms of range of days and the preferred action. The plan must cover the planting phase until the harvesting phase. Dont include unnecessary words. Keep it short and simple for beginners. Give them all the necessary details such as number of seeds per hectare, fertilizer to use, quantity of fertilizer and so on. Use the following format "Day 1-30 : Description".Dont use any special characters apart from "-". Thank you`)
             .then(messageData => { 
                 
-                solution = document.getElementById("generated-plan")   
-                        
                 if (solution) {   
-    
+                    
                     text = messageData.message  
                     
                     const sections = text.split('Day ').slice(1);
@@ -482,16 +505,22 @@ function generatePlan(event){
                     
                     const amendedData = {};
 
-                    // Iterate through the original data and calculate new dates for each key
+                    // Iterate through the original data and calculate new dates for each key 
                     for (const [key, value] of Object.entries(dict)) {
                         const newDateRange = calculateNewDates(key,plantDate);
                         amendedData[newDateRange] = value; // Assign the value to the new key
                     } 
  
-                    console.log(amendedData); 
-                    
+                    console.log(amendedData);  
+ 
+                    currentPlan = amendedData; 
+
+                    document.getElementById("label-planPreview").textContent= ""
+
                     document.getElementsByClassName('plan-preview')[0].style.display = 'block';
                     var planContainer = document.getElementById('planContainer');
+
+                    solution.innerHTML = "Generated Plan :";         
 
                     // Loop through the data and generate HTML for each date range and action description
                     for (const [dateRange, actionDescription] of Object.entries(amendedData)) {
@@ -509,6 +538,21 @@ function generatePlan(event){
 
                         planContainer.appendChild(section);
                     }
+
+
+                    // Get all sections within planContainer
+                    const sections2 = planContainer.querySelectorAll('.section');
+
+                    // Iterate over each section and print the date range and action description
+                    sections2.forEach(section => {
+                        // Get date heading and action paragraph within each section
+                        const dateHeading = section.querySelector('h2');
+                        const actionParagraph = section.querySelector('p');
+                        
+                        // Print the text content of date heading and action paragraph
+                        console.log('Date Range:', dateHeading.textContent);
+                        console.log('Action Description:', actionParagraph.textContent);
+                    });
                 
                 } else {
                     console.error('Label element with class "generated-plan" not found.'); 
@@ -529,5 +573,364 @@ function generatePlan(event){
 }
 
 
-var fieldCropID; 
-populateData();
+// dynamic form for auto fill recommended crop -------------------------------------
+
+
+function createFormCropRecommendation(cropName) {
+    const form = document.createElement('form');
+    form.className = 'cropRecommendation-form'; // Added a class for styling purposes
+    form.enctype = 'multipart/form-data';  
+    form.id = 'cropForm2'; 
+    
+    form.innerHTML = `   
+    <label class="form-title">Add New Crop</label> 
+        <label for="name">Crop:</label> 
+        <input type="text" id="name" name="name" value="${cropName}"><br>
+
+        <label for="type">Field:</label> 
+        <input type="text" id="field" name="field"><br>
+    
+        <label for="coveredArea">Covered Area (Hectare):</label>
+        <input type="text" id="coveredArea" name="coveredArea"><br>
+
+        <div class="button-container">
+            <button type="submit" onclick="submitNewCrop2(event)" class="submit-new-crop">Submit</button>
+            <button class="clear-btn">Clear</button> 
+        </div>
+    `; 
+
+    return form; 
+} 
+
+
+document.getElementsByClassName("submit-new-crop")[0].addEventListener('click', function() {
+    console.log('clicked');
+    submitNewCrop() 
+});
+
+function generateAutoFillCropForm(cropName){
+    const container = document.getElementsByClassName('popup-crop-autofill')[0]; 
+    const form = createFormCropRecommendation(cropName);
+    container.appendChild(form);
+}
+  
+
+function submitNewCrop2(event){    
+    event.preventDefault();
+    
+    const form = document.getElementById('cropForm2');
+    console.log(form)
+
+    // Access the input fields by their IDs
+    const cropName = form.querySelector('#name').value;
+    const field = form.querySelector('#field').value;
+    const coveredArea = form.querySelector('#coveredArea').value;
+
+    console.log(cropName, field, coveredArea); 
+
+    // // Check if any of the required fields are empty
+    if (!cropName || !field || !coveredArea) {
+        alert('Please fill in all fields.');
+        return; // Exit the function early if any field is empty
+    } 
+   
+    insertCropDataIntoDatabase(form);
+
+}
+
+function insertCropDataIntoDatabase(form) { 
+    const formData = new FormData(form); // Get form data using FormData API
+
+    // Extract data from form fields
+    const cropName = formData.get('name');
+    const fieldID = formData.get('field');
+    const coveredArea = formData.get('coveredArea');
+
+
+    fetch('/insertCrop', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({cropName , fieldID, coveredArea}) 
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');  
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Form data inserted successfully:', data);
+        // Handle successful insertion
+    })
+    .catch(error => {
+        console.error('Error inserting form data into database:', error);
+        // Handle the error
+    }); 
+
+}
+
+// dynamic form for auto fill generate plan -------------------------------------
+
+function createForm(startDate, endDate, description, isActive , isFirstForm = false) {
+    const form = document.createElement('form');
+    form.className = 'phase-form'; // Added a class for styling purposes
+    form.enctype = 'multipart/form-data';
+
+    if (isFirstForm) {
+        form.innerHTML = `
+        <label for="type">Description:</label>
+        <input type="text" class="plan-description" name="description" value="${description}"><br> 
+
+        <label for="type">Start date:</label>
+        <input type="date" class="plan-start-date" name="startDate" value="${startDate}"><br> 
+
+        <label for="type">End date:</label> 
+        <input type="date" class="plan-end-date" name="endDate" value="${endDate}"><br> 
+
+        <div class="radio-buttons">    
+            <label>Status:</label>
+            <input type="radio" class="active" name="status" value="1" ${isActive ? 'checked' : ''}>
+            <label for="active">Active</label><br>
+            <input type="radio" class="inactive" name="status" value="0" ${isActive ? '' : 'checked'}>
+            <label for="inactive">Inactive</label><br>
+        </div>
+        `; 
+        
+    } else {
+        form.innerHTML = ` 
+        <label for="type">Description:</label>
+        <input type="text" class="plan-description" name="description" value="${description}"><br> 
+
+        <label for="type">Start date:</label>
+        <input type="date" class="plan-start-date" name="startDate" value="${startDate}"><br> 
+
+        <label for="type">End date:</label> 
+        <input type="date" class="plan-end-date" name="endDate" value="${endDate}"><br> 
+
+        <div class="radio-buttons">    
+            <label>Status:</label>
+            <input type="radio" class="active" name="status" value="1" ${isActive ? 'checked' : ''}>
+            <label for="active">Active</label><br>
+            <input type="radio" class="inactive" name="status" value="0" ${isActive ? '' : 'checked'}>
+            <label for="inactive">Inactive</label><br>
+        </div>
+    
+        <div class="button-container"> 
+            <button type="button" onclick="removeForm(this)" class="remove-form-btn red-button">Remove</button>
+        </div>
+    `;
+    }
+
+    return form; 
+}
+
+function insertPlanDataIntoDatabase(forms) {
+    // Iterate over each form
+    forms.forEach(form => {
+        const formData = new FormData(form); // Get form data using FormData API
+
+        // Extract data from form fields
+        const description = formData.get('description'); 
+        const startDate = formData.get('startDate');
+        const endDate = formData.get('endDate');
+        const status = formData.get('status');
+ 
+        console.log(description)
+        
+        // Prepare the request body
+        const requestBody = {
+            fieldCropID, // Assuming you have a hidden field with name 'fieldCropID' in your form 
+            description,
+            startDate,
+            endDate,
+            status
+        };
+
+        // Make a POST request to the /insertCropPlan endpoint
+        fetch('/insertCropPlan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');  
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Form data inserted successfully:', data);
+            // Handle successful insertion
+        })
+        .catch(error => {
+            console.error('Error inserting form data into database:', error);
+            // Handle the error
+        });
+    });
+}
+
+
+function updateEntirePlanStatus(fieldCropID){
+    return new Promise((resolve, reject) => {  
+        fetch('/updateExistingPlanStatus', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ fieldCropID }), 
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+}
+
+
+
+// Function to handle form submission 
+function submitForms(event) {
+    event.preventDefault();
+    const forms = document.querySelectorAll('.phase-form');
+    
+    // Count the number of checked active radio buttons
+    const activeCount = document.querySelectorAll('.active:checked').length;
+    
+    // If more than one active status is selected, show an alert
+    if (activeCount > 1) {
+        alert('Please choose only one active status.');
+        return; // Prevent further execution of submission logic
+    }
+
+    updateEntirePlanStatus(fieldCropID)
+    .then(data => {
+        insertPlanDataIntoDatabase(forms);
+        console.log("Updated all status") 
+    }) 
+    .catch(error => {
+        console.error('Error updating plan status:', error);
+    });
+
+}
+
+// Function to clear all forms
+function clearForms(event) { 
+    event.preventDefault();
+    const descriptions = document.querySelectorAll('.plan-description');
+    const startDates = document.querySelectorAll('.plan-start-date');
+    const endDates = document.querySelectorAll('.plan-end-date');
+    const activeRadios = document.querySelectorAll('.active');
+    const inactiveRadios = document.querySelectorAll('.inactive');
+
+    descriptions.forEach(input => input.value = '');
+    startDates.forEach(input => input.value = '');
+    endDates.forEach(input => input.value = '');
+    activeRadios.forEach(input => input.checked = false);  
+    inactiveRadios.forEach(input => input.checked = false);  
+} 
+
+
+// Function to remove a form
+function removeForm(button) {
+    const form = button.closest('.phase-form');
+    const container = form.parentNode;
+    const forms = container.querySelectorAll('.phase-form');
+
+    // Check if there's only one form left
+    if (forms.length > 1) { 
+        form.parentNode.removeChild(form);
+    } else {
+        alert("At least one form must remain.");
+    }
+}
+
+// Function to add a new form without data 
+function addForm() {
+
+    const container = document.getElementsByClassName('popup-plan-autofill')[0];
+    const buttonContainer = container.querySelector('.button-container2');
+    const form = createForm('', '', '', false);
+    container.insertBefore(form, buttonContainer);
+
+}
+
+
+function generateAutoFillPlanForm(currentPlan){ 
+    const container = document.getElementsByClassName('popup-plan-autofill')[0];
+    // container.style.display = 'block'; 
+
+    const formTitle = document.createElement('label');
+    formTitle.className = 'form-title';
+    formTitle.textContent = 'Add Plan';
+    container.appendChild(formTitle); 
+
+    console.log(currentPlan);
+
+    let firstForm = true;
+    // let dataCount = 0;
+    Object.entries(currentPlan).forEach(([dateRange, description]) => { 
+        const [startDate, endDate] = dateRange.split(' - ');
+        const isActive = firstForm;
+        firstForm = false;
+
+        console.log(startDate, endDate);
+
+        const [startDatemonth, startDateday,  startDateyear] = startDate.split('/');
+        const startDateObject = new Date(`${startDateyear}-${startDatemonth.padStart(2, '0')}-${startDateday.padStart(2, '0')}`);
+        finalStartDate = startDateObject.toISOString().split('T')[0]; // Output: 2024-05-16
+    
+        const [endDatemonth, endDateday, endDateyear] = endDate.split('/'); 
+        const endDateObject = new Date(`${endDateyear}-${endDatemonth.padStart(2, '0')}-${endDateday.padStart(2, '0')}`);
+        finalEndDate = endDateObject.toISOString().split('T')[0]; // Output: 2024-06-30  
+     
+        const form = createForm(finalStartDate, finalEndDate, description, isActive, isActive);
+        container.appendChild(form); 
+    });
+
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.id = 'form-container'; 
+    buttonContainer.className = 'button-container2'; 
+
+    // Add event listeners to submit and clear buttons 
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Submit';
+    submitButton.addEventListener('click', submitForms); 
+    buttonContainer.appendChild(submitButton);
+
+    // Add button to add a new form
+    const addFormButton = document.createElement('button');
+    addFormButton.textContent = 'Add Form';
+    addFormButton.addEventListener('click', addForm);
+    buttonContainer.appendChild(addFormButton);  
+
+
+    const clearButton = document.createElement('button');
+    clearButton.type = 'button';
+    clearButton.textContent = 'Clear All';
+    clearButton.className = 'red-button';
+    clearButton.addEventListener('click', clearForms);
+    buttonContainer.appendChild(clearButton);
+
+
+    container.appendChild(buttonContainer); 
+}
+
+
+var currentChosenCrop;
+var currentPlan;
+var fieldCropID;  
+populateData(); 

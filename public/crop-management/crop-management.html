@@ -34,7 +34,7 @@
                 </div>
             </div> 
         </div>
-
+ 
         <div id="overlay" class="overlay"></div> 
 
         <div class="container2" style="display: none;">
@@ -75,25 +75,23 @@
             <span class="close" onclick="closePopup()">&times;</span>    
             <label class="form-title">Generate Plan</label> 
             <form id="planForm" enctype="multipart/form-data">  
-
-                <label for="type">Select a field:</label>
-                <input type="text" id="crop-field-plan" name="field" required><br>
+ 
                 
-                <label for="type">Select plant date:</label>
+                <label for="type">Select plant date:</label> 
                 <input type="date" id="plant-date" name="field"><br>    
                 
             
                 <div class="button-container"> 
                     <button type="submit" onclick="generatePlan(event)" class="detect-pest">Generate Plan</button> 
-                    <button type="submit" onclick="clearPlan(event)" class="clear-btn">Clear</button> 
+                    <button type="submit" onclick="clearGeneratedPlan(event)" class="clear-btn">Clear</button> 
                 </div>  
             </form>          
 
-            <div class="plan-preview" style="display: none;">  
-                    <label id="label-planPreview" for="label-planPreview"></label>   
+            <label id="label-planPreview" for="label-planPreview"></label>   
+            <div class="plan-preview" style="display: none;">   
                     <label id="generated-plan" for="generated-plan"></label>   
                     <div id="planContainer"></div>
-                    <button>Autofill Plan Form</button>   
+                    <button class="autofill-plan-form">Autofill Plan Form</button>   
             </div>  
         </div> 
 
@@ -109,15 +107,12 @@
                 <label for="type">Field:</label>
                 <input type="text" id="field" name="field"><br>
             
-                <label for="plantingStartDate">Planting Start Date:</label>
-                <input type="date" id="plantingStartDate" name="plantingStartDate"><br>
-            
                 <label for="coveredArea">Covered Area (Hectare):</label>
                 <input type="text" id="coveredArea" name="coveredArea"><br>
         
-                <div class="button-container">
-                    <button type="submit">Submit</button>
-                    <button class="clear-btn">Clear</button>
+                <div class="button-container"> 
+                    <button type="submit" onclick="submitNewCrop(event)" class="submit-new-crop">Submit</button>
+                    <button class="clear-btn">Clear</button> 
                 </div>
 
             </form>         
@@ -128,24 +123,67 @@
             <span class="close" onclick="closePopup()">&times;</span>    
             <label class="form-title">Crop Recommendation</label> 
             <form id="recordForm" enctype="multipart/form-data">  
-
+ 
                 <label for="type">Select a field:</label>
                 <input type="text" id="crop-field-recommendation" name="field"><br> 
             
                 <div class="button-container"> 
                     <button type="submit" onclick="recommendCrop(event)" class="recommendPlan">Recommend</button> 
-                    <button type="submit" onclick="clearPlan(event)" class="clear-plan-btn">Clear</button> 
-                </div>  
+                    <button type="submit" onclick="clearCrop(event)" class="clear-plan-btn red-button">Clear</button> 
+                </div>   
             </form>          
 
             <div class="crop-preview" style="display: none;">  
                     <label id="label-cropPreview" for="label-cropPreview"></label>   
                     <label id="generated-crop" for="generated-crop"></label>   
                     <div id="radioButtonsContainer"></div>
-                    <button>Autofill Crop Form</button> 
+                    <button class="autofill-crop-form">Autofill Crop Form</button> 
             </div>  
         </div> 
+
+        <div style="display: none;" id="popup-plan" class="popup-plan">   
+            <span class="close" onclick="closePopup()">&times;</span>    
+            <label class="form-title">Add Plan</label> 
+            <form id="planForm" enctype="multipart/form-data">  
+    
+                <label for="type">Description:</label>
+                <input type="text" id="plan-description" name="field"><br>  
+    
+                <label for="type">Start date:</label>
+                <input type="date" id="plan-start-date" name="field"><br> 
+    
+                <label for="type">End date:</label> 
+                <input type="text" id="plan-end-date" name="field"><br> 
+    
+                <div class="radio-buttons">    
+                    <label>Status:</label>
+                    <input type="radio" id="active" name="active" value="1">   
+                    <label for="active">Active</label><br>
+                    <input type="radio" id="inactive" name="inactive" value="0">
+                    <label for="inactive">Inactive</label><br> 
+                </div>
+                
+                <div class="button-container"> 
+                    <button type="submit" onclick="addPlan(event)" class="addPlan">Add Plan</button> 
+                    <button type="submit" onclick="clearPlan(event)" class="clear-plan red-button">Clear</button> 
+                </div>  
+                
+            </form>          
+        </div> 
+ 
+        <div style="display: none;" id="popup-plan-autofill" class="popup-plan-autofill">   
+            <span class="close" onclick="closePopup()">&times;</span>
+        </div> 
+
+        <div style="display: none;" id="popup-crop-autofill" class="popup-crop-autofill">   
+            <span class="close" onclick="closePopup()">&times;</span>
+        </div>
+        
     </div> 
+
+</div> 
+
+
 
 
 </body>

@@ -994,6 +994,103 @@ app.post('/getCropGivenFieldCropID', (req, res) => {
 }); 
 
 
+
+app.post('/updateExistingPlanStatus', (req, res) => { 
+
+    const { fieldCropID } = req.body; 
+ 
+    const sqlQuery1 = `UPDATE cropplanning 
+    SET status = 0 
+    WHERE cropID = ${fieldCropID}`        
+  
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+
+app.post('/insertCropPlan', (req, res) => { 
+
+    const { fieldCropID,description, startDate, endDate, status } = req.body; 
+
+    console.log("Server : ",fieldCropID,description, startDate, endDate, status)
+ 
+    const sqlQuery1 = `INSERT INTO cropplanning (cropID, startDate, endDate, description, status) VALUES (${fieldCropID}, "${startDate}" , "${endDate}" , "${description}", ${status})`        
+  
+    // Wrapping the database query inside a promise 
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => { 
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
+                    resolve(results1);
+                }
+            });  
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+ 
+app.post('/insertCrop', (req, res) => { 
+
+    const { cropName , fieldID, coveredArea } = req.body; 
+ 
+    const sqlQuery1 = `INSERT INTO field_crop (cropName, fieldID, coveredArea) VALUES ("${cropName}", ${fieldID} , ${coveredArea})`         
+  
+    // Wrapping the database query inside a promise 
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => { 
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
+                    resolve(results1);
+                }
+            });  
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+
+
+
 // Crop management ends -----------------------------
 
 

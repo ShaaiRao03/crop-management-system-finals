@@ -554,32 +554,6 @@ app.post('/getFieldData', (req, res) => {
         });
 }); 
 
-// Define an endpoint for updating task details
-// app.post('/updateTask', (req, res) => {
-//     // Access form data from the request body
-//     const { taskName, association, dueDate, status, assignee } = req.body;
-
-//     // Query to update the task details in the database
-//     const sqlQuery = `
-//         UPDATE task_association
-//         SET association = ?, dueDate = ?, status = ?, assignee = ?
-//         WHERE taskName = ?;
-//     `;
-
-//     // Execute the query
-//     db.query(sqlQuery, [association, dueDate, status, assignee, taskName], (error, results) => {
-//         if (error) {
-//             console.error('Error updating task details:', error);
-//             res.status(500).json({ message: 'Error updating task details.' });
-//         } else {
-//             console.log('Task details updated successfully.');
-//             res.status(200).json({ message: 'Task details updated successfully.' });
-//         }
-//     });
-// });
-
-
-
 // Soil relocation (Monitoring) ends ------------------------- 
 
 // Dashboard starts -------------------------
@@ -902,7 +876,7 @@ app.post('/getTaskInfo', (req, res) => {
 
     const { username } = req.body; 
 
-    const sqlQuery1 = `SELECT taskName, field.fieldName, duedate, task_status.taskStatus, assignee FROM task_association JOIN field ON field.fieldID=task_association.fieldID JOIN task_status ON task_status.taskStatusID=task_association.taskStatusID JOIN user ON user.userID=task_association.user_id WHERE user.username='${username}'`     
+    const sqlQuery1 = `SELECT taskName, field.fieldID, field.fieldName, duedate, task_status.taskStatusID, task_status.taskStatus, assignee FROM task_association JOIN field ON field.fieldID=task_association.fieldID JOIN task_status ON task_status.taskStatusID=task_association.taskStatusID JOIN user ON user.userID=task_association.user_id WHERE user.username='${username}'`     
 
     // Wrapping the database query inside a promise
     const executeQuery = () => {
@@ -947,6 +921,54 @@ app.post('/submit_task', (req, res) =>{
         res.status(200).json({ message: 'Form submitted successfully!' });
     });
 });
+
+
+// Define an endpoint for updating task details
+app.post('/updateTask', (req, res) => {
+    // Access form data from the request body
+    const { taskName, association, dueDate, status, assignee } = req.body;
+
+    // Query to update the task details in the database
+    const sqlQuery = `
+        UPDATE task_association
+        SET fieldID = ?, duedate = ?, taskStatusID = ?, assignee = ?
+        WHERE taskName = ?;
+    `;
+
+    // Execute the query
+    db.query(sqlQuery, [association, dueDate, status, assignee, taskName], (error, results) => {
+        if (error) {
+            console.error('Error updating task details:', error);
+            res.status(500).json({ message: 'Error updating task details.' });
+        } else {
+            console.log('Task details updated successfully.');
+            res.status(200).json({ message: 'Task details updated successfully.' });
+        }
+    });
+});
+
+app.post('/deleteTask', (req, res) => {
+    // Access task name from the request body
+    const { taskName } = req.body;
+
+    // Query to delete the task from the database
+    const sqlQuery = `
+        DELETE FROM task_association
+        WHERE taskName = ?;
+    `;
+
+    // Execute the query
+    db.query(sqlQuery, [taskName], (error, results) => {
+        if (error) {
+            console.error('Error deleting task:', error);
+            res.status(500).json({ message: 'Error deleting task.' });
+        } else {
+            console.log('Task deleted successfully.');
+            res.status(200).json({ message: 'Task deleted successfully.' });
+        }
+    });
+});
+
 
 // Task management ends -------------------------------
 

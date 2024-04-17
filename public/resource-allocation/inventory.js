@@ -351,7 +351,6 @@ function updateInventoryDetails(inventoryID){
     }) 
 }
 
-//TBA
 // update usage record
 function updateUsageRecord(inventoryID){ 
     console.log("Inventory id : ",inventoryID) 
@@ -360,6 +359,9 @@ function updateUsageRecord(inventoryID){
         console.log(data)
 
         setTimeout(function() {
+            // Update Current Balance
+            const currBalance = data[0].balance;
+            document.getElementById("balanceVal").textContent = currBalance;
 
             //the table
             var table = $('#example2').DataTable(); 
@@ -394,6 +396,9 @@ function reUpdateUsageRecord(inventoryID){
         console.log(data)
 
         setTimeout(function() {
+            // Update Current Balance
+            const currBalance = data[0].balance;
+            document.getElementById("balanceVal").textContent = currBalance;
 
             //the table
             var table = $('#example2').DataTable(); 

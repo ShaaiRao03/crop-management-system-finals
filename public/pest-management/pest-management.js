@@ -22,6 +22,37 @@ function fetchPestData() {
     });
 } 
  
+function refetchData(){
+    fetchPestData()
+    .then(data => { 
+        // adding some delay to ensure jquery is fully loaded 
+        setTimeout(function() {
+            
+            console.log(data)
+
+            //the table
+            var table = $('#example').DataTable(); 
+            table.clear();
+    
+            // Map data and create rows 
+            data.forEach(item => {
+                const row = `<tr> 
+                    <td><a href="#" class="table-link" onclick="showPestDetails('${item.pestID}')">${item.currentPest}</a></td>  
+                    <td>${item.treatmentPlan}</td>
+                    <td>${item.treatmentStartDate}</td>
+                </tr>`;
+    
+                // Add the row to the table
+                table.row.add($(row).get(0));
+            }); 
+            // Redraw the table  
+            table.draw();
+        }, 100); 
+    }) 
+    .catch(error => {
+        console.error('Error fetching equipment data:', error);
+    });  
+}
 
 fetchPestData()
 .then(data => { 
@@ -506,42 +537,62 @@ document.getElementById('backButton').addEventListener('click', function() {
 function makeDetailsEditable() {
     const detailsContainer = document.querySelector('.details-container');
 
-    // Loop through each details item and replace it with an input field
-    detailsContainer.querySelectorAll('.details-info').forEach(info => {
-        // Create an input field
-        const input = document.createElement('input');
-        input.setAttribute('type', 'text');
-        input.setAttribute('value', info.textContent.trim());
-
-        // Set input field styles to match original details-info class
-        input.style.width = '600px'; // Set width to match
-        input.style.padding = '0'; // Reset padding to match original
-        input.style.marginLeft = '30px';
-        input.style.marginBottom = '0px';
-
-        // Replace the details info span with the input field
-        info.parentNode.replaceChild(input, info);
-    });
-
-    // Hide the edit button
-    const editButton = document.getElementById('editButton'); 
-    editButton.style.display = 'none';
-
-    // Show update button 
-    const updateButton = document.getElementById('updateButton'); 
-    updateButton.style.display = 'block'; 
-
     const deleteButton = document.getElementById('deleteButton');
     // Add a disabled class to the button
     deleteButton.classList.add('disabled');
 
     // Also, set the disabled attribute to prevent default button behavior
     deleteButton.setAttribute('disabled', 'disabled');
-    
+
+    // Show update button
+    const updateButton = document.getElementById('updateButton'); 
+    // Hide the edit button
+    const editButton = document.getElementById('editButton'); 
+
+        // Hide the edit button
+        editButton.style.display = 'none';
+        // Show update button 
+        updateButton.style.display = 'block'; 
+        // Loop through each details item and replace it with an input field
+        detailsContainer.querySelectorAll('.details-item').forEach(item => {
+            const infoSpan = item.querySelector('.details-info');
+            const labelSpan = item.querySelector('.details-label');
+            const separator = item.querySelector('.separator');
+
+            // Create an input field
+            const input = document.createElement('input');
+            input.setAttribute('type', 'text');
+            input.value = infoSpan.textContent.trim();
+
+            // Set input field styles to match original details-info class
+            input.style.width = '600px'; // Set width to match
+            input.style.padding = '0'; // Reset padding to match original
+            input.style.marginLeft = '30px';
+            input.style.marginBottom = '0px';
+
+            // Replace the info span with the input field
+            item.removeChild(infoSpan); // Remove the span
+            item.insertBefore(separator, labelSpan.nextSibling); // Insert : after label
+            item.insertBefore(input, separator.nextSibling); // Insert input after :
+        });
+
+
     // Add event listener to the update button
     updateButton.addEventListener('click', function() {
-        // Loop through each input field and replace it with the original text content
-        detailsContainer.querySelectorAll('input[type="text"]').forEach(input => {
+        // Create an object to store updated details
+        let updatedDetails = {};
+
+        // Loop through each details item and gather the updated information
+        detailsContainer.querySelectorAll('.details-item').forEach(item => {
+            const label = item.querySelector('.details-label').textContent.trim();
+            const input = item.querySelector('input[type="text"]');
+
+            if (input == '' || input == null){
+                console.log("no changes made.");
+            } else {
+                updatedDetails[label.toLowerCase()] = input.value.trim();
+            }
+            
             const span = document.createElement('span');
             span.classList.add('details-info');
             span.textContent = input.value.trim();
@@ -550,10 +601,75 @@ function makeDetailsEditable() {
         });
 
         editButton.style.display = 'block';
-        updateButton.style.display = 'none'; 
-        
+        updateButton.style.display = 'none';
         deleteButton.classList.remove('disabled');
         deleteButton.removeAttribute('disabled');
+        // Send updated details to the server
+        if(updatedDetails != {}) {
+            updateDetails(pestID, updatedDetails)
+            .then(() => {
+                console.log('Details updated successfully');
+                refetchData();
+            })
+            .catch(error => {
+                console.error('Error updating details:', error);
+            });
+        } else {
+            console.log('No changes made.');
+        }
+    });
+    
+}
+
+function updateDetails(pestID, updatedDetails){
+    console.log("new details gathered");
+
+    return new Promise((resolve, reject) => {  
+        fetch('/updatePestDetails', { 
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ pestID, updatedDetails }),
+        })
+        .then(response => {
+            if (!response.ok) {  
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })   
+        .then(data => {
+            resolve(data); // Resolve with the fetched data
+        })
+        .catch(error => {
+            reject(error); // Reject with the error
+        }); 
+    });
+}
+
+function updateDetails(pestID, updatedDetails){
+    console.log("new details gathered");
+
+    return new Promise((resolve, reject) => {  
+        fetch('/updatePestDetails', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ pestID, updatedDetails }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
     });
 }
 
@@ -562,6 +678,13 @@ function editButtonEventListener(){
     // Call makeDetailsEditable() when the edit button is clicked
     const editButton = document.getElementById('editButton')
     editButton.addEventListener('click', makeDetailsEditable);
+}
+
+function updateButtonListener(){
+    // Call updateDetails() when the update button is clicked
+    console.log("update button clicked");
+    const updateBtn = document.getElementById('updateButton');
+    updateBtn.addEventListener('click', updateDetails(pestID));
 }
 
 // Editable ends here ------------------------------

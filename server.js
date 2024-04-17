@@ -394,6 +394,27 @@ app.post('/submit_pest', (req, res) =>{
     });
 });
 
+app.post('/updatePestDetails', (req, res) => { 
+    // Access updated details from the request body
+    const { pestID, updatedDetails } = req.body;
+
+    // Construct the SQL update statement for specific fields
+    const sql = 'UPDATE pest_management SET currentPest = ?, treatmentPlan = ?, treatmentStartDate = ? WHERE pestID = ?';
+    const values = [updatedDetails.name, updatedDetails.treatment, updatedDetails.date, pestID];
+
+    // Execute the SQL query
+    db.query(sql, values, (err, result) => {  
+        if (err) { 
+            console.error('Error updating data into database:', err);
+            res.status(500).json({ message: 'Error updating form.' });
+            return;
+        }
+        console.log('Data updated successfully'); 
+        res.status(200).json({ message: 'Data updated successfully!' });
+    });
+});
+
+
 // Pest management ends -------------------------------
 
 

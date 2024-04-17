@@ -341,6 +341,37 @@ app.post('/getPestInfo', (req, res) => {
         });
 }); 
 
+app.post('/getPestInfoByID', (req, res) => { 
+  
+    const { pestID } = req.body;  
+ 
+    //need inventory ID, action, amount, date
+    const sqlQuery1 = `SELECT * FROM pest_management 
+    WHERE pestID = "${pestID}"` 
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client 
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+});
+
 
 app.post('/submit_pest', (req, res) =>{ 
     // Access form data
@@ -362,6 +393,27 @@ app.post('/submit_pest', (req, res) =>{
         res.status(200).json({ message: 'Form submitted successfully!' });
     });
 });
+
+app.post('/updatePestDetails', (req, res) => { 
+    // Access updated details from the request body
+    const { pestID, updatedDetails } = req.body;
+
+    // Construct the SQL update statement for specific fields
+    const sql = 'UPDATE pest_management SET currentPest = ?, treatmentPlan = ?, treatmentStartDate = ? WHERE pestID = ?';
+    const values = [updatedDetails.name, updatedDetails.treatment, updatedDetails.date, pestID];
+
+    // Execute the SQL query
+    db.query(sql, values, (err, result) => {  
+        if (err) { 
+            console.error('Error updating data into database:', err);
+            res.status(500).json({ message: 'Error updating form.' });
+            return;
+        }
+        console.log('Data updated successfully'); 
+        res.status(200).json({ message: 'Data updated successfully!' });
+    });
+});
+
 
 // Pest management ends -------------------------------
 
@@ -522,7 +574,6 @@ app.post('/getFieldData', (req, res) => {
             res.status(500).json(error); // Send the error back to the client
         });
 }); 
-
 
 // Soil relocation (Monitoring) ends ------------------------- 
 
@@ -846,7 +897,7 @@ app.post('/getTaskInfo', (req, res) => {
 
     const { username } = req.body; 
 
-    const sqlQuery1 = `SELECT taskName, field.fieldName, duedate, task_status.taskStatus, assignee FROM task_association JOIN field ON field.fieldID=task_association.fieldID JOIN task_status ON task_status.taskStatusID=task_association.taskStatusID JOIN user ON user.userID=task_association.user_id WHERE user.username='${username}'`     
+    const sqlQuery1 = `SELECT taskName, field.fieldID, field.fieldName, duedate, task_status.taskStatusID, task_status.taskStatus, assignee FROM task_association JOIN field ON field.fieldID=task_association.fieldID JOIN task_status ON task_status.taskStatusID=task_association.taskStatusID JOIN user ON user.userID=task_association.user_id WHERE user.username='${username}'`     
 
     // Wrapping the database query inside a promise
     const executeQuery = () => {
@@ -891,6 +942,54 @@ app.post('/submit_task', (req, res) =>{
         res.status(200).json({ message: 'Form submitted successfully!' });
     });
 });
+
+
+// Define an endpoint for updating task details
+app.post('/updateTask', (req, res) => {
+    // Access form data from the request body
+    const { taskName, association, dueDate, status, assignee } = req.body;
+
+    // Query to update the task details in the database
+    const sqlQuery = `
+        UPDATE task_association
+        SET fieldID = ?, duedate = ?, taskStatusID = ?, assignee = ?
+        WHERE taskName = ?;
+    `;
+
+    // Execute the query
+    db.query(sqlQuery, [association, dueDate, status, assignee, taskName], (error, results) => {
+        if (error) {
+            console.error('Error updating task details:', error);
+            res.status(500).json({ message: 'Error updating task details.' });
+        } else {
+            console.log('Task details updated successfully.');
+            res.status(200).json({ message: 'Task details updated successfully.' });
+        }
+    });
+});
+
+app.post('/deleteTask', (req, res) => {
+    // Access task name from the request body
+    const { taskName } = req.body;
+
+    // Query to delete the task from the database
+    const sqlQuery = `
+        DELETE FROM task_association
+        WHERE taskName = ?;
+    `;
+
+    // Execute the query
+    db.query(sqlQuery, [taskName], (error, results) => {
+        if (error) {
+            console.error('Error deleting task:', error);
+            res.status(500).json({ message: 'Error deleting task.' });
+        } else {
+            console.log('Task deleted successfully.');
+            res.status(200).json({ message: 'Task deleted successfully.' });
+        }
+    });
+});
+
 
 // Task management ends -------------------------------
 

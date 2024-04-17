@@ -596,11 +596,17 @@ width: 360px;
 }
 .details-info {
     flex: 1;
-    width: 400px;
+    width: 600px;
     margin-left: 30px;
     color: black; 
 }
 
+#pestName{
+    flex: 1;
+    width: 460px;
+    margin-left: 30px;
+    color: black; 
+}
 
 #detailsButton{
     border-top-left-radius: 10px;
@@ -646,6 +652,16 @@ width: 360px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     height: auto; 
 }   
+
+.container3-pestdetails{ 
+    margin-top: 10px;
+    width: 1160px;  
+    padding: 20px;  
+    background-color: #fff; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: auto; 
+} 
    
 .maintenance-section{
     margin-top: 10px;

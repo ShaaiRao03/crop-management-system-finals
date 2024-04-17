@@ -38,7 +38,7 @@ fetchTaskData()
             const time = item.duedate.substring(11, 19); // Extract time part
 
             const row = `<tr> 
-                <td>${item.taskName}</td>  
+                <td><a href="#" class="table-link" onclick='showTaskDetails(${JSON.stringify(item.taskName)},${JSON.stringify(item.fieldID)},${JSON.stringify(item.fieldName)},${JSON.stringify(date)},${JSON.stringify(item.taskStatusID)},${JSON.stringify(item.taskStatus)},${JSON.stringify(item.assignee)})'>${item.taskName}</a></td>  
                 <td>${item.fieldName}</td>
                 <td>${date} ${time}</td> <!-- Combine date and time -->
                 <td>${item.taskStatus}</td> 
@@ -55,6 +55,37 @@ fetchTaskData()
 .catch(error => {
     console.error('Error fetching task data:', error);
 });
+
+function showTaskDetails(taskName,fieldID,association,dueDate,statusID,status,assignee) {
+    openPopupTask();
+
+    document.getElementById('taskN').innerText = taskName;
+
+    var assoSelect = document.getElementById('asso');
+    var option = assoSelect.options[0];
+    option.value = fieldID;
+    option.innerText = association;
+
+    document.getElementById('dDate').value = dueDate;
+
+    var assoSelect = document.getElementById('stat');
+    var option = assoSelect.options[0];
+    option.value = statusID;
+    option.innerText = status;
+
+    document.getElementById('assig').value = assignee;
+}
+
+function openPopupTask() {  
+    document.getElementById('popupTask').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block'; 
+}
+
+function closePopupTask() {
+    document.getElementById('popupTask').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+}
+
 
 function newPage(name) {
     console.log(name);
@@ -229,6 +260,112 @@ function clearTaskButtonEventListener(){
         
         // Clear the form data
         clearTaskFormData();
+    });
+}
+
+function fetchFieldNames3() {
+    return new Promise((resolve, reject) => {  
+        fetch('/getFieldNames', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
+
+fetchFieldNames3()
+.then(data => { 
+
+    // Map data and create options
+    data.forEach(item => {
+        // Decide which attributes to use for value and display text
+        const value = item.fieldID;
+        const text = item.fieldName;
+        
+        // Create the option element
+        const option = $('<option>', {
+            value: value,
+            text: text
+        });
+
+        // Append the option to the select element
+        $('#asso').append(option);
+    });
+}) 
+.catch(error => {
+    console.error('Error fetching data:', error);
+});
+
+document.getElementById('taskFormDetails').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const taskName = document.getElementById('taskN').innerText;
+    const association = document.getElementById('asso').value.trim();
+    const dueDate = document.getElementById('dDate').value.trim();
+    const status = document.getElementById('stat').value.trim();
+    const assignee = document.getElementById('assig').value.trim();
+
+    console.log(taskName,", ",association,", ",dueDate,", ",status,", ",assignee)
+
+    const formData = { taskName, association, dueDate, status, assignee };
+
+    const isDeleteButtonClicked = event.submitter.id === 'clearBtn';
+
+    if (isDeleteButtonClicked) {
+        deleteTask(taskName);
+    } else {
+        fetch('/updateTask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Task details updated successfully!');
+            } else {
+                throw new Error('Error updating task details.');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating task details:', error);
+            alert('An error occurred while updating task details. Please try again.');
+        });
+    }
+});
+
+function deleteTask(taskName) {
+    fetch('/deleteTask', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ taskName }),
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Task details deleted successfully!');
+        } else {
+            throw new Error('Error deleting task details.');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting task:', error);
     });
 }
 

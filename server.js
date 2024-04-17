@@ -523,6 +523,31 @@ app.post('/getFieldData', (req, res) => {
         });
 }); 
 
+// Define an endpoint for updating task details
+// app.post('/updateTask', (req, res) => {
+//     // Access form data from the request body
+//     const { taskName, association, dueDate, status, assignee } = req.body;
+
+//     // Query to update the task details in the database
+//     const sqlQuery = `
+//         UPDATE task_association
+//         SET association = ?, dueDate = ?, status = ?, assignee = ?
+//         WHERE taskName = ?;
+//     `;
+
+//     // Execute the query
+//     db.query(sqlQuery, [association, dueDate, status, assignee, taskName], (error, results) => {
+//         if (error) {
+//             console.error('Error updating task details:', error);
+//             res.status(500).json({ message: 'Error updating task details.' });
+//         } else {
+//             console.log('Task details updated successfully.');
+//             res.status(200).json({ message: 'Task details updated successfully.' });
+//         }
+//     });
+// });
+
+
 
 // Soil relocation (Monitoring) ends ------------------------- 
 

@@ -38,9 +38,7 @@ fetchPestData()
             const row = `<tr> 
                 <td>${item.currentPest}</td>  
                 <td>${item.treatmentPlan}</td>
-                <td>${item.inventoryUsed}</td>
-                <td>${item.treatmentStartDate}</td> 
-                <td>${item.amountApplied}</td> 
+                <td>${item.treatmentStartDate}</td>
             </tr>`;
 
             // Add the row to the table
@@ -165,21 +163,21 @@ function fetchUserID() {
                 console.log(data);
                 resolve(data); // Resolve with the fetched data
             })
-            .catch(error => {
+            .catch(error => { 
                 reject(error); // Reject with the error
             }); 
     });
 } 
 
-
+  
 function detectPest(event) { 
     event.preventDefault();  
     clearPestWithoutImage(event) 
+    document.getElementById("pestName").textContent= "Predicting pest..."
 
-    // Show the preview container
-    document.getElementById("pestName").textContent= ""  
+    document.getElementById("pestDescription").textContent= ""
+    document.getElementById("label-pestDescription").textContent= ""
     document.querySelector('.preview-container').style.display = 'block';
-    // document.getElementsByClassName("preview-container")[0].style.display = 'none';
     document.getElementsByClassName("img-preview")[0].style.display = 'none';
     
     // Call the previewImage function to display the image preview
@@ -400,7 +398,9 @@ function clearPest(event) {
     document.getElementById('recordForm').reset();  
     solution = document.getElementById("generated-solution")
     solution.textContent = ""
+    document.getElementById("pestDescription").textContent= ""
     document.getElementById("label-pestSolution").textContent= "" 
+    document.getElementById("label-pestDescription").textContent= ""
 
     // Hide the image preview container and show the image preview label
     document.querySelector('.img-preview').style.display = 'block';
@@ -409,7 +409,7 @@ function clearPest(event) {
     var container = document.getElementById('radioButtonsContainer');
 
     if (container) { 
-        while (container.firstChild) {
+        while (container.firstChild) { 
             container.removeChild(container.firstChild);
         }
     } else {

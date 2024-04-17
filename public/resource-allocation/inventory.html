@@ -19,7 +19,7 @@
         <div class="container2">
             <div class="top-section"> 
                 <button class="button" id="backButton">Back</button>   
-                <p class="overview-label">Farmall 140A Pro Tractor Overview</p>
+                <p class="overview-label">Wheat Seeds Crop Overview</p>
             </div>
                 
             <div class="button-container2">  
@@ -53,8 +53,13 @@
             <!-- The table that shows the usages --> 
             <div class="container3-usagetable"  style="display: none;">
                 <div class="usage-section"> 
-                    <div id="addRecordbutton">  
-                        <button class="add-record-btn" id="add-record">Add record</button>
+                    <div class="recordBalanceRow">
+                        <div id="currBalance">
+                            <p id="currBalanceText">Current Balance: <span id="balanceVal">2000</span></p>
+                        </div>
+                        <div id="addRecordbutton">  
+                            <button class="add-record-btn" id="add-record">Add record</button>
+                        </div>
                     </div>
                     
                     <div class="row"> 
@@ -95,24 +100,7 @@
                                 <th>Manufacturer</th> 
                                 <th>Balance</th>
                                 <th>Threshold</th> 
-                                <th>Status</th> 
-
-                                 <!-- Threshold is the threshold value  -->
-                                 
-                                 <!-- Status can be either "Need to Refill" , "Sufficient" , "Insufficient" ... "Need to Refill" when balance approach threshold (20% margin) 
-                                    
-                                    Say, threshold = 5000 , currentBalance = 5500  , for simplicity , by default we use 20% margin ..  
-
-                                    Calculation : 
-                                    currentBalance - threshold
-                                    5500 - 5000 = 500 
-                                    
-                                    500/5000 * 100 = 10% .. 
-                                    since the value is below the margin (value is < 20) , we will show "Need to Refill" 
-                                    if value is < 0 , then "Insufficient"
-                                    if value is > 20  , then "Sufficient"
-        
-                                -->
+                                <th>Status</th>
                             </tr> 
                         </thead>  
                         <tbody id="equipment-table">  

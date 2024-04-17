@@ -38,9 +38,7 @@ fetchPestData()
             const row = `<tr> 
                 <td>${item.currentPest}</td>  
                 <td>${item.treatmentPlan}</td>
-                <td>${item.inventoryUsed}</td>
-                <td>${item.treatmentStartDate}</td> 
-                <td>${item.amountApplied}</td> 
+                <td>${item.treatmentStartDate}</td>
             </tr>`;
 
             // Add the row to the table

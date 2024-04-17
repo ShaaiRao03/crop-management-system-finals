@@ -23,11 +23,14 @@
             <!-- <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/logo.jpg);"></a> -->
             <ul class="list-unstyled components mb-5"> 
 
-              <li class="active">
+              <li class="active"> 
                  <a href="#" onclick="changeActive(this.parentNode,false, 'dashboard/dashboard.html', 'dashboard/dashboard.js');"><i class="fa-solid fa-table-columns"></i> <span style="margin-left: 15px;">Dashboard</span></a> 
               </li>
               <li>
                 <a href="#" onclick="changeActive(this.parentNode,false, 'task-management/task-management.html', 'task-management/task-management.js');"><i class="fa-solid fa-list-check"></i> <span style="margin-left: 15px;">Task Management</span></a> 
+              </li> 
+              <li>
+                <a href="#" onclick="changeActive(this.parentNode,false, 'crop-management/crop-management.html', 'crop-management/crop-management.js');"><i class="fa-solid fa-seedling"></i> <span style="margin-left: 15px;">Crop Management</span></a> 
               </li> 
               <li>
                 <a href="#" onclick="changeActive(this.parentNode,false,'pest-management/pest-management.html' , 'pest-management/pest-management.js');"><i class="fa-solid fa-bug-slash"></i> <span style="margin-left: 15px;">Pest Management</span></a> 
@@ -129,7 +132,7 @@
         function fetchPageContent(event, pageURL) { 
             event.preventDefault(); // Prevent default behavior 
             
-            fetch(pageURL)
+            fetch(pageURL) 
                 .then(response => response.text())
                 .then(data => {
                     var doc = new DOMParser().parseFromString(data, 'text/html');

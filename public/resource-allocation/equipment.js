@@ -254,13 +254,13 @@ document.getElementById('equipmentForm').addEventListener('submit', function(eve
 document.getElementsByClassName("add-record-btn")[0].addEventListener('click', function() {
     openPopupRecord()
 }); 
-
+ 
 function openPopupRecord() {  
     document.getElementById('popup-record').style.display = 'block';
     document.getElementById('overlay').style.display = 'block'; 
 }
 
-function closePopupRecord() {
+function closePopupRecord() { 
     document.getElementById('popup-record').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
 }
@@ -269,10 +269,10 @@ function closePopupRecord() {
 
 // Equipment details starts -------------------- 
 
-function updateEquipmentDetails(serialNum){
+function updateEquipmentDetails(serialNum){ 
     fetchEquipmentDataBySerialNum(serialNum)  
     .then(data => { 
-
+ 
         equipmentData = data[0] 
         console.log(equipmentData.img)
 
@@ -464,8 +464,6 @@ document.getElementById('recordForm').addEventListener('submit', function(event)
     })
 });
 
- 
-
 // Equipment details ends --------------------
 
 // Navigation between pages starts here ---------------- 
@@ -575,7 +573,34 @@ function editButtonEventListener(){
 
 // Editable ends here ------------------------------
 
+function clearEquipmentFormData(){
+    // Remove the 'required' attribute from all required fields
+    document.querySelectorAll('#equipmentForm [required]').forEach(field => {
+        field.removeAttribute('required');
+    });
+
+    // Reset the form
+    document.getElementById("equipmentForm").reset();
+
+    // Add back the 'required' attribute to required fields
+    document.querySelectorAll('#equipmentForm [data-required]').forEach(field => {
+        field.setAttribute('required', 'required');
+    });
+}
+
+function clearButtonEventListener(){
+    const clearBtn = document.getElementById('clearBtn');
+    clearBtn.addEventListener('click', function(event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        
+        // Clear the form data
+        clearEquipmentFormData();
+    });
+}
+
 
 var currSerialNum; 
 populateData()
 editButtonEventListener()
+clearButtonEventListener()

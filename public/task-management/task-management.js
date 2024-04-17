@@ -204,3 +204,34 @@ fetchFieldNames2()
 .catch(error => {
     console.error('Error fetching data:', error);
 });
+
+// Clearing form data starts here ------------------------------
+function clearTaskFormData(){
+    // Remove the 'required' attribute from all required fields
+    document.querySelectorAll('#taskForm [required]').forEach(field => {
+        field.removeAttribute('required');
+    });
+
+    // Reset the form
+    document.getElementById("taskForm").reset();
+
+    // Add back the 'required' attribute to required fields
+    document.querySelectorAll('#taskForm [data-required]').forEach(field => {
+        field.setAttribute('required', 'required');
+    });
+}
+
+function clearTaskButtonEventListener(){
+    const clearBtn = document.getElementById('clearBtn');
+    clearBtn.addEventListener('click', function(event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        
+        // Clear the form data
+        clearTaskFormData();
+    });
+}
+
+// Clearing form data ends here ------------------------------
+
+clearTaskButtonEventListener();

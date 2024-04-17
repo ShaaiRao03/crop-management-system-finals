@@ -401,14 +401,14 @@ app.post('/getFieldNum', (req, res) => {
 
 app.post('/getMonitoringInfo', (req, res) => {
 
-    const { username, startDate, endDate } = req.body; 
+    const { username, fieldName, startDate, endDate } = req.body; 
     let sqlQuery1;
 
-    if (!startDate || !endDate){
+    if (!fieldName || !startDate || !endDate){
         sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}');`     
     }
     else{
-        sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}') AND date BETWEEN '${startDate}' AND '${endDate}';`;
+        sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}') AND fieldID = '${fieldName}' AND date BETWEEN '${startDate}' AND '${endDate}';`;
     }
     // Wrapping the database query inside a promise
     const executeQuery = () => {

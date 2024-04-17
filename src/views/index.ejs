@@ -34,9 +34,9 @@
 
               </li>  
               <li>
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onclick="changeActive(this.parentNode,true);"><i class="fa-solid fa-solar-panel"></i><span style="margin-left: 15px;">Soil Management</span></a>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onclick="changeActive(this.parentNode,true, 'soil-management/initiation-phase.html', 'soil-management/initiation-phase.js');"><i class="fa-solid fa-solar-panel"></i><span style="margin-left: 15px;">Soil Management</span></a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
-                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode);">Initiation Phase</a></li>
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode,'soil-management/initiation-phase.html','soil-management/initiation-phase.js');">Initiation Phase</a></li>
                   <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode,'soil-management/monitoring-phase.html' , 'soil-management/monitoring-phase.js');">Monitoring Phase</a></li>
                 </ul>
               </li>
@@ -48,7 +48,7 @@
                 </ul>  
               </li>
               <li>
-                <a href="#" onclick="changeActive(this.parentNode,false,'resource-allocation/equipment.html' , 'resource-allocation/equipment.js');"><i class="fa-solid fa-book"></i><span style="margin-left: 15px;"></span> Tutorials</a>
+                <a href="#" onclick="changeActive(this.parentNode,false,'tutorials/tutorials.html' , 'tutorials/tutorials.js');"><i class="fa-solid fa-book"></i><span style="margin-left: 15px;"></span> Tutorials</a>
               </li>
               <li> 
                 <a href="#" onclick="changeActive(this.parentNode,false,'chatbot/chatbot.html' , 'chatbot/chatbot.js');"><i class="fa-solid fa-message"></i><span style="margin-left: 15px;"></span>Chatbot</a> 

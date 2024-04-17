@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Initiation</title> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="/public/assets/css/style.css"> -->
+<link rel="stylesheet" href="/public/assets/css/initiation.css"> 
+<script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>
+<script src="initiation.js"></script>
+</head>
+
+<body>
+<div id="main-content">
+    <div class="crop-tutorial" id="crop-tutorial">
+        <h1>Optimal Soil Conditions</h1>
+        <div class="crop-search-container">
+            <input class="search-bar" type="text" id="search-input" placeholder="Search">
+            <button class="search-icon" type="submit" id="search-button">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M28.7073 27.2923L22.4485 21.0348C24.2626 18.8569 25.1672 16.0635 24.9741 13.2357C24.781 10.4079 23.5052 7.76337 21.412 5.85226C19.3188 3.94116 16.5694 2.91061 13.7357 2.97501C10.902 3.03941 8.20225 4.1938 6.19802 6.19802C4.1938 8.20225 3.03941 10.902 2.97501 13.7357C2.91061 16.5694 3.94116 19.3188 5.85226 21.412C7.76337 23.5052 10.4079 24.781 13.2357 24.9741C16.0635 25.1672 18.8569 24.2626 21.0348 22.4485L27.2923 28.7073C27.3852 28.8002 27.4955 28.8739 27.6169 28.9242C27.7383 28.9745 27.8684 29.0004 27.9998 29.0004C28.1312 29.0004 28.2613 28.9745 28.3827 28.9242C28.5041 28.8739 28.6144 28.8002 28.7073 28.7073C28.8002 28.6144 28.8739 28.5041 28.9242 28.3827C28.9745 28.2613 29.0004 28.1312 29.0004 27.9998C29.0004 27.8684 28.9745 27.7383 28.9242 27.6169C28.8739 27.4955 28.8002 27.3852 28.7073 27.2923ZM4.9998 13.9998C4.9998 12.2198 5.52764 10.4797 6.51657 8.99966C7.5055 7.51962 8.91111 6.36607 10.5556 5.68488C12.2002 5.00369 14.0098 4.82546 15.7556 5.17273C17.5014 5.52 19.1051 6.37716 20.3638 7.63584C21.6224 8.89451 22.4796 10.4982 22.8269 12.244C23.1741 13.9898 22.9959 15.7994 22.3147 17.4439C21.6335 19.0885 20.48 20.4941 18.9999 21.483C17.5199 22.472 15.7798 22.9998 13.9998 22.9998C11.6137 22.9972 9.32601 22.0481 7.63876 20.3608C5.95151 18.6736 5.00244 16.3859 4.9998 13.9998Z" fill="#797979"/>
+                </svg>
+            </button>
+            <!-- <button class="filter-icon" type="submit" id="filter-button">
+                <svg width="40" height="42" viewBox="0 0 40 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M36.0312 8.12606C35.8388 7.65932 35.52 7.26226 35.1144 6.98427C34.7088 6.70628 34.2343 6.55963 33.75 6.56254H6.24996C5.7661 6.56354 5.29292 6.71195 4.88781 6.98977C4.4827 7.26759 4.16308 7.66287 3.96772 8.12767C3.77236 8.59247 3.70965 9.10681 3.78721 9.60829C3.86476 10.1098 4.07925 10.5768 4.40465 10.9529L4.41715 10.9676L15 22.8326V35.4375C14.9999 35.9126 15.1225 36.3788 15.3549 36.7865C15.5874 37.1941 15.9208 37.5279 16.3196 37.7522C16.7185 37.9765 17.1678 38.0829 17.6198 38.0601C18.0717 38.0374 18.5093 37.8862 18.8859 37.6229L23.8859 34.1218C24.2287 33.882 24.5097 33.5571 24.7041 33.1759C24.8984 32.7946 25.0001 32.3689 25 31.9364V22.8326L35.5843 10.9676L35.5968 10.9529C35.9257 10.5786 36.1422 10.1109 36.2195 9.60815C36.2967 9.10542 36.2312 8.58995 36.0312 8.12606ZM23.1781 21.046C22.7438 21.5293 22.5013 22.1682 22.5 22.8326V31.9364L17.5 35.4375V22.8326C17.5014 22.1658 17.2599 21.5236 16.825 21.0378L6.24996 9.18754H33.75L23.1781 21.046Z" fill="#fff"/>
+                </svg>                    
+            </button> -->
+        </div>
+            
+        <div class="crops" id="crops">
+        </div>
+
+        <div class="crop" id="crop">
+        </div>
+    </div>
+
+    <div id="overlay" onclick="closePopup()" style="display: none">
+        
+    </div>
+    <div id="filterPopup" class="popup" style="display: none">
+        
+        <br><br>
+        <div class="button-row">
+            <button class="upload" type="submit" onclick="submitFilter()">Filter</button>
+            <button class="close" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+    var initiationLink = document.querySelector('a[href="initiation-phase.html"]');
+    
+    if (initiationLink) {
+        initiationLink.click();
+    }
+  };
+</script>
+
+</body>
+</html>

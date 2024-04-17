@@ -365,8 +365,33 @@ async function query(imageData) {
     return result;
 }
 
- 
+// Clearing form data starts here ------------------------------
 
+function clearButtonEventListener(){
+    const clearBtn = document.getElementById('clearBtn');
+    clearBtn.addEventListener('click', function(event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        
+        // Clear the form data
+        clearPestFormData();
+    });
+}
+
+function clearPestFormData(){
+    // Remove the 'required' attribute from all required fields
+    document.querySelectorAll('#pestForm [required]').forEach(field => {
+        field.removeAttribute('required');
+    });
+
+    // Reset the form
+    document.getElementById("pestForm").reset();
+
+    // Add back the 'required' attribute to required fields
+    document.querySelectorAll('#pestForm [data-required]').forEach(field => {
+        field.setAttribute('required', 'required');
+    });
+}
 
 function clearPest(event) {
     event.preventDefault(); // Prevent form submission
@@ -418,3 +443,7 @@ function clearPestWithoutImage(event) {
     }
 
 }
+
+// Clearing form data ends here ------------------------------
+
+clearButtonEventListener()

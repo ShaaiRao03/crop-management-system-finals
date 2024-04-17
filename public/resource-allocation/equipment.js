@@ -573,6 +573,7 @@ function editButtonEventListener(){
 
 // Editable ends here ------------------------------
 
+// Clearing form data starts here ------------------------------
 function clearEquipmentFormData(){
     // Remove the 'required' attribute from all required fields
     document.querySelectorAll('#equipmentForm [required]').forEach(field => {
@@ -588,6 +589,21 @@ function clearEquipmentFormData(){
     });
 }
 
+function clearRecordFormData(){
+    // Remove the 'required' attribute from all required fields
+    document.querySelectorAll('#recordForm [required]').forEach(field => {
+        field.removeAttribute('required');
+    });
+
+    // Reset the form
+    document.getElementById("recordForm").reset();
+
+    // Add back the 'required' attribute to required fields
+    document.querySelectorAll('#recordForm [data-required]').forEach(field => {
+        field.setAttribute('required', 'required');
+    });
+}
+
 function clearButtonEventListener(){
     const clearBtn = document.getElementById('clearBtn');
     clearBtn.addEventListener('click', function(event) {
@@ -599,8 +615,21 @@ function clearButtonEventListener(){
     });
 }
 
+function clearRecordButtonEventListener(){
+    const clearBtn = document.getElementById('clearRecordBtn');
+    clearBtn.addEventListener('click', function(event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        
+        // Clear the form data
+        clearRecordFormData();
+    });
+}
+
+// Clearing form data ends here ------------------------------
 
 var currSerialNum; 
 populateData()
 editButtonEventListener()
 clearButtonEventListener()
+clearRecordButtonEventListener()

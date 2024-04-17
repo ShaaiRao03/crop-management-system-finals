@@ -1,8 +1,9 @@
-function fetchNutrientData(startDate = null, endDate = null) {
+function fetchNutrientData(fieldName = null, startDate = null, endDate = null) {
     return new Promise((resolve, reject) => {  
         // Construct the request body based on provided start and end dates
         const requestBody = { username };
-        if (startDate && endDate) {
+        if (fieldName && startDate && endDate) {
+            requestBody.fieldName = fieldName;
             requestBody.startDate = startDate;
             requestBody.endDate = endDate;
         }
@@ -39,10 +40,11 @@ fetchNutrientData()
 });
 
 $('#update').on('click', function() {
+    const fieldName = $('#fieldSelect').val();
     const startDate = $('#startdate').val(); // Get the start date value
     const endDate = $('#enddate').val(); // Get the end date value
 
-    fetchNutrientData(startDate, endDate)
+    fetchNutrientData(fieldName, startDate, endDate)
     .then(data => {
         // Render the table with the fetched data
         renderTable(data);

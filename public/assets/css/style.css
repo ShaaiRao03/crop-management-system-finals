@@ -752,3 +752,34 @@ width: 360px;
 
 
 /* Crop management ends */
+
+.tool {
+    position: relative;
+    cursor: help; /* Change cursor to indicate tooltip */
+  }
+  
+  .tool::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+    bottom: calc(100% + 5px);
+    left: 20%;
+  }
+  
+  .tool:hover::after {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .filter-container {
+    position: relative;
+    display: inline-block;
+  }

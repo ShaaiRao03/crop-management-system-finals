@@ -17,16 +17,25 @@
   <div class="container1">
     <h2>Soil Nutrients Monitoring</h2>
     <div class="input-form">
-      <label for="startdate" style="font-size: large;">Start</label>
+      <label for="fieldSelect" style="font-size: large;" class="tool" data-tooltip="Choose a field name">Field Name</label>
+      <select type="text" id="fieldSelect" style="margin-left: 10px;width:15%"></select>
+    
+      <label for="startdate" style="margin-left: 30px;font-size: large;" class="tool" data-tooltip="Select the start date">Start</label>
       <input type="date" id="startdate" style="margin-left: 10px;">
-      
-      <label for="enddate" style="margin-left: 30px;font-size: large;">End</label>
+    
+      <label for="enddate" style="margin-left: 30px;font-size: large;" class="tool" data-tooltip="Select the end date">End</label>
       <input type="date" id="enddate" style="margin-left: 10px;">
-      
-      <input type="submit" id="update" value="Filter" name="update" style="margin-left: 30px;">
+    
+      <div class="filter-container">
+        <input type="submit" id="update" value="Filter" name="update" style="margin-left: 30px;">
+        <label class="tool" data-tooltip="Filter the table by field name and the date range" style="background-color: green; border-radius: 50%; color: white; padding-left:12px; padding-right:12px; position: absolute; top: -10px; right: -15px;">?</label>
+      </div>
     </div>
-  
-    <button class="add-task">Add Nutrients</button>   
+    
+    <div class="filter-container">
+      <button class="add-task">Add Nutrients</button>
+      <label class="tool" data-tooltip="Add nutrients to existing fields" style="background-color: green; border-radius: 50%; color: white; padding-left:12px; padding-right:12px; position: absolute; top: -10px; right: -15px;">?</label>
+    </div>
     <div id="overlay" class="overlay"></div> 
 
     <div id="popupN" class="popupN">
@@ -38,7 +47,6 @@
           </select>
           <label for="datesampled" class="custom-label">Date Sampled:</label>
           <input type="date" id="datesampled" class="custom-input-n">
-          <button id="end-button" class="searchicon"><i class="fa-solid fa-calendar"></i></button>
           <div style="display:flex;">
             <div>
               <label for="nitrogen" class="custom-label">Nitrogen (N):</label>
@@ -68,9 +76,9 @@
         <div class="col-12">
             <div class="data_table">
                 <div class="button-container2"> 
-                  <button class="button-overwiew highlight " id="tableButton">Table</button>
+                  <button class="button-overwiew highlight" id="tableButton">Table</button>
                   <button class="button-overwiew" id="visualButton">Visualization</button> 
-                </div> 
+                </div>
                 <div id="table-content">
                 <table id="example" class="table table-striped table-bordered">
                     <thead class="table-dark">
@@ -93,8 +101,8 @@
                 </div>
                 <div id="visualization-content" style="display: none;">
                   <div style="display:flex;">
-                      <label for="chartSelect" style="padding-left: 500px; padding-right: 20px;">Select Field:</label>
-                      <select id="chartSelect" style="height: 35px;">
+                      <label for="chartSelect" style="padding-left: 400px; padding-right: 20px;">Select Field:</label>
+                      <select id="chartSelect" style="height: 35px; width:200px">
                       </select>
                   </div>
                   <canvas id="myCharte"></canvas>

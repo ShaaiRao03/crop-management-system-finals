@@ -36,7 +36,7 @@ fetchPestData()
         //current pest, treatmentPlan, inventoryUsed, Date, amount applied
         data.forEach(item => {
             const row = `<tr> 
-                <td>${item.currentPest}</td>  
+                <td><a href="#" class="table-link" onclick="showPestDetails('${item.pestID}')">${item.currentPest}</a></td>  
                 <td>${item.treatmentPlan}</td>
                 <td>${item.treatmentStartDate}</td>
             </tr>`;
@@ -51,6 +51,30 @@ fetchPestData()
 .catch(error => {
     console.error('Error fetching equipment data:', error);
 });
+
+function fetchPestByID(pestID) {
+    return new Promise((resolve, reject) => {  
+        fetch('/getPestInfoByID', {  
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                }, 
+                body: JSON.stringify({ pestID }),
+            })
+            .then(response => { 
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => { 
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
 
 function newPage(name) {
     console.log(name);
@@ -92,6 +116,93 @@ function closePopup() {
     }   
 
 } 
+
+// Pest details starts -------------------- 
+
+function updatePestDetails(pestID){ 
+    fetchPestByID(pestID)     
+    .then(data => {  
+
+        pestData = data[0] 
+        // console.log(inventoryData.img)
+
+        console.log(data)
+
+       // const last_serviceDate = equipmentData.lastService;
+       // const last_service = last_serviceDate.split('T'); 
+ 
+        document.querySelector('.details-info.name').textContent = pestData.currentPest;  
+        document.querySelector('.details-info.treatment').textContent = pestData.treatmentPlan;
+        document.querySelector('.details-info.date').textContent = pestData.treatmentStartDate;
+
+        document.querySelector('.overview-label').textContent = pestData.currentPest + " Overview" 
+
+        // Handling images -----------------------------
+         
+        // imageData contains the Buffer object retrieved from the database
+        var imageData = pestData.img 
+        
+        if(imageData){
+            // convert the Buffer object to a Uint8Array   
+            var uint8Array = new Uint8Array(imageData.data); 
+
+            // create a Blob object from the Uint8Array
+            var blob = new Blob([uint8Array], { type: 'image/jpeg' }); // Adjust the MIME type if necessary
+
+            // create a FileReader object to read the Blob  
+            var reader = new FileReader();
+
+            // define the onload event handler for when the FileReader finishes reading
+            reader.onload = function(event) {
+                var imgElement = document.createElement("img");
+
+                imgElement.src = event.target.result;
+
+                imgElement.id = "pest-image"
+
+                imgElement.alt = "Placeholder Image";
+
+                var existingImgElement = document.getElementById("pest-image");
+
+                // console.log("Data exist")
+                // console.log(existingImgElement); // Check if existingImgElement is found
+                // console.log(existingImgElement.parentNode);  
+
+                existingImgElement.parentNode.replaceChild(imgElement, existingImgElement); 
+            };
+            reader.readAsDataURL(blob);
+
+        }else{
+
+            // If no image data is given, use a fallback image URL 
+            var fallbackImageUrl = "img/no image available.jpg"; // Replace with your fallback image URL
+ 
+            // Create a new Image element 
+            var imgElement = document.createElement("img");
+ 
+            // Set the src attribute to the fallback image URL 
+            imgElement.src = fallbackImageUrl;
+
+            imgElement.id = "pest-image"
+ 
+            // Set the alt attribute 
+            imgElement.alt = "Placeholder Image";
+
+            // Get the existing img element by its ID or another suitable selector
+            var existingImgElement = document.getElementById("pest-image");
+
+            // console.log("Data not exist")
+            // console.log(existingImgElement); // Check if existingImgElement is found
+            // console.log(existingImgElement.parentNode);  
+
+            // Replace the existing img element with the new Image element
+            existingImgElement.parentNode.replaceChild(imgElement, existingImgElement);
+
+        }
+    }) 
+}
+
+// Pest details ends -------------------- 
 
 // submit form
 document.getElementById('pestForm').addEventListener('submit', function(event) {
@@ -363,6 +474,98 @@ async function query(imageData) {
     return result;
 }
 
+//  Navigation between pages starts here  ----------------
+
+function showPestDetails(pestIDFromLink) {    
+    console.log("Test: ", pestID);  
+    pestID = pestIDFromLink; 
+  
+    updatePestDetails(pestID)
+
+    document.getElementsByClassName('pest-details')[0].style.display = 'block';
+    document.getElementsByClassName('container1')[0].style.display = 'none';
+
+    // Show details section by default
+    document.getElementsByClassName('container3-pestDetails')[0].style.display = 'block';
+}
+
+document.getElementById('backButton').addEventListener('click', function() { 
+    //document.getElementsByClassName('container3-usagetable')[0].style.display = 'none'; 
+    document.getElementsByClassName('pest-details')[0].style.display = 'none'; 
+    document.getElementsByClassName('container1')[0].style.display = 'block';
+    document.getElementById('detailsButton').classList.add('highlight'); 
+    document.getElementById('pestButton').classList.remove('highlight'); 
+    //TBA
+    var table = $('#example').DataTable(); 
+    table.clear();
+}); 
+
+//  Navigation between pages ends here  ----------------
+
+// Editable starts here ------------------------------
+function makeDetailsEditable() {
+    const detailsContainer = document.querySelector('.details-container');
+
+    // Loop through each details item and replace it with an input field
+    detailsContainer.querySelectorAll('.details-info').forEach(info => {
+        // Create an input field
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('value', info.textContent.trim());
+
+        // Set input field styles to match original details-info class
+        input.style.width = '600px'; // Set width to match
+        input.style.padding = '0'; // Reset padding to match original
+        input.style.marginLeft = '30px';
+        input.style.marginBottom = '0px';
+
+        // Replace the details info span with the input field
+        info.parentNode.replaceChild(input, info);
+    });
+
+    // Hide the edit button
+    const editButton = document.getElementById('editButton'); 
+    editButton.style.display = 'none';
+
+    // Show update button 
+    const updateButton = document.getElementById('updateButton'); 
+    updateButton.style.display = 'block'; 
+
+    const deleteButton = document.getElementById('deleteButton');
+    // Add a disabled class to the button
+    deleteButton.classList.add('disabled');
+
+    // Also, set the disabled attribute to prevent default button behavior
+    deleteButton.setAttribute('disabled', 'disabled');
+    
+    // Add event listener to the update button
+    updateButton.addEventListener('click', function() {
+        // Loop through each input field and replace it with the original text content
+        detailsContainer.querySelectorAll('input[type="text"]').forEach(input => {
+            const span = document.createElement('span');
+            span.classList.add('details-info');
+            span.textContent = input.value.trim();
+            // Replace the input field with the original details info span
+            input.parentNode.replaceChild(span, input);
+        });
+
+        editButton.style.display = 'block';
+        updateButton.style.display = 'none'; 
+        
+        deleteButton.classList.remove('disabled');
+        deleteButton.removeAttribute('disabled');
+    });
+}
+
+
+function editButtonEventListener(){
+    // Call makeDetailsEditable() when the edit button is clicked
+    const editButton = document.getElementById('editButton')
+    editButton.addEventListener('click', makeDetailsEditable);
+}
+
+// Editable ends here ------------------------------
+
 // Clearing form data starts here ------------------------------
 
 function clearButtonEventListener(){
@@ -446,4 +649,6 @@ function clearPestWithoutImage(event) {
 
 // Clearing form data ends here ------------------------------
 
-clearButtonEventListener()
+var pestID;
+editButtonEventListener();
+clearButtonEventListener();

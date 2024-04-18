@@ -190,6 +190,8 @@
 
         function logout() {
             window.location.href = "/logout";
+            localStorage.removeItem('userId');
+            localStorage.removeItem('username');
         }
 
     </script>

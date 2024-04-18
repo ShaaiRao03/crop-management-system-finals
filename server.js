@@ -252,7 +252,28 @@ app.post('/getMaintenanceRecord', (req, res) => {
         });
 }); 
 
+/*
+app.post('/updateEquipmentDetails', (req, res) => { 
+    // Access updated details from the request body
+    const { currSerialNum, updatedDetails } = req.body;
 
+    const statusVal = 1;
+
+    // Construct the SQL update statement for specific fields
+    const sql = 'UPDATE equipment SET equipmentName = ?, type = ?, brand = ?, model = ?, serialNum = ?, equipmentStatusID = ?, plateNum = ?, lastService = ?, purchaseTypeID =?, dealerNumber =? WHERE serialNum = ?';
+    const values = [updatedDetails.name, updatedDetails.type, updatedDetails.brand, updatedDetails.model, updatedDetails.serial-number, 1, updatedDetails.plate-number, updatedDetails.last-service, 1, updatedDetails.dealer-number, currSerialNum];
+
+    // Execute the SQL query
+    db.query(sql, values, (err, result) => {  
+        if (err) { 
+            console.error('Error updating data into database:', err);
+            res.status(500).json({ message: 'Error updating form.' });
+            return;
+        }
+        console.log('Data updated successfully'); 
+        res.status(200).json({ message: 'Data updated successfully!' });
+    });
+});*/
 
 app.post('/submit_equipment', upload.single('image'), (req, res) => {
     // Access form data
@@ -813,6 +834,29 @@ app.post('/getInventoryInfoByID', (req, res) => {
             res.status(500).json(error); // Send the error back to the client
         });
 });
+/*
+app.post('/updateInventoryDetails', (req, res) => { 
+    // Access updated details from the request body
+    console.log("Inventory ID: ", inventoryID);
+    const { inventoryID, updatedDetails } = req.body;
+    //let inventoryTypeVal = '';
+    console.log(updatedDetails.name, "", updatedDetails.brand, "", updatedDetails.threshold, "", updatedDetails.manufacturer, "", updatedDetails.manufacturer-number, "", updatedDetails.type, "", inventoryID);
+
+    // Construct the SQL update statement for specific fields
+    const sql = 'UPDATE inventory SET inventoryName = ?, brand = ?, flagThreshold = ?, manufacturer = ?, manufacturerNumber = ? inventoryTypeID = ? WHERE inventoryID = ?';
+    const values = [updatedDetails.name, updatedDetails.brand, updatedDetails.threshold, updatedDetails.manufacturer, updatedDetails.manufacturer-number, updatedDetails.type, inventoryID];
+
+    // Execute the SQL query
+    db.query(sql, values, (err, result) => {  
+        if (err) { 
+            console.error('Error updating data into database:', err);
+            res.status(500).json({ message: 'Error updating form.' });
+            return;
+        }
+        console.log('Data updated successfully'); 
+        res.status(200).json({ message: 'Data updated successfully!' });
+    });
+});*/
 
 app.post('/submit_inventory', upload.single('image'), (req, res) => {
     // Access form data

@@ -105,7 +105,8 @@
                 <input type="text" id="name" name="name" required><br>
 
                 <label for="type">Field:</label>
-                <input type="text" id="field" name="field"><br>
+                <select id="field" name="field" style="height: 35px;">
+                </select>
             
                 <label for="coveredArea">Covered Area (Hectare):</label>
                 <input type="text" id="coveredArea" name="coveredArea"><br>
@@ -124,9 +125,10 @@
             <label class="form-title">Crop Recommendation</label> 
             <form id="recordForm" enctype="multipart/form-data">  
  
-                <label for="type">Select a field:</label>
-                <input type="text" id="crop-field-recommendation" name="field"><br> 
-            
+                <label for="type">Select Field:</label>
+                <select id="crop-field-recommendation" name="field" style="height: 35px;">
+                </select>
+
                 <div class="button-container"> 
                     <button type="submit" onclick="recommendCrop(event)" class="recommendPlan">Recommend</button> 
                     <button type="submit" onclick="clearCrop(event)" class="clear-plan-btn red-button">Clear</button> 

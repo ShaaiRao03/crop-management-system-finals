@@ -775,10 +775,9 @@ width: 360px;
 
 .add-button,.add-task{
     padding: 10px;
-    background-color: #28b704; 
+    background-color: #349631; 
     color: white;
-    border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
 }
 

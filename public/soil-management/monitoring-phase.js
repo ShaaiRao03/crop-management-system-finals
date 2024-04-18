@@ -1,7 +1,7 @@
 function fetchNutrientData(fieldName) {
     return new Promise((resolve, reject) => {  
         // Construct the request body based on provided start and end dates
-        const requestBody = { username };
+        const requestBody = { username, fieldName };
         if (fieldName) {
             requestBody.fieldName = fieldName;
         }
@@ -28,27 +28,44 @@ function fetchNutrientData(fieldName) {
     });
 }
 
-fetchNutrientData()
-.then(data => {
-    // Render the table with the fetched data
-    renderTable(data);
-})
-.catch(error => {
-    console.error('Error fetching monitoring data:', error);
-});
+$('#fieldSelect').on('change', function() {
+    const fieldName = $(this).val(); // Get the selected field name
 
-$('#update').on('click', function() {
-    const fieldName = $('#fieldSelect').val();
-
+    // Fetch nutrient data for the selected field name
     fetchNutrientData(fieldName)
     .then(data => {
         // Render the table with the fetched data
         renderTable(data);
+
+        // Update the visualization with the fetched data
+        displayChart(fieldName);
     })
     .catch(error => {
         console.error('Error fetching monitoring data:', error);
     });
 });
+
+// fetchNutrientData()
+// .then(data => {
+//     // Render the table with the fetched data
+//     renderTable(data);
+// })
+// .catch(error => {
+//     console.error('Error fetching monitoring data:', error);
+// });
+
+// $('#update').on('click', function() {
+//     const fieldName = $('#fieldSelect').val();
+
+//     fetchNutrientData(fieldName)
+//     .then(data => {
+//         // Render the table with the fetched data
+//         renderTable(data);
+//     })
+//     .catch(error => {
+//         console.error('Error fetching monitoring data:', error);
+//     });
+// });
 
 function renderTable(data) {
     // Destroy existing DataTable instance
@@ -189,9 +206,9 @@ document.getElementsByClassName("add-task")[0].addEventListener('click', functio
 
 // for the chart (start)
 
-function displayChart(){
-    const selectedField = $('#fieldSelect').val(); // Get the selected field ID
-    fetchFieldData(username, selectedField)
+function displayChart(fieldName){
+    // const selectedField = $('#fieldSelect').val(); // Get the selected field ID
+    fetchFieldData(username, fieldName)
     .then(data => {
     const xValues = data.map(item => {
         const data_date = item.date;
@@ -396,7 +413,6 @@ document.getElementById('visualButton').addEventListener('click', function() {
     document.getElementById('visualization-content').style.display = 'block';
     document.getElementById('tableButton').classList.remove('highlight'); 
     document.getElementById('visualButton').classList.add('highlight');
-    displayChart();
 });
 
 // submit form

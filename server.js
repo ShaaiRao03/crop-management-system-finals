@@ -9,6 +9,8 @@ const PORT = process.env.PORT || 5000;
 
 const cors = require('cors');
 
+const crypto = require('crypto');
+
 app.use(cors());  
 app.use(express.json()); 
 
@@ -1275,7 +1277,33 @@ app.post('/insertCrop', (req, res) => {
         });
 }); 
 
+app.post('/updateAccount', (req, res) => {
+    const {userId, username, password} = req.body;
 
+    const hashedPassword = crypto.createHash('md5').update(password).digest('hex');
+    const sqlQuery = `UPDATE user SET username = ?, password = ? WHERE userId = ?`;
+    const values = [username, hashedPassword, userId];
+
+    const executeQuery = () => {
+        return new Promise ((resolve, reject) => {
+            db.query (sqlQuery, values, (error, results) => {
+                if (error) {
+                    reject ({error : 'Error updating account details in the database'});
+                } else {
+                    resolve (results);
+                }
+            });
+        });
+    };
+
+    executeQuery() 
+    .then ((data) => {
+        res.status(200).json(data);
+    })
+    .catch ((error) => {
+        res.status(500).json(error);
+    });
+});
 
 
 // Crop management ends -----------------------------

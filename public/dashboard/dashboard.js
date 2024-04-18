@@ -306,7 +306,7 @@ function InitMapViewOnly(lat, long, polygonCoordinates) {
     var mapOptions = {
         zoom: 16,
         center: location,
-        mapTypeId: google.maps.MapTypeId.RoadMap
+        mapTypeId: google.maps.MapTypeId.SATELLITE
     };
     var map = new google.maps.Map(document.getElementById('map-canvas2'), mapOptions);
 
@@ -631,12 +631,12 @@ function fetchUserID() {
 
 
 
-function InitMap(lat,long) {
+function InitMap(lat,long) { 
     var location = new google.maps.LatLng(lat,long) 
     mapOptions = {
         zoom: 16,
         center: location, 
-        mapTypeId: google.maps.MapTypeId.RoadMap
+        mapTypeId: google.maps.MapTypeId.SATELLITE
     }
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions)
     var all_overlays = [];

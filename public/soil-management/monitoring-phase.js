@@ -244,7 +244,7 @@ document.getElementsByClassName("add-task")[0].addEventListener('click', functio
           fill:false
       }]
   
-  
+   
         // Get the canvas element
         const chartCanvas = document.getElementById('myCharte');
         
@@ -337,7 +337,7 @@ document.getElementById('visualButton').addEventListener('click', function() {
 // submit form
 document.getElementById('nutrientForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
-       
+        
     // Fetch form inputs
     const fieldID = document.getElementById('fieldSelect').value.trim();
     const datesampled = document.getElementById('datesampled').value.trim();

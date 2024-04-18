@@ -186,7 +186,6 @@ a:hover, a:focus {
 #sidebar {
 min-width: 280px;
 max-width: 280px;
-/* background: #1d1919; */
 background: #062f05;
 color: #fff;
 -webkit-transition: all 0.3s;
@@ -703,7 +702,7 @@ width: 360px;
     justify-content: space-between; /* Items will be spaced evenly with the first item at the start and the last item at the end */
     align-items: center; /* Align items vertically in the center */
 }
-
+ 
 #currBalanceText {
     font-size: 40px;
 }
@@ -984,4 +983,83 @@ width: 360px;
     margin-right: 10px;
     display: flex;
     justify-content: space-evenly;    
+}
+
+.containerMap{
+    width: 1160px;  
+    padding: 20px;  
+    background-color: #fff; 
+    border-radius: 5px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: auto;
+}
+
+/*Irrigation*/
+
+/* Styles for the items inside general-irrigation-summary */
+.irrigation-status,
+.min-max-threshold,
+.daily-water-consumption {
+    height: 120px;
+    margin-bottom: 20px;
+    background-color: #fff; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+
+.containerIrrigationSummary {
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-start; 
+    padding-top: 10px;
+    width: 1200px; 
+    padding: 20px;   
+    background: #094507;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    height: auto;
+} 
+ 
+.flex-container {
+    display: flex;
+}
+
+.containerMap {
+    height: 400px;
+    width: 600px;
+    margin-right: 15px;  
+}
+
+.general-irrigation-summary {
+    height: 400px;
+    width: 550px;
+    margin-right: 20px; 
+}
+
+
+.summary-header{
+    margin-left: 10px;
+    padding-top: 10px;
+} 
+
+.summary-header-label{
+    margin-left: 10px;
+}
+
+.summary-header-water{
+    padding-top: 10px;
+    margin-left: 10px;
+}
+
+.summary-header-label-status{
+    margin-left: 5px;
+    margin-bottom: 0px;
+}   
+ 
+
+.containerIrrigation {
+    display: flex; /* Use flexbox */
+    align-items: center; /* Align items vertically */
+    justify-content: flex-start; /* Align items to the start */
 }

@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="css/datatables.min.css">  
     <link rel="stylesheet" href="css/style.css">    
      
-  </head> 
-  <body> 
+  </head>  
+  <body>  
     
     <div class="wrapper d-flex align-items-stretch">   
       <nav id="sidebar"> 
@@ -33,16 +33,16 @@
                 <a href="#" onclick="changeActive(this.parentNode,false, 'crop-management/crop-management.html', 'crop-management/crop-management.js');"><i class="fa-solid fa-seedling"></i> <span style="margin-left: 15px;">Crop Management</span></a> 
               </li>  
               <li>
-                <a href="#" onclick="changeActive(this.parentNode,false, 'irrigation-system/irrigation-system.html', 'irrigation-system/irrigation-system.js');"><i class="fa-solid fa-droplet"></i> <span style="margin-left: 15px;">Irrigation management</span></a> 
+                <a href="#" onclick="changeActive(this.parentNode,false, 'irrigation-system/irrigation-system.html', 'irrigation-system/irrigation-system.js');"><i class="fa-solid fa-droplet"></i> <span style="margin-left: 18px;">Irrigation management</span></a> 
               </li> 
               <li>
-                <a href="#" onclick="changeActive(this.parentNode,false,'pest-management/pest-management.html' , 'pest-management/pest-management.js');"><i class="fa-solid fa-bug-slash"></i> <span style="margin-left: 15px;">Pest Management</span></a> 
+                <a href="#" onclick="changeActive(this.parentNode,false,'pest-management/pest-management.html' , 'pest-management/pest-management.js');"><i class="fa-solid fa-bug-slash"></i> <span style="margin-left: 10px;">Pest Management</span></a> 
               </li>  
               <li>
-                <a href="#" onclick="changeActive(this.parentNode,false,'soil-management/monitoring-phase.html' , 'soil-management/monitoring-phase.js');"><i class="fa-solid fa-solar-panel"></i><span style="margin-left: 15px;"></span> Soil Management</a>
+                <a href="#" onclick="changeActive(this.parentNode,false,'soil-management/monitoring-phase.html' , 'soil-management/monitoring-phase.js');"><i class="fa-solid fa-solar-panel"></i><span style="margin-left: 10px;"></span> Soil Management</a>
               </li>
               <li> 
-                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onclick="changeActive(this.parentNode,true,'resource-allocation/equipment.html' , 'resource-allocation/equipment.js');"><i class="fa-solid fa-key"></i><span style="margin-left: 15px;">Resource Allocation</span></a>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onclick="changeActive(this.parentNode,true,'resource-allocation/equipment.html' , 'resource-allocation/equipment.js');"><i class="fa-solid fa-key"></i><span style="margin-left: 18px;">Resource Allocation</span></a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                   <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode,'resource-allocation/equipment.html' , 'resource-allocation/equipment.js');">Equipment</a></li>
                   <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode,'resource-allocation/inventory.html' , 'resource-allocation/inventory.js');">Inventory</a></li>
@@ -88,6 +88,13 @@
  
         var username = "<%= user.username %>";
         console.log(username);  
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Trigger click event on the "Dashboard" link
+            document.querySelector('#sidebar li.active a').click();
+        });
+ 
+
 
         function changeActive(li,isContainSubItem,page,script) {
             // Remove active class from all list items
@@ -136,9 +143,12 @@
             fetch(pageURL) 
                 .then(response => response.text())
                 .then(data => {
+                  
                     var doc = new DOMParser().parseFromString(data, 'text/html');
                     var newContent = doc.querySelector("#main-content").innerHTML;          
-                    document.getElementById("main-content").innerHTML = newContent;
+                    document.getElementById("main-content").innerHTML = newContent;                      
+
+
                 })
                 .catch(error => console.error('Error fetching page content:', error));
         }

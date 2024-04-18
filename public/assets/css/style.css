@@ -10,20 +10,20 @@ color: gray; }
 
 
 .content {  
-    margin-left: 15px;
+    margin-left: 15px; 
     margin-top: 15px;   
 } 
 
 .container1 { 
     padding-top: 10px;
     width: 1200px; 
-    padding: 20px;  
+    padding: 20px;   
     background-color: #fff; 
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     height: auto;
     display: block; 
-}
+} 
 
 .container2 {  
     padding-top: 10px;

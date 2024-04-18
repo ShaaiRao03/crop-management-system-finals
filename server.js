@@ -1371,6 +1371,30 @@ app.post('/deleteTask', (req, res) => {
 
 // Crop management starts -----------------------------
 
+app.post('/weather', (req, res) => {
+    const { lat, lon } = req.body;
+  
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=0e0ca3df46cc04a4bfe39ce905df666e&units=metric`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Send the weather forecast data as a response
+        res.json(data);
+      })
+      .catch(error => {
+        console.error('Error fetching weather forecast data:', error);
+        res.status(500).json({ error: 'An error occurred while fetching weather data' });
+      });
+}); 
+
+
+
+
+
 app.post('/getCropData', (req, res) => { 
 
     const { username } = req.body; 

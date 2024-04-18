@@ -185,25 +185,49 @@ function closePopup() {
 function recommendCrop(event){
     event.preventDefault(); 
 
-    document.querySelector('.crop-preview').style.display = 'none';
-    document.getElementById("label-cropPreview").textContent= ""
-    var container = document.getElementById('radioButtonsContainer');
+    fieldID = document.getElementById("crop-field-recommendation").value
+    console.log(fieldID) 
 
-    if (container) { 
-        while (container.firstChild) {
-            container.removeChild(container.firstChild); 
+
+    fetch('/getFieldInfoByID', { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }, 
+        body: JSON.stringify({ fieldID }),           
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-    } else {
-        console.error('Container element with ID "radioButtonsContainer" not found.'); 
-    }
+        return response.json();
+    }).then(data => {
+         
+        console.log(data);
+        document.querySelector('.crop-preview').style.display = 'none';
+        document.getElementById("label-cropPreview").textContent= ""
+        var container = document.getElementById('radioButtonsContainer');
 
-    value = document.getElementById('crop-field-recommendation').value;
-    if(value == ""){
-        alert("Please select a field"); 
-        return;
-    } else {
-        showRecommendedCrop("Suggest me 5 crops that is suitable to be planted in Malaysia. Strictly give me the name only. Dont give me any descriptions apart from name.Give reason why you suggested the crop. Separate the reason by using '-'. Thank you. ");
-    }
+        if (container) { 
+            while (container.firstChild) {
+                container.removeChild(container.firstChild); 
+            }
+        } else {
+            console.error('Container element with ID "radioButtonsContainer" not found.'); 
+        }
+
+        value = document.getElementById('crop-field-recommendation').value;
+        if(value == ""){
+            alert("Please select a field"); 
+            return;
+        } else {
+            showRecommendedCrop("Suggest me 5 crops that is suitable to be planted in Malaysia. Strictly give me the name only. Dont give me any descriptions apart from name.Give reason why you suggested the crop. Separate the reason by using '-'. Thank you. ");
+        }
+
+    }).catch(error => {
+        console.error('Error fetching equipment data:', error);
+    });
+
+
 } 
 
 

@@ -20,12 +20,6 @@
       <label for="fieldSelect" style="font-size: large;" class="tool" data-tooltip="Choose a field name">Field Name</label>
       <select type="text" id="fieldSelect" style="margin-left: 10px;width:15%"></select>
     
-      <label for="startdate" style="margin-left: 30px;font-size: large;" class="tool" data-tooltip="Select the start date">Start</label>
-      <input type="date" id="startdate" style="margin-left: 10px;">
-    
-      <label for="enddate" style="margin-left: 30px;font-size: large;" class="tool" data-tooltip="Select the end date">End</label>
-      <input type="date" id="enddate" style="margin-left: 10px;">
-    
       <div class="filter-container">
         <input type="submit" id="update" value="Filter" name="update" style="margin-left: 30px;">
         <label class="tool" data-tooltip="Filter the table by field name and the date range" style="background-color: green; border-radius: 50%; color: white; padding-left:12px; padding-right:12px; position: absolute; top: -10px; right: -15px;">?</label>
@@ -42,8 +36,8 @@
         <span class="close" onclick="closePopupN()">&times;</span>
         <h2>Add Nutrients</h2>
         <form id="nutrientForm" enctype="multipart/form-data" >
-          <label for="fieldSelect">Select Field:</label>
-          <select id="fieldSelect" style="height: 35px;">
+          <label for="fieldSelect2">Select Field:</label>
+          <select id="fieldSelect2" style="height: 35px;">
           </select>
           <label for="datesampled" class="custom-label">Date Sampled:</label>
           <input type="date" id="datesampled" class="custom-input-n">
@@ -113,11 +107,11 @@
                 </table>
                 </div>
                 <div id="visualization-content" style="display: none;">
-                  <div style="display:flex;">
+                  <!-- <div style="display:flex;">
                       <label for="chartSelect" style="padding-left: 400px; padding-right: 20px;">Select Field:</label>
                       <select id="chartSelect" style="height: 35px; width:200px">
                       </select>
-                  </div>
+                  </div> -->
                   <canvas id="myCharte"></canvas>
                 </div>
             </div>

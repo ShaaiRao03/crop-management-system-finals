@@ -453,37 +453,38 @@ app.post('/getFieldNum', (req, res) => {
 
 app.post('/getMonitoringInfo', (req, res) => {
 
-    const { username, fieldName, startDate, endDate } = req.body; 
+    const { username, fieldName } = req.body; 
     let sqlQuery1;
 
-    if (!fieldName || !startDate || !endDate){
-        sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}');`     
+    // Check if fieldName is not empty
+    if (fieldName) {
+        sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}') AND field_ID='${fieldName}';`;
+        const executeQuery = () => {
+            return new Promise((resolve, reject) => {
+                db.query(sqlQuery1, (error1, results1) => { 
+                    if (error1) {
+                        reject({ error: 'Error querying table2' });
+                    } else {
+                        resolve(results1);
+                    }
+                }); 
+            });
+        };
+        
+        // Call the function that returns the promise
+        executeQuery()
+            .then((data) => {
+                res.status(200).json(data); // Send the result back to the client
+            })
+            .catch((error) => {
+                res.status(500).json(error); // Send the error back to the client
+            });
+    } else {
+        // If fieldName is empty, send an error response
+        res.status(400).json({ error: 'fieldName cannot be empty' });
     }
-    else{
-        sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}') AND fieldID = '${fieldName}' AND date BETWEEN '${startDate}' AND '${endDate}';`;
-    }
-    // Wrapping the database query inside a promise
-    const executeQuery = () => {
-        return new Promise((resolve, reject) => {
-            db.query(sqlQuery1, (error1, results1) => { 
-                if (error1) {
-                    reject({ error: 'Error querying table2' });
-                } else {
-                    resolve(results1);
-                }
-            }); 
-        });
-    };
-
-    // Call the function that returns the promise
-    executeQuery()
-        .then((data) => {
-            res.status(200).json(data); // Send the result back to the client
-        })
-        .catch((error) => {
-            res.status(500).json(error); // Send the error back to the client
-        });
 });
+
 
 
 app.post('/submit_nutrients', upload.single('image'), (req, res) => {

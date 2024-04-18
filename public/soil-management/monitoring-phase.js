@@ -1,11 +1,9 @@
-function fetchNutrientData(fieldName, startDate, endDate) {
+function fetchNutrientData(fieldName) {
     return new Promise((resolve, reject) => {  
         // Construct the request body based on provided start and end dates
         const requestBody = { username };
-        if (fieldName && startDate && endDate) {
+        if (fieldName) {
             requestBody.fieldName = fieldName;
-            requestBody.startDate = startDate;
-            requestBody.endDate = endDate;
         }
 
         fetch('/getMonitoringInfo', { 
@@ -41,10 +39,8 @@ fetchNutrientData()
 
 $('#update').on('click', function() {
     const fieldName = $('#fieldSelect').val();
-    const startDate = $('#startdate').val(); // Get the start date value
-    const endDate = $('#enddate').val(); // Get the end date value
 
-    fetchNutrientData(fieldName, startDate, endDate)
+    fetchNutrientData(fieldName)
     .then(data => {
         // Render the table with the fetched data
         renderTable(data);
@@ -104,10 +100,10 @@ function fetchFieldNames() {
 fetchFieldNames()
 .then(data => { 
     // Clear existing options
-    $('#chartSelect').empty();
+    $('#fieldSelect').empty();
 
     // Add a default option
-    $('#chartSelect').append($('<option>', {
+    $('#fieldSelect').append($('<option>', {
         value: '',
         text: 'Select a field'
     }));
@@ -125,7 +121,7 @@ fetchFieldNames()
         });
 
         // Append the option to the select element
-        $('#chartSelect').append(option);
+        $('#fieldSelect').append(option);
     });
 }) 
 
@@ -156,10 +152,10 @@ function fetchFieldNames2() {
 fetchFieldNames2()
 .then(data => { 
     // Clear existing options
-    $('#fieldSelect').empty();
+    $('#fieldSelect2').empty();
 
     // Add a default option
-    $('#fieldSelect').append($('<option>', {
+    $('#fieldSelect2').append($('<option>', {
         value: '',
         text: 'Select a field'
     }));
@@ -177,7 +173,7 @@ fetchFieldNames2()
         });
 
         // Append the option to the select element
-        $('#fieldSelect').append(option);
+        $('#fieldSelect2').append(option);
     });
 }) 
 .catch(error => {
@@ -193,58 +189,58 @@ document.getElementsByClassName("add-task")[0].addEventListener('click', functio
 
 // for the chart (start)
 
-  $('#chartSelect').on('change', function() {
-    const selectedField = $(this).val(); // Get the selected field ID
+function displayChart(){
+    const selectedField = $('#fieldSelect').val(); // Get the selected field ID
     fetchFieldData(username, selectedField)
     .then(data => {
-      const xValues = data.map(item => {
-          const data_date = item.date;
-          const dateParts = data_date.split('T');
-          return dateParts[0]; // Assuming you want to use only the date part
-      }); 
-      const datasets = [{
-          label: 'Nitrogen',
-          data: data.map(item => item.nitrogen_N),
-          borderColor: "red",
-          fill:false
-      },{
-          label: 'Potassium',
-          data: data.map(item => item.potassium_K),
-          borderColor: "orange",
-          fill:false
-      },{
-          label: 'Sulfur',
-          data: data.map(item => item.sulphur_S),
-          borderColor: "yellow",
-          fill:false
-      },{
-          label: 'Boron',
-          data: data.map(item => item.boron_B),
-          borderColor: "lime",
-          fill:false
-      },{
-          label: 'Phosphorus',
-          data: data.map(item => item.phosphorus_P),
-          borderColor: "green",
-          fill:false
-      },{
-          label: 'Magnesium',
-          data: data.map(item => item.magnesium_Mg),
-          borderColor: "cyan",
-          fill:false
-      },{
-          label: 'Calcium',
-          data: data.map(item => item.calcium_Ca),
-          borderColor: "blue",
-          fill:false
-      },{
-          label: 'Copper',
-          data: data.map(item => item.copper_Cu),
-          borderColor: "purple",
-          fill:false
-      }]
-  
-  
+    const xValues = data.map(item => {
+        const data_date = item.date;
+        const dateParts = data_date.split('T');
+        return dateParts[0]; // Assuming you want to use only the date part
+    }); 
+    const datasets = [{
+        label: 'Nitrogen',
+        data: data.map(item => item.nitrogen_N),
+        borderColor: "red",
+        fill:false
+    },{
+        label: 'Potassium',
+        data: data.map(item => item.potassium_K),
+        borderColor: "orange",
+        fill:false
+    },{
+        label: 'Sulfur',
+        data: data.map(item => item.sulphur_S),
+        borderColor: "yellow",
+        fill:false
+    },{
+        label: 'Boron',
+        data: data.map(item => item.boron_B),
+        borderColor: "lime",
+        fill:false
+    },{
+        label: 'Phosphorus',
+        data: data.map(item => item.phosphorus_P),
+        borderColor: "green",
+        fill:false
+    },{
+        label: 'Magnesium',
+        data: data.map(item => item.magnesium_Mg),
+        borderColor: "cyan",
+        fill:false
+    },{
+        label: 'Calcium',
+        data: data.map(item => item.calcium_Ca),
+        borderColor: "blue",
+        fill:false
+    },{
+        label: 'Copper',
+        data: data.map(item => item.copper_Cu),
+        borderColor: "purple",
+        fill:false
+    }]
+
+
         // Get the canvas element
         const chartCanvas = document.getElementById('myCharte');
         
@@ -257,9 +253,77 @@ document.getElementsByClassName("add-task")[0].addEventListener('click', functio
         renderChart(chartCanvas, xValues, datasets);
     })
     .catch(error => {
-      console.error('Error fetching field data:', error);
+    console.error('Error fetching field data:', error);
     });
-});
+}
+
+//   $('#chartSelect').on('change', function() {
+//     const selectedField = $(this).val(); // Get the selected field ID
+//     fetchFieldData(username, selectedField)
+//     .then(data => {
+//       const xValues = data.map(item => {
+//           const data_date = item.date;
+//           const dateParts = data_date.split('T');
+//           return dateParts[0]; // Assuming you want to use only the date part
+//       }); 
+//       const datasets = [{
+//           label: 'Nitrogen',
+//           data: data.map(item => item.nitrogen_N),
+//           borderColor: "red",
+//           fill:false
+//       },{
+//           label: 'Potassium',
+//           data: data.map(item => item.potassium_K),
+//           borderColor: "orange",
+//           fill:false
+//       },{
+//           label: 'Sulfur',
+//           data: data.map(item => item.sulphur_S),
+//           borderColor: "yellow",
+//           fill:false
+//       },{
+//           label: 'Boron',
+//           data: data.map(item => item.boron_B),
+//           borderColor: "lime",
+//           fill:false
+//       },{
+//           label: 'Phosphorus',
+//           data: data.map(item => item.phosphorus_P),
+//           borderColor: "green",
+//           fill:false
+//       },{
+//           label: 'Magnesium',
+//           data: data.map(item => item.magnesium_Mg),
+//           borderColor: "cyan",
+//           fill:false
+//       },{
+//           label: 'Calcium',
+//           data: data.map(item => item.calcium_Ca),
+//           borderColor: "blue",
+//           fill:false
+//       },{
+//           label: 'Copper',
+//           data: data.map(item => item.copper_Cu),
+//           borderColor: "purple",
+//           fill:false
+//       }]
+  
+  
+//         // Get the canvas element
+//         const chartCanvas = document.getElementById('myCharte');
+        
+//         // Check if the chart exists, and destroy it if it does
+//         if (window.myLine) {
+//             window.myLine.destroy(); 
+//         }
+
+//         // Render the new chart
+//         renderChart(chartCanvas, xValues, datasets);
+//     })
+//     .catch(error => {
+//       console.error('Error fetching field data:', error);
+//     });
+// });
 
 function fetchFieldData(username, fieldID) {
     return new Promise((resolve, reject) => {
@@ -331,7 +395,8 @@ document.getElementById('visualButton').addEventListener('click', function() {
     document.getElementById('table-content').style.display = 'none';
     document.getElementById('visualization-content').style.display = 'block';
     document.getElementById('tableButton').classList.remove('highlight'); 
-    document.getElementById('visualButton').classList.add('highlight'); 
+    document.getElementById('visualButton').classList.add('highlight');
+    displayChart();
 });
 
 // submit form
@@ -339,7 +404,7 @@ document.getElementById('nutrientForm').addEventListener('submit', function(even
     event.preventDefault(); // Prevent default form submission
        
     // Fetch form inputs
-    const fieldID = document.getElementById('fieldSelect').value.trim();
+    const fieldID = document.getElementById('fieldSelect2').value.trim();
     const datesampled = document.getElementById('datesampled').value.trim();
     const nitrogen = document.getElementById('nitrogen').value.trim();
     const potassium = document.getElementById('potassium').value.trim();

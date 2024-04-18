@@ -590,6 +590,7 @@ function createFormCropRecommendation(cropName) {
         <label for="type">Field:</label> 
         <select id="fieldRecom" name="field" style="height: 35px;">
         </select>
+
     
         <label for="coveredArea">Covered Area (Hectare):</label>
         <input type="text" id="coveredArea" name="coveredArea"><br>
@@ -624,10 +625,39 @@ function createFormCropRecommendation(cropName) {
         })
         .catch(error => {
             console.error(error);
-        });
 
-    return form;
-}
+    });
+
+
+    return form; 
+} 
+
+
+
+function fetchFieldNames3() {
+    return new Promise((resolve, reject) => {  
+        fetch('/getFieldNames', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
+
 
 
 document.getElementsByClassName("submit-new-crop")[0].addEventListener('click', function() {
@@ -643,16 +673,16 @@ function generateAutoFillCropForm(cropName){
   
 
 function submitNewCrop2(event){    
-    event.preventDefault();
+    event.preventDefault(); 
     
     const form = document.getElementById('cropForm2');
     console.log(form)
 
     // Access the input fields by their IDs
     const cropName = form.querySelector('#name').value;
-    const field = form.querySelector('#field').value;
+    const field = form.querySelector('#fieldRecom').value; 
     const coveredArea = form.querySelector('#coveredArea').value;
-
+ 
     console.log(cropName, field, coveredArea); 
 
     // // Check if any of the required fields are empty
@@ -677,7 +707,7 @@ function insertCropDataIntoDatabase(form) {
     fetch('/insertCrop', {
         method: 'POST',
         headers: { 
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json' 
         },
         body: JSON.stringify({cropName , fieldID, coveredArea}) 
     })

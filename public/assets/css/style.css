@@ -10,7 +10,7 @@ color: gray; }
 
 
 .content {  
-    margin-left: 15px;
+    margin-left: 15px; 
     margin-top: 15px;   
     width: 100%;
 } 
@@ -18,13 +18,13 @@ color: gray; }
 .container1 { 
     padding-top: 10px;
     width: 1200px; 
-    padding: 20px;  
+    padding: 20px;   
     background-color: #fff; 
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     height: auto;
     display: block; 
-}
+} 
 
 .container2 {  
     padding-top: 10px;
@@ -187,7 +187,6 @@ a:hover, a:focus {
 #sidebar {
 min-width: 280px;
 max-width: 280px;
-/* background: #1d1919; */
 background: #062f05;
 color: #fff;
 -webkit-transition: all 0.3s;
@@ -611,13 +610,17 @@ width: 360px;
 #pestName{
     flex: 1;
     width: 460px;
-    margin-left: 30px;
     color: black; 
 }
 
 #detailsButton{
-    border-top-left-radius: 10px;
+    margin-right: 3px;
+    border-top-left-radius: 10px; 
     border-bottom-left-radius: 10px;
+}
+
+#tableButton{ 
+    margin-right: 3px;
 }
 
 #maintenanceButton{ 
@@ -717,7 +720,7 @@ width: 360px;
     justify-content: space-between; /* Items will be spaced evenly with the first item at the start and the last item at the end */
     align-items: center; /* Align items vertically in the center */
 }
-
+ 
 #currBalanceText {
     font-size: 40px;
 }
@@ -955,6 +958,129 @@ width: 360px;
     z-index: 9999;
 }
 
+
+
+.popup-crop-fieldRecord{
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc; 
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+.popup-fieldRecord{ 
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+
+#edit-delete-button2{ 
+    width: 360px;
+    margin-top: 10px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: space-evenly;    
+}
+
+.containerMap{
+    width: 1160px;  
+    padding: 20px;  
+    background-color: #fff; 
+    border-radius: 5px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: auto;
+}
+
+/*Irrigation*/
+
+/* Styles for the items inside general-irrigation-summary */
+.irrigation-status,
+.min-max-threshold,
+.daily-water-consumption {
+    height: 120px;
+    margin-bottom: 20px;
+    background-color: #fff; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+
+.containerIrrigationSummary {
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-start; 
+    padding-top: 10px;
+    width: 1200px; 
+    padding: 20px;   
+    background: #094507;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    height: auto;
+} 
+ 
+.flex-container {
+    display: flex;
+}
+
+.containerMap {
+    height: 400px;
+    width: 600px;
+    margin-right: 15px;  
+}
+
+.general-irrigation-summary {
+    height: 400px;
+    width: 550px;
+    margin-right: 20px; 
+}
+
+
+.summary-header{
+    margin-left: 10px;
+    padding-top: 10px;
+} 
+
+.summary-header-label{
+    margin-left: 10px;
+}
+
+.summary-header-water{
+    padding-top: 10px;
+    margin-left: 10px;
+}
+
+.summary-header-label-status{
+    margin-left: 5px;
+    margin-bottom: 0px;
+}   
+ 
+
+.containerIrrigation {
+    display: flex; /* Use flexbox */
+    align-items: center; /* Align items vertically */
+    justify-content: flex-start; /* Align items to the start */
+}
 
   /* .tableid, .visualid{
     padding-top: 5px;
@@ -1231,3 +1357,4 @@ width: 360px;
 .btn:hover {
     color: #fff;
 }
+

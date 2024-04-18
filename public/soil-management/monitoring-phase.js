@@ -184,6 +184,7 @@ document.getElementsByClassName("add-task")[0].addEventListener('click', functio
 function displayChart(fieldName){
     fetchFieldData(username, fieldName)
     .then(data => {
+
     const xValues = data.map(item => {
         const data_date = item.date;
         const dateParts = data_date.split('T');
@@ -348,7 +349,7 @@ document.getElementById('visualButton').addEventListener('click', function() {
 // submit form
 document.getElementById('nutrientForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
-       
+        
     // Fetch form inputs
     const fieldID = document.getElementById('fieldSelect2').value.trim();
     const datesampled = document.getElementById('datesampled').value.trim();

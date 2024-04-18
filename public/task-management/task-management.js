@@ -24,7 +24,7 @@ function fetchTaskData() {
 
 
 fetchTaskData()
-.then(data => { 
+.then(data => {  
     // adding some delay to ensure jquery is fully loaded 
     setTimeout(function() {
 

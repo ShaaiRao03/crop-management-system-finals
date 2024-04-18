@@ -92,21 +92,5 @@ function populateWebsites() {
     });
 }
 
-function filter() {
-    const searchInput = document.getElementById('search-input').value.toLowerCase();
-    const articles = document.querySelectorAll('.article');
-
-    articles.forEach(article => {
-        const articleName = article.querySelector('a').innerText.toLowerCase();
-        if(articleName.includes(searchInput)) {
-            article.style.display = 'block';
-        } else {
-            article.style.display = 'none';
-        }
-    });
-}
-
-document.getElementById('search-input').addEventListener('input', filter);
-
 populateArticles();
 populateWebsites();

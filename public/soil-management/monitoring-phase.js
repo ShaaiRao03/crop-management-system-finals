@@ -45,28 +45,6 @@ $('#fieldSelect').on('change', function() {
     });
 });
 
-// fetchNutrientData()
-// .then(data => {
-//     // Render the table with the fetched data
-//     renderTable(data);
-// })
-// .catch(error => {
-//     console.error('Error fetching monitoring data:', error);
-// });
-
-// $('#update').on('click', function() {
-//     const fieldName = $('#fieldSelect').val();
-
-//     fetchNutrientData(fieldName)
-//     .then(data => {
-//         // Render the table with the fetched data
-//         renderTable(data);
-//     })
-//     .catch(error => {
-//         console.error('Error fetching monitoring data:', error);
-//     });
-// });
-
 function renderTable(data) {
     // Destroy existing DataTable instance
     $('#example').DataTable().destroy();
@@ -75,7 +53,6 @@ function renderTable(data) {
     const table = $('#example').DataTable({
         data: data,
         columns: [
-            { data: 'fieldName' },
             { data: 'nitrogen_N' },
             { data: 'potassium_K' },
             { data: 'sulphur_S' },
@@ -215,6 +192,10 @@ function displayChart(fieldName){
         const dateParts = data_date.split('T');
         return dateParts[0]; // Assuming you want to use only the date part
     }); 
+
+    const currentDate = new Date().toISOString().split('T')[0];
+    xValues.push(currentDate);
+
     const datasets = [{
         label: 'Nitrogen',
         data: data.map(item => item.nitrogen_N),
@@ -257,6 +238,11 @@ function displayChart(fieldName){
         fill:false
     }]
 
+        // Connect the last data point to the current date
+        datasets.forEach(dataset => {
+            // dataset.data.push(null); // Add null value to separate the last data point
+            dataset.data.push(getLatestValue(dataset.data)); // Add the latest value
+        });
 
         // Get the canvas element
         const chartCanvas = document.getElementById('myCharte');
@@ -274,73 +260,15 @@ function displayChart(fieldName){
     });
 }
 
-//   $('#chartSelect').on('change', function() {
-//     const selectedField = $(this).val(); // Get the selected field ID
-//     fetchFieldData(username, selectedField)
-//     .then(data => {
-//       const xValues = data.map(item => {
-//           const data_date = item.date;
-//           const dateParts = data_date.split('T');
-//           return dateParts[0]; // Assuming you want to use only the date part
-//       }); 
-//       const datasets = [{
-//           label: 'Nitrogen',
-//           data: data.map(item => item.nitrogen_N),
-//           borderColor: "red",
-//           fill:false
-//       },{
-//           label: 'Potassium',
-//           data: data.map(item => item.potassium_K),
-//           borderColor: "orange",
-//           fill:false
-//       },{
-//           label: 'Sulfur',
-//           data: data.map(item => item.sulphur_S),
-//           borderColor: "yellow",
-//           fill:false
-//       },{
-//           label: 'Boron',
-//           data: data.map(item => item.boron_B),
-//           borderColor: "lime",
-//           fill:false
-//       },{
-//           label: 'Phosphorus',
-//           data: data.map(item => item.phosphorus_P),
-//           borderColor: "green",
-//           fill:false
-//       },{
-//           label: 'Magnesium',
-//           data: data.map(item => item.magnesium_Mg),
-//           borderColor: "cyan",
-//           fill:false
-//       },{
-//           label: 'Calcium',
-//           data: data.map(item => item.calcium_Ca),
-//           borderColor: "blue",
-//           fill:false
-//       },{
-//           label: 'Copper',
-//           data: data.map(item => item.copper_Cu),
-//           borderColor: "purple",
-//           fill:false
-//       }]
-  
-  
-//         // Get the canvas element
-//         const chartCanvas = document.getElementById('myCharte');
-        
-//         // Check if the chart exists, and destroy it if it does
-//         if (window.myLine) {
-//             window.myLine.destroy(); 
-//         }
-
-//         // Render the new chart
-//         renderChart(chartCanvas, xValues, datasets);
-//     })
-//     .catch(error => {
-//       console.error('Error fetching field data:', error);
-//     });
-// });
+// Function to get the latest non-null value from an array
+function getLatestValue(array) {
+    for (let i = array.length - 1; i >= 0; i--) {
+        if (array[i] !== null) {
+            return array[i];
+        }
+    }
+    return null; // Return null if no non-null value is found
+}
 
 function fetchFieldData(username, fieldID) {
     return new Promise((resolve, reject) => {

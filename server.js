@@ -1078,9 +1078,7 @@ app.post('/deleteTask', (req, res) => {
     });
 });
 
-
 // Task management ends -------------------------------
-
 
 // Crop management starts -----------------------------
 

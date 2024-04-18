@@ -174,17 +174,14 @@ fetchFieldNames2()
     console.error('Error fetching data:', error);
 });
 
-
 document.getElementsByClassName("add-task")[0].addEventListener('click', function() {
     console.log('clicked');
     openPopupN()
 }); 
 
-
 // for the chart (start)
 
 function displayChart(fieldName){
-    // const selectedField = $('#fieldSelect').val(); // Get the selected field ID
     fetchFieldData(username, fieldName)
     .then(data => {
     const xValues = data.map(item => {
@@ -333,7 +330,12 @@ document.getElementById('tableButton').addEventListener('click', function() {
     document.getElementById('table-content').style.display = 'block';
     document.getElementById('visualization-content').style.display = 'none';
     document.getElementById('tableButton').classList.add('highlight'); 
-    document.getElementById('visualButton').classList.remove('highlight');   
+    document.getElementById('visualButton').classList.remove('highlight');
+
+    const table = document.getElementById('example');
+
+    // Set the width of the table
+    table.style.width = '1133px'; // Set the width to 800 pixels, for example
 }); 
  
 document.getElementById('visualButton').addEventListener('click', function() {

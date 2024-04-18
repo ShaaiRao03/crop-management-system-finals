@@ -647,33 +647,6 @@ function updateDetails(pestID, updatedDetails){
     });
 }
 
-function updateDetails(pestID, updatedDetails){
-    console.log("new details gathered");
-
-    return new Promise((resolve, reject) => {  
-        fetch('/updatePestDetails', { 
-                method: 'POST', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ pestID, updatedDetails }),
-            })
-            .then(response => {
-                if (!response.ok) {  
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })   
-            .then(data => {
-                resolve(data); // Resolve with the fetched data
-            })
-            .catch(error => {
-                reject(error); // Reject with the error
-            }); 
-    });
-}
-
-
 function editButtonEventListener(){
     // Call makeDetailsEditable() when the edit button is clicked
     const editButton = document.getElementById('editButton')

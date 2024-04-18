@@ -581,7 +581,7 @@ function createFormCropRecommendation(cropName) {
     form.className = 'cropRecommendation-form'; // Added a class for styling purposes
     form.enctype = 'multipart/form-data';  
     form.id = 'cropForm2'; 
-    
+
     form.innerHTML = `   
     <label class="form-title">Add New Crop</label> 
         <label for="name">Crop:</label> 
@@ -590,7 +590,7 @@ function createFormCropRecommendation(cropName) {
         <label for="type">Field:</label> 
         <select id="fieldRecom" name="field" style="height: 35px;">
         </select>
-        
+
     
         <label for="coveredArea">Covered Area (Hectare):</label>
         <input type="text" id="coveredArea" name="coveredArea"><br>
@@ -625,11 +625,13 @@ function createFormCropRecommendation(cropName) {
         })
         .catch(error => {
             console.error(error);
+
     });
 
 
     return form; 
 } 
+
 
 
 function fetchFieldNames3() {
@@ -984,6 +986,133 @@ function generateAutoFillPlanForm(currentPlan){
     container.appendChild(buttonContainer); 
 }
 
+function fetchFieldNames() {
+    return new Promise((resolve, reject) => {  
+        fetch('/getFieldNames', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
+
+fetchFieldNames()
+.then(data => { 
+    // Clear existing options
+    $('#crop-field-recommendation').empty();
+
+    // Add a default option
+    $('#crop-field-recommendation').append($('<option>', {
+        value: '',
+        text: 'Select a field'
+    }));
+
+    // Map data and create options
+    data.forEach(item => {
+        // Decide which attributes to use for value and display text
+        const value = item.fieldID;
+        const text = item.fieldName;
+        
+        // Create the option element
+        const option = $('<option>', {
+            value: value,
+            text: text
+        });
+
+        // Append the option to the select element
+        $('#crop-field-recommendation').append(option);
+    });
+}) 
+
+function fetchFieldNames2() {
+    return new Promise((resolve, reject) => {  
+        fetch('/getFieldNames', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
+
+fetchFieldNames2()
+.then(data => { 
+    // Clear existing options
+    $('#field').empty();
+
+    // Add a default option
+    $('#field').append($('<option>', {
+        value: '',
+        text: 'Select a field'
+    }));
+
+    // Map data and create options
+    data.forEach(item => {
+        // Decide which attributes to use for value and display text
+        const value = item.fieldID;
+        const text = item.fieldName;
+        
+        // Create the option element
+        const option = $('<option>', {
+            value: value,
+            text: text
+        });
+
+        // Append the option to the select element
+        $('#field').append(option);
+    });
+}) 
+
+function fetchFieldNames3() {
+    return new Promise((resolve, reject) => {  
+        fetch('/getFieldNames', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
 
 var currentChosenCrop;
 var currentPlan;

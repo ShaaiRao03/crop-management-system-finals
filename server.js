@@ -9,6 +9,8 @@ const PORT = process.env.PORT || 5000;
 
 const cors = require('cors');
 
+const crypto = require('crypto');
+
 app.use(cors());  
 app.use(express.json()); 
 
@@ -251,7 +253,28 @@ app.post('/getMaintenanceRecord', (req, res) => {
         });
 }); 
 
+/*
+app.post('/updateEquipmentDetails', (req, res) => { 
+    // Access updated details from the request body
+    const { currSerialNum, updatedDetails } = req.body;
 
+    const statusVal = 1;
+
+    // Construct the SQL update statement for specific fields
+    const sql = 'UPDATE equipment SET equipmentName = ?, type = ?, brand = ?, model = ?, serialNum = ?, equipmentStatusID = ?, plateNum = ?, lastService = ?, purchaseTypeID =?, dealerNumber =? WHERE serialNum = ?';
+    const values = [updatedDetails.name, updatedDetails.type, updatedDetails.brand, updatedDetails.model, updatedDetails.serial-number, 1, updatedDetails.plate-number, updatedDetails.last-service, 1, updatedDetails.dealer-number, currSerialNum];
+
+    // Execute the SQL query
+    db.query(sql, values, (err, result) => {  
+        if (err) { 
+            console.error('Error updating data into database:', err);
+            res.status(500).json({ message: 'Error updating form.' });
+            return;
+        }
+        console.log('Data updated successfully'); 
+        res.status(200).json({ message: 'Data updated successfully!' });
+    });
+});*/
 
 app.post('/submit_equipment', upload.single('image'), (req, res) => {
     // Access form data
@@ -284,6 +307,36 @@ app.post('/submit_equipment', upload.single('image'), (req, res) => {
     });
 });
   
+app.post('/getPestRecord', (req, res) => {
+
+    const { pestID } = req.body; 
+    console.log(pestID)
+
+    const sqlQuery1 = `SELECT * FROM pestrecord JOIN pest_management ON pest_management.pestID = pestrecord.pestID
+    WHERE pestrecord.pestID = "${pestID}";`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => { 
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1); 
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client 
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
 
 app.post('/submit_record', (req, res) => {  
     // Access form data 
@@ -377,11 +430,11 @@ app.post('/getPestInfoByID', (req, res) => {
 app.post('/submit_pest', (req, res) =>{ 
     // Access form data
     console.log('insert statement starts');
-    const {name, treatment, field, product, inventoryUsed, treatmentStartDate, pestDesc, pic, amount, treatmentDesc} = req.body;
+    const {name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc} = req.body;
  
-    const sql = 'INSERT INTO pest_management (currentPest, treatmentPlan, field_crop_id, productUsed, inventoryUsed, treatmentStartDate, pest_description, userID, amountApplied, treatment_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const sql = 'INSERT INTO pest_management (currentPest, treatmentPlan, field_crop_id, treatmentStartDate, pest_description, userID, treatment_description) VALUES (?, ?, ?, ?, ?, ?, ?)';
     // const values = [formData.name, formData.treatment, formData.field, formData.product, formData.inventoryUsed, formData.treatmentStartDate, formData.pestDesc, formData.pic, formData.amount, formData.treatmentDesc];
-    const values = [name, treatment, field, product, inventoryUsed, treatmentStartDate, pestDesc, pic, amount, treatmentDesc];
+    const values = [name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc];
     console.log('data inserted');
 
     db.query(sql, values, (err, result) => {  
@@ -415,36 +468,43 @@ app.post('/updatePestDetails', (req, res) => {
     });
 });
 
+app.post('/submit_pest_record', (req, res) => {  
+    // Access form data 
+    const {treatment , date , pestID} = req.body;
+ 
+    console.log("Server :  " , treatment, date, pestID) 
 
-// Pest management ends -------------------------------
+    // Insert form data into the database 
+    const sql = `INSERT INTO pestrecord (pestID, treatment, treatmentDate) VALUES ("${pestID}", "${treatment}", "${date}")`;
 
+    db.query(sql, (err, result) => {   
+        if (err) { 
+            console.error('Error inserting data into database:', err);
+            res.status(500).json({ message: 'Error submitting form.' });
+            return;
+        }
+        console.log('Form data inserted successfully');  
+        res.status(200).json({ message: 'Form submitted successfully!' });
+    });
+});
 
+app.post('/insertPest', (req, res) => { 
 
-
-
-// Soil relocation (Monitoring) starts -------------------------
-
-app.post('/getMonitoringInfo', (req, res) => {
-
-    const { username, fieldName, startDate, endDate } = req.body; 
-    let sqlQuery1;
-
-    if (!fieldName || !startDate || !endDate){
-        sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}');`     
-    }
-    else{
-        sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}') AND fieldID = '${fieldName}' AND date BETWEEN '${startDate}' AND '${endDate}';`;
-    }
-    // Wrapping the database query inside a promise
+    const { pestName , field, pestDesc, treatment, treatmentDesc, treatmentStartDate, pic } = req.body; 
+ 
+    const sqlQuery1 = `INSERT INTO pest_management (currentPest, treatmentPlan, field_crop_id, treatmentStartDate, pest_description, pic, treatment_description) 
+    VALUES ("${pestName}", ${treatment}, ${field} , ${treatmentStartDate}, ${pestDesc}, ${pic}, ${treatmentDesc})`         
+  
+    // Wrapping the database query inside a promise 
     const executeQuery = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => { 
             db.query(sqlQuery1, (error1, results1) => { 
                 if (error1) {
-                    reject({ error: 'Error querying table2' });
-                } else {
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
                     resolve(results1);
                 }
-            }); 
+            });  
         });
     };
 
@@ -456,7 +516,50 @@ app.post('/getMonitoringInfo', (req, res) => {
         .catch((error) => {
             res.status(500).json(error); // Send the error back to the client
         });
+}); 
+
+// Pest management ends -------------------------------
+
+
+
+
+
+// Soil relocation (Monitoring) starts -------------------------
+
+app.post('/getMonitoringInfo', (req, res) => {
+
+    const { username, fieldName } = req.body; 
+    let sqlQuery1;
+
+    // Check if fieldName is not empty
+    if (fieldName) {
+        sqlQuery1 = `SELECT * FROM nutrients_monitoring JOIN field ON field.fieldID = nutrients_monitoring.field_ID WHERE field_ID IN (SELECT fieldID FROM user_field JOIN user ON user_field.userID = user.userID WHERE user.username = '${username}') AND field_ID='${fieldName}';`;
+        const executeQuery = () => {
+            return new Promise((resolve, reject) => {
+                db.query(sqlQuery1, (error1, results1) => { 
+                    if (error1) {
+                        reject({ error: 'Error querying table2' });
+                    } else {
+                        resolve(results1);
+                    }
+                }); 
+            });
+        };
+        
+        // Call the function that returns the promise
+        executeQuery()
+            .then((data) => {
+                res.status(200).json(data); // Send the result back to the client
+            })
+            .catch((error) => {
+                res.status(500).json(error); // Send the error back to the client
+            });
+    } else {
+        // If fieldName is empty, send an error response
+        res.status(400).json({ error: 'fieldName cannot be empty' });
+    }
 });
+
 
 
 app.post('/submit_nutrients', upload.single('image'), (req, res) => {
@@ -974,6 +1077,29 @@ app.post('/getInventoryInfoByID', (req, res) => {
             res.status(500).json(error); // Send the error back to the client
         });
 });
+/*
+app.post('/updateInventoryDetails', (req, res) => { 
+    // Access updated details from the request body
+    console.log("Inventory ID: ", inventoryID);
+    const { inventoryID, updatedDetails } = req.body;
+    //let inventoryTypeVal = '';
+    console.log(updatedDetails.name, "", updatedDetails.brand, "", updatedDetails.threshold, "", updatedDetails.manufacturer, "", updatedDetails.manufacturer-number, "", updatedDetails.type, "", inventoryID);
+
+    // Construct the SQL update statement for specific fields
+    const sql = 'UPDATE inventory SET inventoryName = ?, brand = ?, flagThreshold = ?, manufacturer = ?, manufacturerNumber = ? inventoryTypeID = ? WHERE inventoryID = ?';
+    const values = [updatedDetails.name, updatedDetails.brand, updatedDetails.threshold, updatedDetails.manufacturer, updatedDetails.manufacturer-number, updatedDetails.type, inventoryID];
+
+    // Execute the SQL query
+    db.query(sql, values, (err, result) => {  
+        if (err) { 
+            console.error('Error updating data into database:', err);
+            res.status(500).json({ message: 'Error updating form.' });
+            return;
+        }
+        console.log('Data updated successfully'); 
+        res.status(200).json({ message: 'Data updated successfully!' });
+    });
+});*/
 
 app.post('/submit_inventory', upload.single('image'), (req, res) => {
     // Access form data
@@ -1054,6 +1180,93 @@ app.post('/submit_usage', (req, res) => {
 });
 
 // Resource allocation (inventory) ends ------------------------- 
+
+
+app.use("/",require("./src/routes/pages"));     
+app.use("/api", require("./src/controllers/auth"));  
+
+app.post('/getCrops', (req, res) => {
+    const sqlQuery1 = `SELECT * FROM crop_info`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+app.post('/getWebsites', (req, res) => {
+    const sqlQuery1 = `SELECT * FROM website`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+app.post('/getArticles', (req, res) => {
+    const sqlQuery1 = `SELECT * FROM article`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+app.listen(5000, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+// app.listen(PORT);   
 
 // Task management starts ------------------------- 
 
@@ -1154,9 +1367,7 @@ app.post('/deleteTask', (req, res) => {
     });
 });
 
-
 // Task management ends -------------------------------
-
 
 // Crop management starts -----------------------------
 
@@ -1351,8 +1562,35 @@ app.post('/insertCrop', (req, res) => {
         });
 }); 
 
+app.post('/updateAccount', (req, res) => {
+    const {userId, username, password} = req.body;
 
-// Crop management ends -----------------------------
+
+    const hashedPassword = crypto.createHash('md5').update(password).digest('hex');
+    const sqlQuery = `UPDATE user SET username = ?, password = ? WHERE userId = ?`;
+    const values = [username, hashedPassword, userId];
+
+    const executeQuery = () => {
+        return new Promise ((resolve, reject) => {
+            db.query (sqlQuery, values, (error, results) => {
+                if (error) {
+                    reject ({error : 'Error updating account details in the database'});
+                } else {
+                    resolve (results);
+                }
+            });
+        });
+    };
+
+    executeQuery() 
+    .then ((data) => {
+        res.status(200).json(data);
+    })
+    .catch ((error) => {
+        res.status(500).json(error);
+    });
+});
+
 
 
 // Irrigation system starts ---------------------------
@@ -1458,4 +1696,4 @@ app.post('/getSensorData', (req, res) => {
 app.use("/",require("./src/routes/pages"));     
 app.use("/api", require("./src/controllers/auth"));  
 
-app.listen(PORT);   
+// app.listen(PORT);   

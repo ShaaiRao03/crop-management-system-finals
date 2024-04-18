@@ -12,6 +12,7 @@ color: gray; }
 .content {  
     margin-left: 15px; 
     margin-top: 15px;   
+    width: 100%;
 } 
 
 .container1 { 
@@ -274,13 +275,19 @@ button:hover {
     background-color: #d32f2f; /* Darker red */
 }
 
+.settings-top {
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+}
+
 .log-out-button {
     /* background-color: #e84034;  */
-    background-color: rgba(232, 64, 52, 0.4);
+    /* background-color: rgba(232, 64, 52, 0.4); */
+    background-color: rgba(101, 58, 12, 0.826);
     color: white;
     border: #f44336;
     padding: 10px 20px;
-    margin-top: 140px;
     text-align: center; 
     text-decoration: none;
     display: inline-block;
@@ -288,8 +295,8 @@ button:hover {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 100%;
-  }
+    margin-right: 20px;
+}
   
 .log-out-button:hover { 
 background-color: #d32f2f; /* Darker red */
@@ -665,6 +672,17 @@ width: 360px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     height: auto; 
 } 
+
+.container3-pesttable{
+    margin-top: 10px;
+    width: 1160px; 
+    padding: 20px;  
+    background-color: #fff; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: auto;
+    /* display: block; */
+}
    
 .maintenance-section{
     margin-top: 10px;
@@ -771,10 +789,9 @@ width: 360px;
 
 .add-button,.add-task{
     padding: 10px;
-    background-color: #28b704; 
+    background-color: #349631; 
     color: white;
-    border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
 }
 
@@ -942,6 +959,7 @@ width: 360px;
 }
 
 
+
 .popup-crop-fieldRecord{
     display: none; 
     position: fixed;
@@ -1063,3 +1081,280 @@ width: 360px;
     align-items: center; /* Align items vertically */
     justify-content: flex-start; /* Align items to the start */
 }
+
+  /* .tableid, .visualid{
+    padding-top: 5px;
+    padding-bottom: 30px;
+    font-family:Arial, sans-serif
+  } */
+  
+  .tableid, .visualid{
+    border-radius: 2px;
+    padding: 0px;
+    border-width: 1px;
+    border-color: black;
+    background: transparent;
+    width:450px;
+    height:50px;
+    font-size: large;
+    color: black;
+  }
+  
+  .tableid:hover, .visualid:hover, .tableid:focus .visualid:focus{
+    transition-duration: 0.4s;
+    background-color: #28b704;
+    color: white;
+  }
+
+#togglebut button{
+    padding: 0px;
+}
+
+.crop-tutorial h1 {
+    margin-left: 50px;
+    margin-bottom: 30px;
+}
+
+.crop-search-container {
+    margin-left: 50px;
+    position: relative;
+    display: inline-block;
+}
+    
+.crop-search-container input[type="text"] {
+    height: 45px;
+    width: 500px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-style: italic;
+    padding-right: 50px;
+}
+
+.crop-search-container .search-form {
+    margin: 20px 50px;
+    text-align: center;
+}
+
+.crop-search-container .search-input {
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #000;
+}
+
+.crop-search-container .search-icon {
+    width: 50px;
+    padding: 0;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-70%);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.crop-search-container .filter-icon {
+    width: 75px;
+    padding: 0;
+    height: 47px;
+    position: absolute;
+    margin-left: 50px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.search-icon:focus,
+.filter-icon:focus {
+    outline:none;
+}
+
+.filter-icon:hover {
+    background-color: #277425;
+}
+
+.filter-icon:hover svg {
+    color: #fff;
+}
+
+.crops {
+    min-width: 630px;
+}
+
+.crops button {
+    background-color: #fff;
+    color:#277425;
+    display: flex;
+    width: 90%;
+    min-width: 630px;
+    height: 70px;
+    border: none;
+    /* border: 1px solid #918f8f; */
+    border-radius: 10px;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 50px;
+    box-shadow: 0px 4px 8px rgba(129, 129, 129, 0.2);
+}
+
+.crops button p {
+    color: #277425; 
+    margin-top: 0.5%;
+    font-size: 20px;
+    margin-left: 2%;
+}
+
+.arrow-icon {
+    margin-left: auto;
+    margin-right: 5%;
+    fill: #277425;
+}
+
+.crops button:hover {
+    background-color: #277425;
+    color: #fff;
+}
+
+.crops button:hover p {
+    color: #fff;
+}
+
+.crops button:hover .arrow-icon {
+    fill: #fff;
+}
+
+.crop,
+.tutorials {
+    margin-left: 50px;
+}
+
+.crop-row {
+    margin-top: 30px;
+    display: flex;
+    /* flex-direction: row; */
+}
+
+.crop-video {
+    height: auto;
+}
+
+.conditions {
+    margin-left: 60px;
+}
+
+.tutorials h1 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+  .article-container,
+  .website-container {
+    margin-top: 70px;
+  }
+  
+  .article {
+    margin-right: 100px;
+    width: 300px;
+    max-width: 300px;
+    height: 500px;
+    /* border: 1px solid #000; */
+    border-radius: 10px;
+    margin-bottom: 80px;
+  }
+  
+  .article-row,
+  .website-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin:auto;
+  }
+  
+  .article-pic {
+    width: 300px;
+    height: 350px;
+    border-radius: 10px;
+  }
+
+  .article-name {
+    overflow-y: auto;
+    padding: 10px;
+    box-sizing: border-box;
+    max-height: calc(100% - 250px);
+  }
+  
+  .conditions a,
+  .article a,
+  .website-description a {
+    color: #28b704;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .conditions a:hover,
+  .article a:hover,
+  .website-description a:hover {
+    color: #277425;
+  }
+
+  .website-container h2 {
+    margin-bottom: 70px;
+  }
+
+  .website {
+    width: 90%;
+    margin-bottom: 80px;
+  }
+
+  .website hr {
+    height: 1px;
+    background-color: #bdbdbd;
+  }
+
+  .website-button {
+    border: none;
+  }
+
+  .website-description a {
+    color: #fff;
+  }
+
+.bdge {
+  height: 21px;
+  background-color: orange;
+  color: #fff;
+  font-size: 11px;
+  padding: 8px;
+  border-radius: 4px;
+  line-height: 3px;
+}
+
+.comments {
+  margin-top: 80px;
+  text-underline-position: under;
+  cursor: pointer;
+}
+
+.dot {
+  height: 7px;
+  width: 7px;
+  margin-top: 3px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.hit-voting:hover {
+  color: blue;
+}
+
+.hit-voting {
+  cursor: pointer;
+}
+
+.btn:hover {
+    color: #fff;
+}
+

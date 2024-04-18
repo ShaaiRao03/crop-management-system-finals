@@ -107,6 +107,31 @@ function fetchPestByID(pestID) {
     });
 } 
 
+function fetchPestRecord(pestID) { 
+    return new Promise((resolve, reject) => {  
+        fetch('/getPestRecord', {   
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                }, 
+                body: JSON.stringify({ pestID }),
+            })
+            .then(response => { 
+                console.log(response)
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); 
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => { 
+                reject(error); // Reject with the error
+            }); 
+    });
+}
+
 function newPage(name) {
     console.log(name);
 }
@@ -246,15 +271,15 @@ document.getElementById('pestForm').addEventListener('submit', function(event) {
     const treatment = document.getElementById('treatment').value.trim();
     const treatmentDesc = document.getElementById('treatmentDesc').value.trim();
     const treatmentStartDate = document.getElementById('treatmentStartDate').value.trim();
-    const product = document.getElementById('product').value.trim();
-    const inventoryUsed = document.getElementById('inventoryUsed').value.trim();
+   // const product = document.getElementById('product').value.trim();
+    //const inventoryUsed = document.getElementById('inventoryUsed').value.trim();
     const pic = document.getElementById('pic').value.trim();
 
 
-    const amount= document.getElementById('amount').value.trim();
+    //const amount= document.getElementById('amount').value.trim();
 
     // Validate required fields
-    if (!field || !name || !pestDesc || !treatment || !treatmentDesc || !treatmentStartDate || !product|| !inventoryUsed || !pic || !amount) {
+    if (!field || !name || !pestDesc || !treatment || !treatmentDesc || !treatmentStartDate || !pic) {
         alert('Please fill in all required fields.');
         return; // Exit the function
     }
@@ -268,7 +293,7 @@ document.getElementById('pestForm').addEventListener('submit', function(event) {
                 'Content-Type': 'application/json',
             },  
             // body: formData 
-            body: JSON.stringify({name, treatment, field, product, inventoryUsed, treatmentStartDate, pestDesc, pic, amount, treatmentDesc})
+            body: JSON.stringify({name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc})
         });
     })
     .then(response => {
@@ -311,7 +336,71 @@ function fetchUserID() {
     });
 } 
 
-  
+function updatePestRecord(pestID){ 
+    fetchPestRecord(pestID) 
+    .then(data => {   
+        console.log(data)
+
+        setTimeout(function() {
+
+            //the table
+            var table = $('#example2').DataTable(); 
+            table.clear(); 
+    
+            // Map data and create rows   
+            data.forEach(item => {
+
+                const treatment_date = item.treatmentDate;
+                const date = treatment_date.split('T'); 
+
+                const row = `<tr> 
+                    <td>${item.treatment}</td>
+                    <td>${date[0]}</td> 
+                </tr>`; 
+    
+                // Add the row to the table
+                table.row.add($(row).get(0));
+            }); 
+            // Redraw the table   
+            table.draw();
+        }, 100);
+
+    })
+}
+
+
+function reUpdatePestRecord(pestID){ 
+    fetchPestRecord(pestID) 
+    .then(data => {  
+        console.log(data)
+
+        setTimeout(function() {
+
+            //the table
+            var table = $('#example2').DataTable(); 
+            table.clear(); 
+    
+            // Map data and create rows   
+            data.forEach(item => {
+
+                const treatment_date = item.treatmentDate;
+                const date = treatment_date.split('T'); 
+
+                const row = `<tr> 
+                    <td>${item.treatment}</td>
+                    <td>${date[0]}</td> 
+                </tr>`;
+    
+                // Add the row to the table
+                table.row.add($(row).get(0));
+            }); 
+            // Redraw the table  
+            table.draw();
+        }, 100);
+
+    })
+}  
+
 function detectPest(event) { 
     event.preventDefault();  
     clearPestWithoutImage(event) 
@@ -505,6 +594,46 @@ async function query(imageData) {
     return result;
 }
 
+document.getElementById('recordPestForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    
+    // Fetch form inputs
+    const treatment = document.getElementById('description').value.trim();
+    const date = document.getElementById('treatment-date').value.trim();
+
+    // Validate required fields
+    if (!date || !treatment) {
+        alert('Please fill in all required fields.');
+        return; // Exit the function
+    }
+      
+    console.log(treatment , date , pestID) 
+
+    return new Promise((resolve, reject) => { 
+        fetch('/submit_pest_record', {  
+            method: 'POST',   
+            headers: { 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({treatment , date , pestID}),     
+        }).then(response => { 
+            if (response.ok) { 
+                // Form submitted successfully    
+                alert('Form submitted successfully!');
+                reUpdatePestRecord(pestID) 
+                closePopupRecord()  
+            } else { 
+                throw new Error('Error submitting form.'); 
+            }
+        }).catch(error => {
+            reject(error) 
+            alert('An error occurred while submitting the form. Please try again.');
+        });
+
+
+    })
+});
+
 //  Navigation between pages starts here  ----------------
 
 function showPestDetails(pestIDFromLink) {    
@@ -518,7 +647,15 @@ function showPestDetails(pestIDFromLink) {
 
     // Show details section by default
     document.getElementsByClassName('container3-pestDetails')[0].style.display = 'block';
+    document.getElementsByClassName('container3-pesttable')[0].style.display = 'none';
 }
+
+document.getElementById('detailsButton').addEventListener('click', function() {
+    document.getElementsByClassName('container3-pesttable')[0].style.display = 'none';
+    document.getElementsByClassName('container3-pestDetails')[0].style.display = 'block';
+    document.getElementById('detailsButton').classList.add('highlight'); 
+    document.getElementById('pestButton').classList.remove('highlight');   
+}); 
 
 document.getElementById('backButton').addEventListener('click', function() { 
     //document.getElementsByClassName('container3-usagetable')[0].style.display = 'none'; 
@@ -531,7 +668,32 @@ document.getElementById('backButton').addEventListener('click', function() {
     table.clear();
 }); 
 
+document.getElementById('pestButton').addEventListener('click', function() { 
+    // document.getElementsByClassName('maintenance-section')[0].style.display = 'block';
+    document.getElementsByClassName('container3-pesttable')[0].style.display = 'block';
+    document.getElementsByClassName('container3-pestDetails')[0].style.display = 'none';
+    document.getElementById('detailsButton').classList.remove('highlight'); 
+    document.getElementById('pestButton').classList.add('highlight'); 
+    updatePestRecord(pestID) 
+});
+
 //  Navigation between pages ends here  ----------------
+
+// Add record starts ----------------------
+document.getElementsByClassName("add-record-btn")[0].addEventListener('click', function() {
+    openPopupRecord()
+}); 
+ 
+function openPopupRecord() {  
+    document.getElementById('popup-record').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block'; 
+}
+
+function closePopupRecord() { 
+    document.getElementById('popup-record').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+}
+// Add record ends ----------------------
 
 // Editable starts here ------------------------------
 function makeDetailsEditable() {
@@ -647,33 +809,6 @@ function updateDetails(pestID, updatedDetails){
     });
 }
 
-function updateDetails(pestID, updatedDetails){
-    console.log("new details gathered");
-
-    return new Promise((resolve, reject) => {  
-        fetch('/updatePestDetails', { 
-                method: 'POST', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ pestID, updatedDetails }),
-            })
-            .then(response => {
-                if (!response.ok) {  
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })   
-            .then(data => {
-                resolve(data); // Resolve with the fetched data
-            })
-            .catch(error => {
-                reject(error); // Reject with the error
-            }); 
-    });
-}
-
-
 function editButtonEventListener(){
     // Call makeDetailsEditable() when the edit button is clicked
     const editButton = document.getElementById('editButton')
@@ -714,6 +849,32 @@ function clearPestFormData(){
     // Add back the 'required' attribute to required fields
     document.querySelectorAll('#pestForm [data-required]').forEach(field => {
         field.setAttribute('required', 'required');
+    });
+}
+
+function clearRecordFormData(){
+    // Remove the 'required' attribute from all required fields
+    document.querySelectorAll('#recordPestForm [required]').forEach(field => {
+        field.removeAttribute('required');
+    });
+
+    // Reset the form
+    document.getElementById("recordPestForm").reset();
+
+    // Add back the 'required' attribute to required fields
+    document.querySelectorAll('#recordPestForm [data-required]').forEach(field => {
+        field.setAttribute('required', 'required');
+    });
+}
+
+function clearRecordButtonEventListener(){
+    const clearBtn = document.getElementById('clearRecordBtn');
+    clearBtn.addEventListener('click', function(event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        
+        // Clear the form data
+        clearRecordFormData();
     });
 }
 
@@ -770,8 +931,61 @@ function clearPestWithoutImage(event) {
 
 }
 
+function fetchFieldNames() {
+    return new Promise((resolve, reject) => {  
+        fetch('/getFieldNames', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
+
+fetchFieldNames()
+.then(data => { 
+    // Clear existing options
+    $('#field').empty();
+
+    // Add a default option
+    $('#field').append($('<option>', {
+        value: '',
+        text: 'Select a field'
+    }));
+
+    // Map data and create options
+    data.forEach(item => {
+        // Decide which attributes to use for value and display text
+        const value = item.fieldID;
+        const text = item.fieldName;
+        
+        // Create the option element
+        const option = $('<option>', {
+            value: value,
+            text: text
+        });
+
+        // Append the option to the select element
+        $('#field').append(option);
+    });
+}) 
+
 // Clearing form data ends here ------------------------------
 
 var pestID;
 editButtonEventListener();
 clearButtonEventListener();
+clearRecordButtonEventListener();

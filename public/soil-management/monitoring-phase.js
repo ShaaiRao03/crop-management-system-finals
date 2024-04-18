@@ -1,11 +1,9 @@
-function fetchNutrientData(fieldName = null, startDate = null, endDate = null) {
+function fetchNutrientData(fieldName) {
     return new Promise((resolve, reject) => {  
         // Construct the request body based on provided start and end dates
-        const requestBody = { username };
-        if (fieldName && startDate && endDate) {
+        const requestBody = { username, fieldName };
+        if (fieldName) {
             requestBody.fieldName = fieldName;
-            requestBody.startDate = startDate;
-            requestBody.endDate = endDate;
         }
 
         fetch('/getMonitoringInfo', { 
@@ -30,24 +28,17 @@ function fetchNutrientData(fieldName = null, startDate = null, endDate = null) {
     });
 }
 
-fetchNutrientData()
-.then(data => {
-    // Render the table with the fetched data
-    renderTable(data);
-})
-.catch(error => {
-    console.error('Error fetching monitoring data:', error);
-});
+$('#fieldSelect').on('change', function() {
+    const fieldName = $(this).val(); // Get the selected field name
 
-$('#update').on('click', function() {
-    const fieldName = $('#fieldSelect').val();
-    const startDate = $('#startdate').val(); // Get the start date value
-    const endDate = $('#enddate').val(); // Get the end date value
-
-    fetchNutrientData(fieldName, startDate, endDate)
+    // Fetch nutrient data for the selected field name
+    fetchNutrientData(fieldName)
     .then(data => {
         // Render the table with the fetched data
         renderTable(data);
+
+        // Update the visualization with the fetched data
+        displayChart(fieldName);
     })
     .catch(error => {
         console.error('Error fetching monitoring data:', error);
@@ -62,7 +53,6 @@ function renderTable(data) {
     const table = $('#example').DataTable({
         data: data,
         columns: [
-            { data: 'fieldName' },
             { data: 'nitrogen_N' },
             { data: 'potassium_K' },
             { data: 'sulphur_S' },
@@ -104,10 +94,10 @@ function fetchFieldNames() {
 fetchFieldNames()
 .then(data => { 
     // Clear existing options
-    $('#chartSelect').empty();
+    $('#fieldSelect').empty();
 
     // Add a default option
-    $('#chartSelect').append($('<option>', {
+    $('#fieldSelect').append($('<option>', {
         value: '',
         text: 'Select a field'
     }));
@@ -125,7 +115,7 @@ fetchFieldNames()
         });
 
         // Append the option to the select element
-        $('#chartSelect').append(option);
+        $('#fieldSelect').append(option);
     });
 }) 
 
@@ -156,10 +146,10 @@ function fetchFieldNames2() {
 fetchFieldNames2()
 .then(data => { 
     // Clear existing options
-    $('#fieldSelect').empty();
+    $('#fieldSelect2').empty();
 
     // Add a default option
-    $('#fieldSelect').append($('<option>', {
+    $('#fieldSelect2').append($('<option>', {
         value: '',
         text: 'Select a field'
     }));
@@ -177,74 +167,81 @@ fetchFieldNames2()
         });
 
         // Append the option to the select element
-        $('#fieldSelect').append(option);
+        $('#fieldSelect2').append(option);
     });
 }) 
 .catch(error => {
     console.error('Error fetching data:', error);
 });
 
-
 document.getElementsByClassName("add-task")[0].addEventListener('click', function() {
     console.log('clicked');
     openPopupN()
 }); 
 
-
 // for the chart (start)
 
-  $('#chartSelect').on('change', function() {
-    const selectedField = $(this).val(); // Get the selected field ID
-    fetchFieldData(username, selectedField)
+function displayChart(fieldName){
+    fetchFieldData(username, fieldName)
     .then(data => {
-      const xValues = data.map(item => {
-          const data_date = item.date;
-          const dateParts = data_date.split('T');
-          return dateParts[0]; // Assuming you want to use only the date part
-      }); 
-      const datasets = [{
-          label: 'Nitrogen',
-          data: data.map(item => item.nitrogen_N),
-          borderColor: "red",
-          fill:false
-      },{
-          label: 'Potassium',
-          data: data.map(item => item.potassium_K),
-          borderColor: "orange",
-          fill:false
-      },{
-          label: 'Sulfur',
-          data: data.map(item => item.sulphur_S),
-          borderColor: "yellow",
-          fill:false
-      },{
-          label: 'Boron',
-          data: data.map(item => item.boron_B),
-          borderColor: "lime",
-          fill:false
-      },{
-          label: 'Phosphorus',
-          data: data.map(item => item.phosphorus_P),
-          borderColor: "green",
-          fill:false
-      },{
-          label: 'Magnesium',
-          data: data.map(item => item.magnesium_Mg),
-          borderColor: "cyan",
-          fill:false
-      },{
-          label: 'Calcium',
-          data: data.map(item => item.calcium_Ca),
-          borderColor: "blue",
-          fill:false
-      },{
-          label: 'Copper',
-          data: data.map(item => item.copper_Cu),
-          borderColor: "purple",
-          fill:false
-      }]
-  
-   
+
+    const xValues = data.map(item => {
+        const data_date = item.date;
+        const dateParts = data_date.split('T');
+        return dateParts[0]; // Assuming you want to use only the date part
+    }); 
+
+    const currentDate = new Date().toISOString().split('T')[0];
+    xValues.push(currentDate);
+
+    const datasets = [{
+        label: 'Nitrogen',
+        data: data.map(item => item.nitrogen_N),
+        borderColor: "red",
+        fill:false
+    },{
+        label: 'Potassium',
+        data: data.map(item => item.potassium_K),
+        borderColor: "orange",
+        fill:false
+    },{
+        label: 'Sulfur',
+        data: data.map(item => item.sulphur_S),
+        borderColor: "yellow",
+        fill:false
+    },{
+        label: 'Boron',
+        data: data.map(item => item.boron_B),
+        borderColor: "lime",
+        fill:false
+    },{
+        label: 'Phosphorus',
+        data: data.map(item => item.phosphorus_P),
+        borderColor: "green",
+        fill:false
+    },{
+        label: 'Magnesium',
+        data: data.map(item => item.magnesium_Mg),
+        borderColor: "cyan",
+        fill:false
+    },{
+        label: 'Calcium',
+        data: data.map(item => item.calcium_Ca),
+        borderColor: "blue",
+        fill:false
+    },{
+        label: 'Copper',
+        data: data.map(item => item.copper_Cu),
+        borderColor: "purple",
+        fill:false
+    }]
+
+        // Connect the last data point to the current date
+        datasets.forEach(dataset => {
+            // dataset.data.push(null); // Add null value to separate the last data point
+            dataset.data.push(getLatestValue(dataset.data)); // Add the latest value
+        });
+
         // Get the canvas element
         const chartCanvas = document.getElementById('myCharte');
         
@@ -257,9 +254,19 @@ document.getElementsByClassName("add-task")[0].addEventListener('click', functio
         renderChart(chartCanvas, xValues, datasets);
     })
     .catch(error => {
-      console.error('Error fetching field data:', error);
+    console.error('Error fetching field data:', error);
     });
-});
+}
+
+// Function to get the latest non-null value from an array
+function getLatestValue(array) {
+    for (let i = array.length - 1; i >= 0; i--) {
+        if (array[i] !== null) {
+            return array[i];
+        }
+    }
+    return null; // Return null if no non-null value is found
+}
 
 function fetchFieldData(username, fieldID) {
     return new Promise((resolve, reject) => {
@@ -324,14 +331,19 @@ document.getElementById('tableButton').addEventListener('click', function() {
     document.getElementById('table-content').style.display = 'block';
     document.getElementById('visualization-content').style.display = 'none';
     document.getElementById('tableButton').classList.add('highlight'); 
-    document.getElementById('visualButton').classList.remove('highlight');   
+    document.getElementById('visualButton').classList.remove('highlight');
+
+    const table = document.getElementById('example');
+
+    // Set the width of the table
+    table.style.width = '1133px'; // Set the width to 800 pixels, for example
 }); 
  
 document.getElementById('visualButton').addEventListener('click', function() {
     document.getElementById('table-content').style.display = 'none';
     document.getElementById('visualization-content').style.display = 'block';
     document.getElementById('tableButton').classList.remove('highlight'); 
-    document.getElementById('visualButton').classList.add('highlight'); 
+    document.getElementById('visualButton').classList.add('highlight');
 });
 
 // submit form
@@ -339,7 +351,7 @@ document.getElementById('nutrientForm').addEventListener('submit', function(even
     event.preventDefault(); // Prevent default form submission
         
     // Fetch form inputs
-    const fieldID = document.getElementById('fieldSelect').value.trim();
+    const fieldID = document.getElementById('fieldSelect2').value.trim();
     const datesampled = document.getElementById('datesampled').value.trim();
     const nitrogen = document.getElementById('nitrogen').value.trim();
     const potassium = document.getElementById('potassium').value.trim();

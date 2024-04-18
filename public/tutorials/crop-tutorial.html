@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Initiation</title> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="/public/assets/css/style.css">
+<link rel="stylesheet" href="/public/assets/css/initiation.css"> 
+<script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>
+<script src="crop-tutorial.js"></script>
+</head>
+
+<body>
+<div id="main-content">
+    <div class="crop-tutorial" id="crop-tutorial">
+            
+        <div class="crops" id="crops">
+            <h1>Crop Tutorials</h1>
+        </div>
+
+        <div class="crop" id="crop">
+        </div>
+    </div>
+
+    <div id="overlay" onclick="closePopup()" style="display: none">
+        
+    </div>
+    <div id="filterPopup" class="popup" style="display: none">
+        
+        <br><br>
+        <div class="button-row">
+            <button class="upload" type="submit" onclick="submitFilter()">Filter</button>
+            <button class="close" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+    var initiationLink = document.querySelector('a[href="initiation-phase.html"]');
+    
+    if (initiationLink) {
+        initiationLink.click();
+    }
+  };
+</script>
+
+</body>
+</html>

@@ -12,6 +12,13 @@
     
     <link rel="stylesheet" href="css/bootstrap.min.css">    
     <link rel="stylesheet" href="css/datatables.min.css">  
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/style.css">    
      
   </head>  
@@ -49,27 +56,24 @@
                 </ul>  
               </li>
               <li>
-                <a href="#" onclick="changeActive(this.parentNode,false,'resource-allocation/equipment.html' , 'resource-allocation/equipment.js');"><i class="fa-solid fa-book"></i><span style="margin-left: 15px;"></span> Tutorials</a>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onclick="changeActive(this.parentNode,true,'tutorials/crop-tutorial.html' , 'tutorials/crop-tutorial.js');"><i class="fa-solid fa-book"></i><span style="margin-left: 15px;">Tutorials</span></a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode,'tutorials/crop-tutorial.html' , 'tutorials/crop-tutorial.js');">Crop Tutorial</a></li>
+                  <li><a href="#" onclick="changeActiveSub(this.parentNode,this.parentNode.parentNode.parentNode,'tutorials/general-tutorial.html' , 'tutorials/general-tutorial.js');">General Tutorial</a></li>
+                </ul>  
               </li>
               <li> 
                 <a href="#" onclick="changeActive(this.parentNode,false,'chatbot/chatbot.html' , 'chatbot/chatbot.js');"><i class="fa-solid fa-message"></i><span style="margin-left: 15px;"></span>Chatbot</a> 
               </li> 
               <li>
-                <a href="#"  onclick="changeActive(this.parentNode,false);"><i class="fa-solid fa-gear"></i> <span style="margin-left: 15px;"></span>Settings</a>
+                <a href="#"  onclick="changeActive(this.parentNode,false, 'settings/settings.html', 'settings/settings.js');"><i class="fa-solid fa-gear"></i> <span style="margin-left: 15px;"></span>Settings</a>
               </li> 
             </ul>
-
-            <!-- put this in settings later-->
-            <div>
-              <button onclick="logout()" class="log-out-button"> Log out</button>
-              <!-- <button onclick="logout()"> Log out</button> -->
-            </div>
-
           </div>
         </nav>
 
         <div class="content" id="main-content"> 
-
+          
 
           
         </div>
@@ -202,6 +206,8 @@
 
         function logout() {
             window.location.href = "/logout";
+            localStorage.removeItem('userId');
+            localStorage.removeItem('username');
         }
 
     </script>

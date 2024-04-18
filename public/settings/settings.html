@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Initiation</title> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css"> 
+<script src="https://kit.fontawesome.com/f71ea3c766.js" crossorigin="anonymous"></script>
+<script src="general-script.js"></script>
+</head>
+
+<body>
+<div id="main-content">
+    <div class="wrapper bg-white mt-sm-5">
+        <div class="settings-top">
+            <h4 class="pb-4">Account settings</h4>
+            <button onclick="logout()" class="log-out-button"> Log out</button>
+        </div>
+        <hr>
+        <div class="py-2">
+            <div class="row py-2">
+                <div class="col-md-6">
+                    <label for="firstname">Username</label>
+                    <input id="username" type="text" class="bg-light form-control" placeholder="Username">
+                </div>
+                <div class="col-md-6 pt-md-0 pt-3">
+                    <label for="lastname">Password</label>
+                    <input id="password" type="password" class="bg-light form-control" placeholder="Password">
+                </div>
+            </div>
+            
+            
+            <div class="py-3 pb-4 border-bottom">
+                <button class="btn border" onclick="update()">Save Changes</button>
+                <button class="btn border button cancel-button" onclick="cancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

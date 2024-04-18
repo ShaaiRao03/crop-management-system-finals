@@ -12,19 +12,19 @@
 <body> 
     <div class="content" id="main-content">  
 
-        <div class="container1"> 
+        <div class="container1" style="display: block;"> 
             <button class="add-crop-btn">Add Crop</button>    
             <button class="crop-recommendation-btn">Crop Recommendation</button>     
             <div class="row"> 
                 <div class="col-12"> 
                     <div class="data_table">  
                         <table id="example" class="table table-striped table-bordered">
-                            <thead class="table-dark"> 
+                            <thead class="table-dark">  
                                 <tr> 
-                                    <th>Field Name</th> 
+                                    <th>Field ID</th>
+                                    <th>Field Name</th>
                                     <th>Crop Name</th>   
-                                    <th>Planting Date</th>    
-                                    <th>Covered Area</th>    
+                                    <th>Covered Area (Hectare)</th>    
                                 </tr> 
                             </thead>  
                             <tbody id="crop-table">  
@@ -34,55 +34,157 @@
                 </div>
             </div> 
         </div>
-
+ 
         <div id="overlay" class="overlay"></div> 
- 
-    <div id="popup" class="popup"> 
-        <span class="close" onclick="closePopup()">&times;</span>    
-        <label class="form-title">Add New Crop</label> 
-        <form id="cropForm" enctype="multipart/form-data">
-            <label for="name">Crop:</label> 
-            <input type="text" id="name" name="name" required><br>
 
-            <label for="type">Field:</label>
-            <input type="text" id="field" name="field"><br>
-        
-            <label for="plantingStartDate">Planting Start Date:</label>
-            <input type="date" id="plantingStartDate" name="plantingStartDate"><br>
-        
-            <label for="coveredArea">Covered Area:</label>
-            <input type="text" id="coveredArea" name="coveredArea"><br>
-     
-            <div class="button-container">
-                <button type="submit">Submit</button>
-                <button class="clear-btn">Clear</button>
+        <div class="container2" style="display: none;">
+ 
+            <div class="top-section"> 
+                <button class="button" id="backButton">Back</button>   
+                <p class="overview-label"></p> 
             </div>
+                
+            <div class="button-container3">  
+                <button class="add-plan-btn">Add Plan</button>     
+                <button class="generate-plan-btn">Generate Plan</button>     
+            </div> 
 
-        </form>         
-    </div>  
+             
+            <div class="row">
+                <div class="col-12">  
+                    <div class="data_table">  
+                        <table id="example2" class="table table-striped table-bordered">
+                            <thead class="table-dark">
+                                <tr> 
+                                    <th>Description</th> 
+                                    <th>Start Date</th> 
+                                    <th>End Date</th>  
+                                    <th>Status</th> 
+                                </tr> 
+                            </thead>   
+                            <tbody id="plan-table">   
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> 
+        </div>
+
  
+        <div style="display: none;" id="popup-generatePlan" class="popup-generatePlan">    
+            <span class="close" onclick="closePopup()">&times;</span>    
+            <label class="form-title">Generate Plan</label> 
+            <form id="planForm" enctype="multipart/form-data">  
+ 
+                
+                <label for="type">Select plant date:</label> 
+                <input type="date" id="plant-date" name="field"><br>    
+                
+            
+                <div class="button-container"> 
+                    <button type="submit" onclick="generatePlan(event)" class="detect-pest">Generate Plan</button> 
+                    <button type="submit" onclick="clearGeneratedPlan(event)" class="clear-btn">Clear</button> 
+                </div>  
+            </form>          
 
-    <div id="popup-cropRecommendation" class="popup-cropRecommendation">   
-        <span class="close" onclick="closePopup()">&times;</span>    
-        <label class="form-title">Crop Recommendation</label> 
-        <form id="recordForm" enctype="multipart/form-data">  
-
-            <label for="type">Select a field:</label>
-            <input type="text" id="crop-field-recommendation" name="field"><br> 
-           
-            <div class="button-container"> 
-                <button type="submit" onclick="recommendCrop(event)" class="detect-pest">Recommend</button> 
-                <button type="submit" onclick="clearCrop(event)" class="clear-btn">Clear</button> 
+            <label id="label-planPreview" for="label-planPreview"></label>   
+            <div class="plan-preview" style="display: none;">   
+                    <label id="generated-plan" for="generated-plan"></label>   
+                    <div id="planContainer"></div>
+                    <button class="autofill-plan-form">Autofill Plan Form</button>   
             </div>  
-        </form>          
-
-        <div class="crop-preview" style="display: none;">  
-                <label id="label-cropPreview" for="label-cropPreview"></label>   
-                <label id="generated-crop" for="generated-crop"></label>    
-                <div id="radioButtonsContainer"></div>
-                <button>Autofill Pest Form</button> 
         </div> 
+
+
+ 
+        <div id="popup" class="popup">  
+            <span class="close" onclick="closePopup()">&times;</span>    
+            <label class="form-title">Add New Crop</label> 
+            <form id="cropForm" enctype="multipart/form-data">
+                <label for="name">Crop:</label> 
+                <input type="text" id="name" name="name" required><br>
+
+                <label for="type">Field:</label>
+                <input type="text" id="field" name="field"><br>
+            
+                <label for="coveredArea">Covered Area (Hectare):</label>
+                <input type="text" id="coveredArea" name="coveredArea"><br>
+        
+                <div class="button-container"> 
+                    <button type="submit" onclick="submitNewCrop(event)" class="submit-new-crop">Submit</button>
+                    <button class="clear-btn">Clear</button> 
+                </div>
+
+            </form>         
+        </div>  
+        
+
+        <div style="display: none;" id="popup-cropRecommendation" class="popup-cropRecommendation">   
+            <span class="close" onclick="closePopup()">&times;</span>    
+            <label class="form-title">Crop Recommendation</label> 
+            <form id="recordForm" enctype="multipart/form-data">  
+ 
+                <label for="type">Select a field:</label>
+                <input type="text" id="crop-field-recommendation" name="field"><br> 
+            
+                <div class="button-container"> 
+                    <button type="submit" onclick="recommendCrop(event)" class="recommendPlan">Recommend</button> 
+                    <button type="submit" onclick="clearCrop(event)" class="clear-plan-btn red-button">Clear</button> 
+                </div>   
+            </form>          
+
+            <div class="crop-preview" style="display: none;">  
+                    <label id="label-cropPreview" for="label-cropPreview"></label>   
+                    <label id="generated-crop" for="generated-crop"></label>   
+                    <div id="radioButtonsContainer"></div>
+                    <button class="autofill-crop-form">Autofill Crop Form</button> 
+            </div>  
+        </div> 
+
+        <div style="display: none;" id="popup-plan" class="popup-plan">   
+            <span class="close" onclick="closePopup()">&times;</span>    
+            <label class="form-title">Add Plan</label> 
+            <form id="planForm" enctype="multipart/form-data">  
+    
+                <label for="type">Description:</label>
+                <input type="text" id="plan-description" name="field"><br>  
+    
+                <label for="type">Start date:</label>
+                <input type="date" id="plan-start-date" name="field"><br> 
+    
+                <label for="type">End date:</label> 
+                <input type="text" id="plan-end-date" name="field"><br> 
+    
+                <div class="radio-buttons">    
+                    <label>Status:</label>
+                    <input type="radio" id="active" name="active" value="1">   
+                    <label for="active">Active</label><br>
+                    <input type="radio" id="inactive" name="inactive" value="0">
+                    <label for="inactive">Inactive</label><br> 
+                </div>
+                
+                <div class="button-container"> 
+                    <button type="submit" onclick="addPlan(event)" class="addPlan">Add Plan</button> 
+                    <button type="submit" onclick="clearPlan(event)" class="clear-plan red-button">Clear</button> 
+                </div>  
+                
+            </form>          
+        </div> 
+ 
+        <div style="display: none;" id="popup-plan-autofill" class="popup-plan-autofill">   
+            <span class="close" onclick="closePopup()">&times;</span>
+        </div> 
+
+        <div style="display: none;" id="popup-crop-autofill" class="popup-crop-autofill">   
+            <span class="close" onclick="closePopup()">&times;</span>
+        </div>
+        
     </div> 
+
+</div> 
+
+
+
 
 </body>
 

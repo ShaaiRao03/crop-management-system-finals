@@ -37,38 +37,70 @@
 
         <div id="overlay" class="overlay"></div> 
  
-    <div id="popup" class="popup"> 
-        <span class="close" onclick="closePopup()">&times;</span>    
-        <label class="form-title">Add New Task</label>
-        <form id="taskForm" enctype="multipart/form-data">
-            <label for="task">Task:</label>
-            <input type="text" id="task" name="task" required><br>
+        <div id="popup" class="popup"> 
+            <span class="close" onclick="closePopup()">&times;</span>    
+            <label class="form-title">Add New Task</label>
+            <form id="taskForm" enctype="multipart/form-data">
+                <label for="task">Task:</label>
+                <input type="text" id="task" name="task" required><br>
 
-            <label for="association">Association:</label>
-            <select id="association" name="association">
-            </select>
-        
-            <label for="dueDate">Due Date:</label> <!--autofill-->
-            <input type="date" id="dueDate" name="dueDate"><br>
-        
-            <label for="status">Status</label>
-            <select id="status" name="status">
-                <option value="1">In Progress</option>
-                <option value="2">Complete</option>
-                <option value="3">Pending</option>
-            </select>
-        
-            <label for="assignee">Assignee:</label>
-            <input type="text" id="assignee" name="assignee"><br>
+                <label for="association">Association:</label>
+                <select id="association" name="association">
+                </select>
+            
+                <label for="dueDate">Due Date:</label> <!--autofill-->
+                <input type="date" id="dueDate" name="dueDate"><br>
+            
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="1">In Progress</option>
+                    <option value="2">Complete</option>
+                    <option value="3">Pending</option>
+                </select>
+            
+                <label for="assignee">Assignee:</label>
+                <input type="text" id="assignee" name="assignee"><br>
+            
+                <div class="button-container">
+                    <button type="submit">Submit</button>
+                    <button class="clear-btn" id="clearBtn">Clear</button>
+                </div>
 
-        
-            <div class="button-container">
-                <button type="submit">Submit</button>
-                <button class="clear-btn" id="clearBtn">Clear</button>
-            </div>
+            </form>         
+        </div> 
 
-        </form>         
-    </div> 
+        <div id="popupTask" class="popup"> 
+            <span class="close" onclick="closePopupTask()">&times;</span>    
+            <label class="form-title"></label>
+            <form id="taskFormDetails" enctype="multipart/form-data">
+                <label for="taskN" id="taskN" style="font-size: 30px;">Task:</label><br>
+
+                <label for="asso">Association:</label>
+                <select id="asso" name="asso">
+                    <option value="" disabled selected></option>
+                </select>
+            
+                <label for="dDate">Due Date:</label> <!--autofill-->
+                <input type="date" id="dDate" name="dDate"><br>
+            
+                <label for="stat">Status</label>
+                <select id="stat" name="stat">
+                    <option value="" disabled selected></option>
+                    <option value="1">In Progress</option>
+                    <option value="2">Complete</option>
+                    <option value="3">Pending</option>
+                </select>
+            
+                <label for="assig">Assignee:</label>
+                <input type="text" id="assig" name="assig" value="Enter assignee"><br>
+
+                <div class="button-container">
+                    <button type="submit">Update</button>
+                    <button class="clear-btn" id="clearBtn">Delete</button>
+                </div>
+
+            </form>         
+        </div> 
 </body>
 
 </html>

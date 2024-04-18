@@ -340,7 +340,7 @@ function updateEquipmentDetails(serialNum){
             imgElement.src = fallbackImageUrl;
 
             imgElement.id = "equipment-image"
- 
+  
             // Set the alt attribute 
             imgElement.alt = "Placeholder Image";
 
@@ -475,7 +475,7 @@ document.getElementById('detailsButton').addEventListener('click', function() {
 }); 
  
 document.getElementById('maintenanceButton').addEventListener('click', function() { 
-    document.getElementsByClassName('maintenance-section')[0].style.display = 'block';
+    // document.getElementsByClassName('maintenance-section')[0].style.display = 'block';
     document.getElementsByClassName('container3-maintenancetable')[0].style.display = 'block';
     document.getElementsByClassName('container3-equipmentdetails')[0].style.display = 'none';
     document.getElementById('detailsButton').classList.remove('highlight'); 
@@ -484,6 +484,7 @@ document.getElementById('maintenanceButton').addEventListener('click', function(
 });
  
 document.getElementById('backButton').addEventListener('click', function() { 
+    document.getElementsByClassName('container3-maintenancetable')[0].style.display = 'none';
     document.getElementsByClassName('equipment-details')[0].style.display = 'none'; 
     document.getElementsByClassName('container1')[0].style.display = 'block';
     document.getElementById('detailsButton').classList.add('highlight'); 

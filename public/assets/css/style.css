@@ -418,6 +418,41 @@ border-color: #30832d;
     z-index: 9999;
 }
 
+.pop-plan{
+    display: none;  
+    position: fixed; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+
+.popup-plan-autofill{ 
+    display: none;  
+    position: fixed; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
 .preview-container {
     display: flex;
     align-items: center; /* Align items vertically centered */
@@ -479,7 +514,7 @@ select {
 }
 
 .button-container{
-    margin-top: 0px;
+    margin-top: 0px; 
     height: 60px;
 }
 
@@ -562,11 +597,17 @@ width: 360px;
 }
 .details-info {
     flex: 1;
-    width: 400px;
+    width: 600px;
     margin-left: 30px;
     color: black; 
 }
 
+#pestName{
+    flex: 1;
+    width: 460px;
+    margin-left: 30px;
+    color: black; 
+}
 
 #detailsButton{
     border-top-left-radius: 10px;
@@ -612,6 +653,16 @@ width: 360px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     height: auto; 
 }   
+
+.container3-pestdetails{ 
+    margin-top: 10px;
+    width: 1160px;  
+    padding: 20px;  
+    background-color: #fff; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: auto; 
+} 
    
 .maintenance-section{
     margin-top: 10px;
@@ -766,6 +817,56 @@ width: 360px;
     width: 200px;
 }
 
+.popup-cropRecommendation{
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+
+.button-container{ 
+    margin-top: 0px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+
+.popup-generatePlan{
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+
+.section {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f1f1f1; 
+}
 
 
 /* Crop management ends */
@@ -799,6 +900,44 @@ width: 360px;
   .filter-container {
     position: relative;
     display: inline-block;
+  }
+
+  .button-container2{
+    display: flex; /* Use flexbox to arrange the buttons */
+    margin-top: 10px; /* Adjust margin as needed */ 
+  }
+
+  .button-container2 button {
+    margin-right: 10px ; /* Adjust the width of each button */
+}
+ 
+
+.phase-form{
+    background-color: #f8f8f8;
+    border: solid 1px #d2d2d2;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.popup-crop-autofill{
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc; 
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
   }
 
   /* .tableid, .visualid{

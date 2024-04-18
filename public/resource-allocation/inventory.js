@@ -426,7 +426,6 @@ function reUpdateUsageRecord(inventoryID){
     })
 }
 
-// -------------------- TBA ----------------------
 // submit usageForm
 document.getElementById('usageForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission

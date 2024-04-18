@@ -1,4 +1,4 @@
-function fetchNutrientData(fieldName = null, startDate = null, endDate = null) {
+function fetchNutrientData(fieldName, startDate, endDate) {
     return new Promise((resolve, reject) => {  
         // Construct the request body based on provided start and end dates
         const requestBody = { username };

@@ -79,7 +79,7 @@ function populateWebsites() {
                 <hr>
                 <div class="website-description">
                     <p>${website.websiteDescription}</p>
-                    <button><a href="${website.websiteLink}">Learn More</a></button>
+                    <button class="website-button"><a href="${website.websiteLink}">Learn More</a></button>
                 </div>
             </div>
             `;
@@ -94,14 +94,14 @@ function populateWebsites() {
 
 function filter() {
     const searchInput = document.getElementById('search-input').value.toLowerCase();
-    const cropButtons = document.querySelectorAll('.button');
+    const articles = document.querySelectorAll('.article');
 
-    cropButtons.forEach(button => {
-        const cropName = button.querySelector('p').innerText.toLowerCase();
-        if(cropName.includes(searchInput)) {
-            button.parentElement.style.display = 'block';
+    articles.forEach(article => {
+        const articleName = article.querySelector('a').innerText.toLowerCase();
+        if(articleName.includes(searchInput)) {
+            article.style.display = 'block';
         } else {
-            button.parentElement.style.display = 'none';
+            article.style.display = 'none';
         }
     });
 }

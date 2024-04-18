@@ -306,6 +306,36 @@ app.post('/submit_equipment', upload.single('image'), (req, res) => {
     });
 });
   
+app.post('/getPestRecord', (req, res) => {
+
+    const { pestID } = req.body; 
+    console.log(pestID)
+
+    const sqlQuery1 = `SELECT * FROM pestrecord JOIN pest_management ON pest_management.pestID = pestrecord.pestID
+    WHERE pestrecord.pestID = "${pestID}";`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => { 
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1); 
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client 
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
 
 app.post('/submit_record', (req, res) => {  
     // Access form data 
@@ -437,6 +467,25 @@ app.post('/updatePestDetails', (req, res) => {
     });
 });
 
+app.post('/submit_pest_record', (req, res) => {  
+    // Access form data 
+    const {treatment , date , pestID} = req.body;
+ 
+    console.log("Server :  " , treatment, date, pestID) 
+
+    // Insert form data into the database 
+    const sql = `INSERT INTO pestrecord (pestID, treatment, treatmentDate) VALUES ("${pestID}", "${treatment}", "${date}")`;
+
+    db.query(sql, (err, result) => {   
+        if (err) { 
+            console.error('Error inserting data into database:', err);
+            res.status(500).json({ message: 'Error submitting form.' });
+            return;
+        }
+        console.log('Form data inserted successfully');  
+        res.status(200).json({ message: 'Form submitted successfully!' });
+    });
+});
 
 // Pest management ends -------------------------------
 

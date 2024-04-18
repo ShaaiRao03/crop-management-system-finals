@@ -429,11 +429,11 @@ app.post('/getPestInfoByID', (req, res) => {
 app.post('/submit_pest', (req, res) =>{ 
     // Access form data
     console.log('insert statement starts');
-    const {name, treatment, field, product, inventoryUsed, treatmentStartDate, pestDesc, pic, amount, treatmentDesc} = req.body;
+    const {name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc} = req.body;
  
-    const sql = 'INSERT INTO pest_management (currentPest, treatmentPlan, field_crop_id, productUsed, inventoryUsed, treatmentStartDate, pest_description, userID, amountApplied, treatment_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const sql = 'INSERT INTO pest_management (currentPest, treatmentPlan, field_crop_id, treatmentStartDate, pest_description, userID, treatment_description) VALUES (?, ?, ?, ?, ?, ?, ?)';
     // const values = [formData.name, formData.treatment, formData.field, formData.product, formData.inventoryUsed, formData.treatmentStartDate, formData.pestDesc, formData.pic, formData.amount, formData.treatmentDesc];
-    const values = [name, treatment, field, product, inventoryUsed, treatmentStartDate, pestDesc, pic, amount, treatmentDesc];
+    const values = [name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc];
     console.log('data inserted');
 
     db.query(sql, values, (err, result) => {  
@@ -486,6 +486,36 @@ app.post('/submit_pest_record', (req, res) => {
         res.status(200).json({ message: 'Form submitted successfully!' });
     });
 });
+
+app.post('/insertPest', (req, res) => { 
+
+    const { pestName , field, pestDesc, treatment, treatmentDesc, treatmentStartDate, pic } = req.body; 
+ 
+    const sqlQuery1 = `INSERT INTO pest_management (currentPest, treatmentPlan, field_crop_id, treatmentStartDate, pest_description, pic, treatment_description) 
+    VALUES ("${pestName}", ${treatment}, ${field} , ${treatmentStartDate}, ${pestDesc}, ${pic}, ${treatmentDesc})`         
+  
+    // Wrapping the database query inside a promise 
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => { 
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
+                    resolve(results1);
+                }
+            });  
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
 
 // Pest management ends -------------------------------
 

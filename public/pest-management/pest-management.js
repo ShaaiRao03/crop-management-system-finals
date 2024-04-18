@@ -271,15 +271,15 @@ document.getElementById('pestForm').addEventListener('submit', function(event) {
     const treatment = document.getElementById('treatment').value.trim();
     const treatmentDesc = document.getElementById('treatmentDesc').value.trim();
     const treatmentStartDate = document.getElementById('treatmentStartDate').value.trim();
-    const product = document.getElementById('product').value.trim();
-    const inventoryUsed = document.getElementById('inventoryUsed').value.trim();
+   // const product = document.getElementById('product').value.trim();
+    //const inventoryUsed = document.getElementById('inventoryUsed').value.trim();
     const pic = document.getElementById('pic').value.trim();
 
 
-    const amount= document.getElementById('amount').value.trim();
+    //const amount= document.getElementById('amount').value.trim();
 
     // Validate required fields
-    if (!field || !name || !pestDesc || !treatment || !treatmentDesc || !treatmentStartDate || !product|| !inventoryUsed || !pic || !amount) {
+    if (!field || !name || !pestDesc || !treatment || !treatmentDesc || !treatmentStartDate || !pic) {
         alert('Please fill in all required fields.');
         return; // Exit the function
     }
@@ -293,7 +293,7 @@ document.getElementById('pestForm').addEventListener('submit', function(event) {
                 'Content-Type': 'application/json',
             },  
             // body: formData 
-            body: JSON.stringify({name, treatment, field, product, inventoryUsed, treatmentStartDate, pestDesc, pic, amount, treatmentDesc})
+            body: JSON.stringify({name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc})
         });
     })
     .then(response => {
@@ -633,6 +633,124 @@ document.getElementById('recordPestForm').addEventListener('submit', function(ev
 
     })
 });
+
+// dynamic form for auto fill recommended crop -------------------------------------
+
+
+function createFormPestRecommendation(pestName) {
+    const form = document.createElement('form');
+    form.className = 'pestRecommendation-form'; // Added a class for styling purposes
+    form.enctype = 'multipart/form-data';  
+    form.id = 'pestForm2'; 
+    
+    form.innerHTML = `   
+    <label for="name">Pest Name:</label>
+    <input type="text" id="name" name="name" value="${pestName}"><br>
+
+    <label for="type">Field:</label>
+    <select id="field" name="field" style="height: 35px;">
+    </select>
+
+    <label for="pestDesc">Pest description:</label>
+    <input type="text" id="pestDesc" name="pestDesc"><br>
+
+    <label for="treatment">Treatment Plan:</label>
+    <input type="text" id="treatment" name="treatment"><br>
+
+    <label for="treatmentDesc">Treatment Description:</label>
+    <input type="text" id="treatmentDesc" name="treatmentDesc"><br>
+
+    <label for="treatmentStartDate">Treatment Start Date:</label>
+    <input type="date" id="treatmentStartDate" name="treatmentStartDate"><br>
+
+    <label for="pic">Person In Charge:</label>
+    <input type="text" id="pic" name="pic"><br>
+
+    <div class="button-container">
+        <button type="submit" onclick="submitNewPest2(event)" class="submit-new-pest">Submit</button>
+        <button class="clear-btn" id="clearBtn">Clear</button>
+    </div>
+    `; 
+
+    return form; 
+} 
+
+document.getElementsByClassName("submit-new-pest")[0].addEventListener('click', function() {
+    console.log('clicked');
+    submitNewCrop();
+});
+
+function generateAutoFillPestForm(pestName){
+    const container = document.getElementsByClassName('popup-pest-autofill')[0]; 
+    const form = createFormCropRecommendation(pestName);
+    container.appendChild(form);
+}
+
+function submitNewPest2(event){    
+    event.preventDefault();
+    
+    const form = document.getElementById('pestForm2');
+    console.log(form)
+
+    // Access the input fields by their IDs
+    const pestName = form.querySelector('#name').value;
+    const field = form.querySelector('#field').value;
+    const pestDesc = form.querySelector('#pestDesc').value;
+    const treatment = form.querySelector('#treatment').value;
+    const treatmentDesc = form.querySelector('#treatmentDesc').value;
+    const treatmentStartDate = form.querySelector('#treatmentStartDate').value;
+    const pic = form.querySelector('#pic').value;
+
+    console.log(pestName, field, pestDesc, treatment, treatmentDesc, treatmentStartDate, pic); 
+
+    // // Check if any of the required fields are empty
+    if (!pestName || !field || !pestDesc || !treatment || !treatmentDesc || !treatmentStartDate || !pic) {
+        alert('Please fill in all fields.');
+        return; // Exit the function early if any field is empty
+    } 
+   
+    insertPestDataIntoDatabase(form);
+
+}
+
+function insertPestDataIntoDatabase(form) { 
+    const formData = new FormData(form); // Get form data using FormData API
+
+    // Extract data from form fields
+    const pestName = formData.get('name');
+    const field = formData.get('field');
+    const pestDesc = formData.get('pestDesc');
+    const treatment = formData.get('treatment');
+    const treatmentDesc = formData.get('treatmentDesc');
+    const treatmentStartDate = formData.get('treatmentStartDate');
+    const pic = formData.get('pic');
+
+    console.log(pestName , field, pestDesc, treatment, treatmentDesc, treatmentStartDate, pic);
+
+
+    fetch('/insertPest', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({pestName , field, pestDesc, treatment, treatmentDesc, treatmentStartDate, pic}) 
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');  
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Form data inserted successfully:', data);
+        // Handle successful insertion
+    })
+    .catch(error => {
+        console.error('Error inserting form data into database:', error);
+        // Handle the error
+    }); 
+
+}
 
 //  Navigation between pages starts here  ----------------
 

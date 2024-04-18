@@ -25,6 +25,7 @@ app.use("/task-management",express.static(__dirname + "/public/task-management")
 app.use("/tutorials",express.static(__dirname + "/public/tutorials")); 
 app.use("/chatbot",express.static(__dirname + "/public/chatbot"));  
 app.use("/crop-management",express.static(__dirname + "/public/crop-management"));   
+app.use("/irrigation-system",express.static(__dirname + "/public/irrigation-system"));     
  
 
 app.set("view engine","ejs");      
@@ -418,34 +419,6 @@ app.post('/updatePestDetails', (req, res) => {
 // Pest management ends -------------------------------
 
 
-app.post('/getFieldNum', (req, res) => {
-    const { username } = req.body;
-
-    const sqlQuery1 = `SELECT COUNT(*) AS num_rows FROM field`;  
-
-    // Wrapping the database query inside a promise
-    const executeQuery = () => {
-        return new Promise((resolve, reject) => {
-            db.query(sqlQuery1, (error1, results1) => {
-                if (error1) {
-                    reject({ error: 'Error querying table2' });
-                } else {
-                    resolve(results1); 
-                }
-            });
-        }); 
-    };
-
-    // Call the function that returns the promise
-    executeQuery()
-        .then((data) => {
-            res.status(200).json(data); // Send the result back to the client
-        })
-        .catch((error) => {
-            res.status(500).json(error); // Send the error back to the client
-        });
-});
-
 
 
 
@@ -582,17 +555,19 @@ app.post('/getFieldData', (req, res) => {
 //Field data
 app.post('/getFieldNum', (req, res) => {
     const { username } = req.body;
-
-    const sqlQuery = 'SELECT COUNT(*) AS num_rows FROM field';  
+    console.log(username)
+    const sqlQuery = `SELECT COUNT(*) AS num_rows FROM field
+    JOIN user_field ON user_field.fieldID = field.fieldID
+    JOIN user ON user_field.userID = user.userID
+    WHERE user.username = "${username}";`;    
 
     // Wrapping the database query inside a promise
-    const executeQuery = () => {
+    const executeQuery = () => { 
         return new Promise((resolve, reject) => {
             db.query(sqlQuery, (error, results) => {
                 if (error) {
-                    reject({ error: 'Error querying table2' });
-                } else {
-
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
                     resolve(results); 
                 }
             });
@@ -611,10 +586,13 @@ app.post('/getFieldNum', (req, res) => {
 });
 
 // Crop Data
-app.post('/getCropNum', (req, res) => {
-    const { username } = req.body;
+app.post('/getCropNum', (req, res) => {  
+    const { username } = req.body; 
 
-    const sqlQuery = 'SELECT COUNT(*) AS num_rows FROM field_crop';  
+    const sqlQuery = `SELECT COUNT(*) as num_rows FROM field_crop 
+    JOIN user_field ON user_field.fieldID = field_crop.fieldID
+    JOIN user ON user.userID = user_field.userID
+    WHERE username = "${username}"`;   
 
     // Wrapping the database query inside a promise
     const executeQuery = () => {
@@ -647,7 +625,6 @@ app.post('/getFieldInfo', (req, res) => {
 
     const sqlQuery1 = `SELECT * FROM user_field
     JOIN user ON user.userID = user_field.userID
-    JOIN field_crop ON field_crop.fieldID = user_field.fieldID
     JOIN field ON field.fieldID = user_field.fieldID
     WHERE username = "${username}"`     
 
@@ -673,6 +650,72 @@ app.post('/getFieldInfo', (req, res) => {
             res.status(500).json(error); // Send the error back to the client
         });
 }); 
+
+
+app.post('/getFieldInfoByID', (req, res) => {
+
+    const { fieldID } = req.body; 
+
+    const sqlQuery1 = `SELECT * FROM user_field
+    JOIN user ON user.userID = user_field.userID
+    JOIN field ON field.fieldID = user_field.fieldID
+    WHERE field.fieldID = ${fieldID}`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+
+
+
+app.post('/getPolygonCoordinates', (req, res) => {
+
+    const { fieldID } = req.body; 
+
+    const sqlQuery1 = `SELECT polygonID , lat, lng FROM fieldmap WHERE fieldID = ${fieldID};`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
 
 // Tasks in progress
 app.post('/getTasksInProgress', (req, res) => {
@@ -739,6 +782,127 @@ app.post('/getTasksCompleted', (req, res) => {
             res.status(500).json(error); // Send the error back to the client
         });
 }); 
+
+
+app.post('/submit_field', (req, res) => {
+
+    const { name, soilType, size, address, currLat , currLong  } = req.body; 
+
+    const sqlQuery1 = `INSERT INTO field(fieldName, fieldLocation, soilType, size, latitude, longitude) VALUES ('${name}','${address}','${soilType}','${size}',${currLat},${currLong})`     
+ 
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+});          
+             
+
+app.post('/insertFieldMap', (req, res) => {
+
+    const { fieldID, lng, lat  } = req.body; 
+
+    const sqlQuery1 = `INSERT INTO fieldmap(fieldID, lng, lat) VALUES (${fieldID},${lng},${lat})`     
+ 
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+
+app.post('/insertUserField', (req, res) => {
+
+    const { fieldID, userID   } = req.body; 
+
+    const sqlQuery1 = `INSERT INTO user_field (userID, fieldID) VALUES (${userID},${fieldID})`     
+ 
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
+
+app.post('/getFieldIDgivenFieldName', (req, res) => {
+
+    const { name } = req.body;  
+
+    const sqlQuery1 = `SELECT fieldID FROM field WHERE fieldName = "${name}";`     
+ 
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' }); 
+                } else { 
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
 
 // Dashboard ends -------------------------
 
@@ -893,7 +1057,7 @@ app.post('/submit_usage', (req, res) => {
 
 // Task management starts ------------------------- 
 
-app.post('/getTaskInfo', (req, res) => {
+app.post('/getTaskInfo', (req, res) => { 
 
     const { username } = req.body; 
 

@@ -604,13 +604,17 @@ width: 360px;
 #pestName{
     flex: 1;
     width: 460px;
-    margin-left: 30px;
     color: black; 
 }
 
 #detailsButton{
-    border-top-left-radius: 10px;
+    margin-right: 3px;
+    border-top-left-radius: 10px; 
     border-bottom-left-radius: 10px;
+}
+
+#tableButton{ 
+    margin-right: 3px;
 }
 
 #maintenanceButton{ 
@@ -936,4 +940,48 @@ width: 360px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 9999;
+}
+
+
+.popup-crop-fieldRecord{
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc; 
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+.popup-fieldRecord{ 
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1220px; 
+    max-height: 90vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+
+#edit-delete-button2{ 
+    width: 360px;
+    margin-top: 10px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: space-evenly;    
 }

@@ -616,14 +616,14 @@ function generateAutoFillCropForm(cropName){
   
 
 function submitNewCrop2(event){    
-    event.preventDefault();
+    event.preventDefault(); 
     
     const form = document.getElementById('cropForm2');
     console.log(form)
 
     // Access the input fields by their IDs
     const cropName = form.querySelector('#name').value;
-    const field = form.querySelector('#field').value;
+    const field = form.querySelector('#field').value; 
     const coveredArea = form.querySelector('#coveredArea').value;
 
     console.log(cropName, field, coveredArea); 
@@ -650,7 +650,7 @@ function insertCropDataIntoDatabase(form) {
     fetch('/insertCrop', {
         method: 'POST',
         headers: { 
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json' 
         },
         body: JSON.stringify({cropName , fieldID, coveredArea}) 
     })

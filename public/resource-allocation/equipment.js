@@ -154,7 +154,7 @@ fetchEquipmentData()
             // Add the row to the table
             table.row.add($(row).get(0));
         }); 
-        // Redraw the table  
+        // Redraw the table   
         table.draw();
     }, 100);
 }) 

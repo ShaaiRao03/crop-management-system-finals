@@ -581,7 +581,7 @@ function createFormCropRecommendation(cropName) {
     form.className = 'cropRecommendation-form'; // Added a class for styling purposes
     form.enctype = 'multipart/form-data';  
     form.id = 'cropForm2'; 
-    
+
     form.innerHTML = `   
     <label class="form-title">Add New Crop</label> 
         <label for="name">Crop:</label> 
@@ -600,8 +600,34 @@ function createFormCropRecommendation(cropName) {
         </div>
     `; 
 
-    return form; 
-} 
+    // Add the following line to get the <select> element
+    const select = form.querySelector('#fieldRecom');
+
+    // Clear existing options
+    select.innerHTML = '';
+
+    // Add a default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.text = 'Select a field';
+    select.appendChild(defaultOption);
+
+    // Fetch field names and add them to the <select> element
+    fetchFieldNames3()
+        .then(data => {
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.fieldID;
+                option.text = item.fieldName;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    return form;
+}
 
 
 document.getElementsByClassName("submit-new-crop")[0].addEventListener('click', function() {
@@ -1057,34 +1083,6 @@ function fetchFieldNames3() {
             }); 
     });
 } 
-
-fetchFieldNames3()
-.then(data => { 
-    // Clear existing options
-    $('#fieldRecom').empty();
-
-    // Add a default option
-    $('#fieldRecom').append($('<option>', {
-        value: '',
-        text: 'Select a field'
-    }));
-
-    // Map data and create options
-    data.forEach(item => {
-        // Decide which attributes to use for value and display text
-        const value = item.fieldID;
-        const text = item.fieldName;
-        
-        // Create the option element
-        const option = $('<option>', {
-            value: value,
-            text: text
-        });
-
-        // Append the option to the select element
-        $('#fieldRecom').append(option);
-    });
-}) 
 
 var currentChosenCrop;
 var currentPlan;

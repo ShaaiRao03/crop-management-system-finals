@@ -162,6 +162,7 @@ function closePopup() {
     document.getElementById('overlay').style.display = 'none';
     document.getElementsByClassName("preview-container")[0].style.display = 'none';
     document.getElementsByClassName("img-preview")[0].style.display = 'block';
+    document.getElementsByClassName('popup-pest-autofill')[0].style.display = 'none'; 
 
     if (container) { 
         while (container.firstChild) {
@@ -591,7 +592,7 @@ function showPossibleSolution(query) {
                 radioButton.type = 'radio';  
                 radioButton.id = 'option' + (i + 1);
                 radioButton.name = 'option';
-                radioButton.value = i + 1;
+                radioButton.value = descriptions[i];
                 radioButton.style.width = '20px'; // Set a fixed width for the radio button
                 radioButton.style.flexShrink = 0; // Ensure radio button doesn't shrink
             
@@ -687,9 +688,9 @@ document.getElementById('recordPestForm').addEventListener('submit', function(ev
         }).then(response => { 
             if (response.ok) { 
                 // Form submitted successfully    
-                alert('Form submitted successfully!');
+                alert('Form submitted successfully!'); 
                 reUpdatePestRecord(pestID) 
-                closePopupRecord()  
+                closePopupRecord()   
             } else { 
                 throw new Error('Error submitting form.'); 
             }
@@ -1052,6 +1053,129 @@ fetchFieldNames()
 }) 
 
 // Clearing form data ends here ------------------------------
+
+
+// Autofill form data starts here ----------------------------
+
+function createFormPestDetection(pestName,pestDescription,treatmentPlan,treatmentDesc) {
+    const form = document.createElement('form'); 
+    form.className = 'pestDetection-form'; // Added a class for styling purposes
+    form.enctype = 'multipart/form-data';  
+    form.id = 'pestDetection2'; 
+
+    form.innerHTML = `   
+            <label class="form-title">Add New Pest</label> 
+            <label for="name">Pest Name:</label>
+            <input type="text" id="name" name="name" value=${pestName} required><br>
+
+            <label for="type">Field:</label>
+            <select id="fieldRecom" name="field" style="height: 35px;">
+            </select>
+        
+            <label for="pestDesc">Pest description:</label> <!--autofill-->
+            <input type="text" id="pestDesc" name="pestDesc" value=${pestDescription}><br>
+        
+            <label for="treatment">Treatment Plan:</label>
+            <input type="text" id="treatment" name="treatment" value=${treatmentPlan}><br>
+        
+            <label for="treatmentDesc">Treatment Description:</label> <!--autofill--> 
+            <input type="text" id="treatmentDesc" name="treatmentDesc" value=${treatmentDesc}><br>
+
+            <label for="treatmentStartDate">Treatment Start Date:</label>
+            <input type="date" id="treatmentStartDate" name="treatmentStartDate"><br>
+        
+
+            <label for="image">Upload Image:</label> 
+            <input type="file" id="image2" name="image"><br>
+        
+            <div class="button-container">
+                <button type="submit" onclick="submitNewPest(event)" class="submit-new-pest">Submit</button>
+                <button class="clear-btn" id="clearBtn">Clear</button>
+            </div>
+    `; 
+
+    // Add the following line to get the <select> element
+    const select = form.querySelector('#fieldRecom');
+
+    // Clear existing options
+    select.innerHTML = '';
+
+    // Add a default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.text = 'Select a field';
+    select.appendChild(defaultOption);
+
+    // Fetch field names and add them to the <select> element
+    fetchFieldNames3()
+        .then(data => {
+            data.forEach(item => { 
+                const option = document.createElement('option');
+                option.value = item.fieldID;
+                option.text = item.fieldName;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error(error);
+
+    });
+    return form; 
+} 
+
+function fetchFieldNames3() {
+    return new Promise((resolve, reject) => {  
+        fetch('/getFieldNames', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            })
+            .then(response => {
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })   
+            .then(data => {
+                resolve(data); // Resolve with the fetched data
+            })
+            .catch(error => {
+                reject(error); // Reject with the error
+            }); 
+    });
+} 
+
+document.getElementsByClassName("autofill-pest-form")[0].addEventListener('click', function() { 
+    const selectedSolution = document.querySelector('input[name="option"]:checked').value;
+
+    getTreatmentPlan = selectedSolution.split('-')[0];
+    getTreatmentDesc = selectedSolution.split('-')[1];
+
+    // openPopupAutoFillPest(pestName,pestDescription,treatmentPlan,treatmentDesc);   
+});  
+
+ 
+function openPopupAutoFillPest(pestName,pestDescription,treatmentPlan,treatmentDesc) {
+    document.getElementsByClassName('popup-pest-autofill')[0].style.display = 'block'; 
+    document.getElementById('popup-pestDetection').style.display = 'none';
+    document.getElementById('overlay').style.display = 'block';  
+    generateAutoFillPestForm(pestName,pestDescription,treatmentPlan,treatmentDesc); 
+}
+
+
+function generateAutoFillPestForm(pestName,pestDescription,treatmentPlan,treatmentDesc){
+    const container = document.getElementsByClassName('popup-pest-autofill')[0]; 
+    const form = createFormCropRecommendation(pestName,pestDescription,treatmentPlan,treatmentDesc);
+    container.appendChild(form);
+}
+  
+
+
+
+
+// Autofill form data ends here ------------------------------
 
 var pestID;
 editButtonEventListener();

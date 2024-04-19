@@ -12,6 +12,10 @@
 <body> 
     <div class="content" id="main-content">  
 
+        <div style="display: none;" id="popup-pest-autofill" class="popup-pest-autofill">   
+            <span class="close" onclick="closePopup()">&times;</span>
+        </div>
+
         <div class="pest-details" style="display: none;">  
             <div class="container2">
                 <div class="top-section"> 
@@ -154,7 +158,7 @@
                 <label id="label-pestSolution" for="label-pestSolution"></label>   
                 <label id="generated-solution" for="generated-solution"></label>    
                 <div id="radioButtonsContainer"></div>
-                <button>Autofill Pest Form</button> 
+                <button class="autofill-pest-form">Autofill Pest Form</button> 
         </div> 
     </div> 
 
@@ -175,6 +179,7 @@
 
         </form>         
     </div> 
+
 
 </body>
 

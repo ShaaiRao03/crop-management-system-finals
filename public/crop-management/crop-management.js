@@ -689,7 +689,7 @@ function createFormCropRecommendation(cropName) {
         <input type="text" id="coveredArea" name="coveredArea"><br>
 
         <div class="button-container">
-            <button type="submit" onclick="submitNewCrop2(event)" class="submit-new-crop">Submit</button>
+            <button type="submit" onclick="submitNewCrop(event)" class="submit-new-crop">Submit</button>
             <button class="clear-btn">Clear</button> 
         </div>
     `; 
@@ -753,11 +753,6 @@ function fetchFieldNames3() {
 
 
 
-document.getElementsByClassName("submit-new-crop")[0].addEventListener('click', function() {
-    console.log('clicked');
-    submitNewCrop() 
-});
-
 function generateAutoFillCropForm(cropName){
     const container = document.getElementsByClassName('popup-crop-autofill')[0]; 
     const form = createFormCropRecommendation(cropName);
@@ -765,7 +760,7 @@ function generateAutoFillCropForm(cropName){
 }
   
 
-function submitNewCrop2(event){    
+function submitNewCrop(event){    
     event.preventDefault(); 
     
     const form = document.getElementById('cropForm2');

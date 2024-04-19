@@ -1149,10 +1149,17 @@ function fetchFieldNames3() {
 
 document.getElementsByClassName("autofill-pest-form")[0].addEventListener('click', function() { 
     const selectedSolution = document.querySelector('input[name="option"]:checked').value;
+    const pestName = document.getElementById("pestName").value;
+    const pestDescription = document.getElementById("pestDescription").value 
 
     getTreatmentPlan = selectedSolution.split('-')[0];
-    getTreatmentDesc = selectedSolution.split('-')[1];
+    getTreatmentDesc = selectedSolution.split('-')[1]; 
+    // getPestName = pestName.split(':')[1]
+    getPestName = pestName.split(':')[1]
+    getPestDescription = pestDescription 
 
+    console.log(getPestName , getPestDescription) 
+ 
     // openPopupAutoFillPest(pestName,pestDescription,treatmentPlan,treatmentDesc);   
 });  
 

@@ -261,6 +261,63 @@ function updatePestDetails(pestID){
 // Pest details ends -------------------- 
 
 // submit form
+// document.getElementById('pestForm').addEventListener('submit', function(event) {
+//     event.preventDefault(); // Prevent default form submission
+    
+//     // Fetch form inputs
+//     const name = document.getElementById('name').value.trim();
+//     const field = document.getElementById('field').value.trim();
+//     const pestDesc = document.getElementById('pestDesc').value.trim();
+//     const treatment = document.getElementById('treatment').value.trim();
+//     const treatmentDesc = document.getElementById('treatmentDesc').value.trim();
+//     const treatmentStartDate = document.getElementById('treatmentStartDate').value.trim();
+//    // const product = document.getElementById('product').value.trim();
+//     //const inventoryUsed = document.getElementById('inventoryUsed').value.trim();
+//     const pic = document.getElementById('pic').value.trim();
+
+
+//     //const amount= document.getElementById('amount').value.trim();
+
+//     // Validate required fields
+//     if (!field || !name || !pestDesc || !treatment || !treatmentDesc || !treatmentStartDate || !pic) {
+//         alert('Please fill in all required fields.');
+//         return; // Exit the function
+//     }
+
+//     const image = document.getElementById('image').files[0];
+//     console.log(image)  
+
+//     fetchUserID()
+//     .then(user_userID => { 
+
+//         userID = user_userID[0].userID 
+//         console.log(userID) 
+//         // Submit the form data to the API 
+//         return fetch('/submit_pest', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },  
+//             // body: formData 
+//             body: JSON.stringify({name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc , image , userID})
+//         });
+//     })
+//     .then(response => {
+//         if (response.ok) { 
+//             // Form submitted successfully 
+//             alert('Form submitted successfully!');
+//         } else {
+//             throw new Error('Error submitting form.');
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//         alert('An error occurred while submitting the form. Please try again.');
+//     }); 
+
+// });
+
+
 document.getElementById('pestForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
     
@@ -271,29 +328,36 @@ document.getElementById('pestForm').addEventListener('submit', function(event) {
     const treatment = document.getElementById('treatment').value.trim();
     const treatmentDesc = document.getElementById('treatmentDesc').value.trim();
     const treatmentStartDate = document.getElementById('treatmentStartDate').value.trim();
-   // const product = document.getElementById('product').value.trim();
-    //const inventoryUsed = document.getElementById('inventoryUsed').value.trim();
-    const pic = document.getElementById('pic').value.trim();
-
-
-    //const amount= document.getElementById('amount').value.trim();
+    // const pic = document.getElementById('pic').value.trim();
 
     // Validate required fields
-    if (!field || !name || !pestDesc || !treatment || !treatmentDesc || !treatmentStartDate || !pic) {
+    if (!field || !name || !pestDesc || !treatment || !treatmentDesc || !treatmentStartDate ) {
         alert('Please fill in all required fields.');
         return; // Exit the function
     }
 
+    const image = document.getElementById('image').files[0];
+
     fetchUserID()
-    .then(userID => { 
+    .then(user_userID => { 
+        const userID = user_userID[0].userID;
+        console.log(userID);
+
+        // Create FormData object and append form data
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('field', field);
+        formData.append('pestDesc', pestDesc);
+        formData.append('treatment', treatment);
+        formData.append('treatmentDesc', treatmentDesc);
+        formData.append('treatmentStartDate', treatmentStartDate);
+        // formData.append('pic', pic);
+        formData.append('image', image); // Append image file
+
         // Submit the form data to the API 
         return fetch('/submit_pest', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },  
-            // body: formData 
-            body: JSON.stringify({name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc})
+            body: formData // Use FormData object as the body
         });
     })
     .then(response => {
@@ -308,8 +372,9 @@ document.getElementById('pestForm').addEventListener('submit', function(event) {
         console.error('Error:', error);
         alert('An error occurred while submitting the form. Please try again.');
     }); 
-
 });
+
+
 
 function fetchUserID() {
     return new Promise((resolve, reject) => {  

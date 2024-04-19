@@ -75,7 +75,7 @@ function renderTable(data) {
 
     setTimeout(function() { 
             
-        console.log(data)  
+        console.log(data)   
 
         //the table
         var table = $('#example').DataTable(); 

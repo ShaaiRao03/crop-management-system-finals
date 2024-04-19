@@ -427,26 +427,84 @@ app.post('/getPestInfoByID', (req, res) => {
 });
 
 
-app.post('/submit_pest', (req, res) =>{ 
+// app.post('/submit_pest', upload.single('image'), (req, res) =>{ 
+//     // Access form data
+//     console.log('insert statement starts');
+//     const {name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc, image , userID} = req.body;
+//     const imageFile = image;
+
+//     let fileData = null;
+//     if (imageFile) {
+//         fileData = fs.readFileSync(imageFile.path); // Read the file synchronously
+//         fs.unlinkSync(imageFile.path); // Remove the temporary file after reading
+//     }
+
+//     console.log(fileData)
+//     console.log(userID)
+ 
+//     const sql = 'INSERT INTO pest_management (currentPest, treatmentPlan, field_crop_id, treatmentStartDate, pest_description, userID, treatment_description) VALUES (?, ?, ?, ?, ?, ?, ?)';
+//     // const values = [formData.name, formData.treatment, formData.field, formData.product, formData.inventoryUsed, formData.treatmentStartDate, formData.pestDesc, formData.pic, formData.amount, formData.treatmentDesc];
+//     const values = [name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc];
+//     console.log('data inserted');
+
+//     db.query(sql, values, (err, result) => {  
+//         if (err) { 
+//             console.error('Error inserting data into database:', err);
+//             res.status(500).json({ message: 'Error submitting form.' });
+//             return;
+//         }
+//         console.log('Form data inserted successfully'); 
+//         res.status(200).json({ message: 'Form submitted successfully!' });
+//     });
+// });
+
+app.post('/submit_pest', upload.single('image'), (req, res) => {
     // Access form data
     console.log('insert statement starts');
-    const {name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc} = req.body;
- 
-    const sql = 'INSERT INTO pest_management (currentPest, treatmentPlan, field_crop_id, treatmentStartDate, pest_description, userID, treatment_description) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    // const values = [formData.name, formData.treatment, formData.field, formData.product, formData.inventoryUsed, formData.treatmentStartDate, formData.pestDesc, formData.pic, formData.amount, formData.treatmentDesc];
-    const values = [name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc];
-    console.log('data inserted');
+    const { name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc, userID } = req.body;
 
-    db.query(sql, values, (err, result) => {  
-        if (err) { 
-            console.error('Error inserting data into database:', err);
-            res.status(500).json({ message: 'Error submitting form.' });
-            return;
+    const imageFile = req.file; // Access uploaded image file from req.file
+
+    // Ensure that the image file exists
+    if (!imageFile) {
+        return res.status(400).json({ message: 'Image file not provided.' });
+    }
+
+    // Read the image file asynchronously
+    fs.readFile(imageFile.path, (err, fileData) => {
+        if (err) {
+            console.error('Error reading image file:', err);
+            return res.status(500).json({ message: 'Error reading image file.' });
         }
-        console.log('Form data inserted successfully'); 
-        res.status(200).json({ message: 'Form submitted successfully!' });
+
+        // Remove the temporary file after reading
+        fs.unlink(imageFile.path, (unlinkErr) => {
+            if (unlinkErr) {
+                console.error('Error removing temporary image file:', unlinkErr);
+            }
+
+            console.log(fileData);
+            console.log(userID);
+
+            const sql = 'INSERT INTO pest_management (currentPest, treatmentPlan, field_crop_id, treatmentStartDate, pest_description, treatment_description, img, userID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+            const values = [name, treatment, field, treatmentStartDate, pestDesc, treatmentDesc, fileData, userID]; // Add fileData to values array
+            console.log('Data inserted');
+
+            db.query(sql, values, (dbErr, result) => {
+                if (dbErr) {
+                    console.error('Error inserting data into database:', dbErr);
+                    return res.status(500).json({ message: 'Error submitting form.' });
+                }
+                console.log('Form data inserted successfully');
+                res.status(200).json({ message: 'Form submitted successfully!' });
+            });
+        });
     });
 });
+
+
+
+
 
 app.post('/updatePestDetails', (req, res) => { 
     // Access updated details from the request body

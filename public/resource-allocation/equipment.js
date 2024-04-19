@@ -296,7 +296,7 @@ function updateEquipmentDetails(serialNum){
         // Handling images -----------------------------
          
         // imageData contains the Buffer object retrieved from the database
-        var imageData = equipmentData.img 
+        var imageData = equipmentData.img  
         
         if(imageData){
             // convert the Buffer object to a Uint8Array   

@@ -40,3 +40,11 @@ To deploy the Crop Management System:
 4. Download the SQL file and import it into the database.
 
 5. Enter the command 'npm start' in the terminal and go to 'localhost:5000' in the browser. Ensure that port number '5000' is not in use to ensure smooth system operation.
+
+## Programming Language / Technologies used
+
+- **Frontend**: HTML and CSS
+  
+- **Backend**: Javascript , Express JS , Node JS
+
+- **Other technologies**: Huggingface model , Google Cloud Platform , OpenWeatherMap API 

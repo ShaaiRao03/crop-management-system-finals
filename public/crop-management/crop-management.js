@@ -202,7 +202,14 @@ function recommendCrop(event){
         return response.json();
     }).then(data => {
          
-        console.log(data);
+        fieldData = data[0];
+
+        currLat = fieldData.latitude;
+        currLng = fieldData.longitude;
+
+        console.log(currLat)
+        console.log(currLng)
+
         document.querySelector('.crop-preview').style.display = 'none';
         document.getElementById("label-cropPreview").textContent= ""
         var container = document.getElementById('radioButtonsContainer');
@@ -215,12 +222,74 @@ function recommendCrop(event){
             console.error('Container element with ID "radioButtonsContainer" not found.'); 
         }
 
-        value = document.getElementById('crop-field-recommendation').value;
+        value = document.getElementById('crop-field-recommendation').value; 
+
         if(value == ""){
             alert("Please select a field"); 
             return;
         } else {
-            showRecommendedCrop("Suggest me 5 crops that is suitable to be planted in Malaysia. Strictly give me the name only. Dont give me any descriptions apart from name.Give reason why you suggested the crop. Separate the reason by using '-'. Thank you. ");
+            // showRecommendedCrop("Suggest me 5 crops that is suitable to be planted in Malaysia. Strictly give me the name only. Dont give me any descriptions apart from name.Give reason why you suggested the crop. Separate the reason by using '-'. Thank you. ");
+            
+            fetch('/getLatestNutrientDataGivenID', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }, 
+                body: JSON.stringify({ fieldID }),           
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(nutrientData => {
+
+                n = nutrientData[0].nitrogen_N; 
+                p = nutrientData[0].phosphorus_P;
+                k = nutrientData[0].potassium_K; 
+                
+
+                fetch('/getWeatherDataGivenCoord', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }, 
+                    body: JSON.stringify({ currLat , currLng }),            
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(weatherData => {
+    
+                    console.log(weatherData);
+
+                    const humidity = weatherData.list[0].main.humidity;
+                    const temperature = weatherData.list[0].main.temp;
+
+                    console.log("Humidity:", humidity);
+                    console.log("Temperature:", temperature);
+                        
+                    showRecommendedCrop(`Suggest me 5 crops that is suitable to be planted with the following condition. The nutrients for the field are as following : nitrogen = ${n}, phosphorus = ${p} , potassium = ${k}. The weather data for the field are as following : temperature = ${temperature} , humidity = ${humidity} Strictly give me the name only. Dont give me any descriptions apart from name.Give reason why you suggested the crop. Separate the reason by using '-'. Thank you. `);
+                    
+                    // showRecommendedCrop("Suggest me 5 crops that is suitable to be planted in Malaysia. Strictly give me the name only. Dont give me any descriptions apart from name.Give reason why you suggested the crop. Separate the reason by using '-'. Thank you. ");
+
+                })
+                .catch(error => {
+                    console.error('Error fetching nutrient data:', error);
+                });
+
+
+
+            })
+            .catch(error => {
+                console.error('Error fetching nutrient data:', error);
+            });
+        
+            
         }
 
     }).catch(error => {
@@ -1138,6 +1207,13 @@ function fetchFieldNames3() {
     });
 } 
 
+
+var currTemp; 
+var n;
+var p; 
+var k; 
+var currLat;
+var currLng;
 var currentChosenCrop;
 var currentPlan;
 var fieldCropID;  

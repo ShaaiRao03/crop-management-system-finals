@@ -787,6 +787,66 @@ app.post('/getFieldInfoByID', (req, res) => {
         });
 }); 
 
+const fetchWeatherForecast = async (latitude, longitude) => {
+    const apiKey = '0e0ca3df46cc04a4bfe39ce905df666e';
+    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const weatherData = await response.json();
+        return weatherData;
+    } catch (error) {
+        throw new Error('Error fetching weather forecast:', error);
+    }
+};
+
+
+
+app.post('/getWeatherDataGivenCoord', async (req, res) => {
+    const { currLat , currLng } = req.body;
+
+    try {
+        // Call the fetchWeatherForecast function
+        const weatherForecast = await fetchWeatherForecast(currLat , currLng); 
+        res.status(200).json(weatherForecast); // Send the result back to the client
+    } catch (error) {
+        res.status(500).json({ error: error.message }); // Send the error back to the client
+    }
+}); 
+
+
+app.post('/getLatestNutrientDataGivenID', (req, res) => {
+
+    const { fieldID } = req.body; 
+
+    const sqlQuery1 = `SELECT * FROM nutrients_monitoring WHERE date = (SELECT MAX(date) FROM nutrients_monitoring WHERE field_ID = ${fieldID});`     
+
+    // Wrapping the database query inside a promise
+    const executeQuery = () => {
+        return new Promise((resolve, reject) => {
+            db.query(sqlQuery1, (error1, results1) => { 
+                if (error1) {
+                    reject({ error: 'Error querying table2' });
+                } else {
+                    resolve(results1);
+                }
+            }); 
+        });
+    };
+
+    // Call the function that returns the promise
+    executeQuery()
+        .then((data) => {
+            res.status(200).json(data); // Send the result back to the client
+        })
+        .catch((error) => {
+            res.status(500).json(error); // Send the error back to the client
+        });
+}); 
+
 
 
 

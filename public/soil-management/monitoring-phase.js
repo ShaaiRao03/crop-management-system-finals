@@ -45,27 +45,71 @@ $('#fieldSelect').on('change', function() {
     });
 });
 
-function renderTable(data) {
-    // Destroy existing DataTable instance
-    $('#example').DataTable().destroy();
+// function renderTable(data) {
 
-    // Render the table with the fetched data
-    const table = $('#example').DataTable({
-        data: data,
-        columns: [
-            { data: 'nitrogen_N' },
-            { data: 'potassium_K' },
-            { data: 'sulphur_S' },
-            { data: 'boron_B' },
-            { data: 'phosphorus_P' },
-            { data: 'magnesium_Mg' },
-            { data: 'calcium_Ca' },
-            { data: 'copper_Cu' },
-            { data: 'date' }
-        ],
-        destroy: true // Destroy previous DataTable instance
-    });
+//     console.log(data)
+//     // Destroy existing DataTable instance
+//     $('#example').DataTable().destroy();
+
+//     // Render the table with the fetched data
+//     const table = $('#example').DataTable({
+//         data: data,
+
+//         columns: [
+//             { data: 'nitrogen_N' },
+//             { data: 'potassium_K' },
+//             { data: 'sulphur_S' },
+//             { data: 'boron_B' },
+//             { data: 'phosphorus_P' },
+//             { data: 'magnesium_Mg' },
+//             { data: 'calcium_Ca' },
+//             { data: 'copper_Cu' },
+//             { data: 'date' }
+//         ],
+//         destroy: true // Destroy previous DataTable instance
+//     });
+// }
+
+
+function renderTable(data) {
+
+    setTimeout(function() { 
+            
+        console.log(data)  
+
+        //the table
+        var table = $('#example').DataTable(); 
+        
+        table.destroy();
+
+        // Map data and create rows 
+        data.forEach(item => {
+
+            const startDate = item.date;
+            const startDateAmended = startDate.split('T'); 
+
+
+            const row = `<tr> 
+                <td>${item.nitrogen_N}</td>
+                <td>${item.potassium_K}</td>
+                <td>${item.sulphur_S}</td>
+                <td>${item.boron_B}</td>
+                <td>${item.phosphorus_P}</td>
+                <td>${item.magnesium_Mg}</td>
+                <td>${item.calcium_Ca}</td>
+                <td>${item.copper_Cu}</td>
+                <td>${startDateAmended[0]}</td>  
+            </tr>`;
+ 
+            // Add the row to the table
+            table.row.add($(row).get(0));
+        }); 
+        // Redraw the table  
+        table.draw(); 
+    }, 100); 
+    
 }
+
 
 function fetchFieldNames() {
     return new Promise((resolve, reject) => {  

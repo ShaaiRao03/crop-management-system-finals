@@ -123,7 +123,7 @@ function fetchPestRecord(pestID) {
                 }
                 return response.json(); 
             })   
-            .then(data => {
+            .then(data => { 
                 resolve(data); // Resolve with the fetched data
             })
             .catch(error => { 
@@ -1066,27 +1066,27 @@ function createFormPestDetection(pestName,pestDescription,treatmentPlan,treatmen
     form.innerHTML = `   
             <label class="form-title">Add New Pest</label> 
             <label for="name">Pest Name:</label>
-            <input type="text" id="name" name="name" value=${pestName} required><br>
+            <input type="text" id="name" name="name" value="${pestName}" required><br>
 
             <label for="type">Field:</label>
             <select id="fieldRecom" name="field" style="height: 35px;">
             </select>
         
             <label for="pestDesc">Pest description:</label> <!--autofill-->
-            <input type="text" id="pestDesc" name="pestDesc" value=${pestDescription}><br>
+            <input type="text" id="pestDesc" name="pestDesc" value="${pestDescription}"><br>
         
             <label for="treatment">Treatment Plan:</label>
-            <input type="text" id="treatment" name="treatment" value=${treatmentPlan}><br>
+            <input type="text" id="treatment" name="treatment" value="${treatmentPlan}"><br>
         
             <label for="treatmentDesc">Treatment Description:</label> <!--autofill--> 
-            <input type="text" id="treatmentDesc" name="treatmentDesc" value=${treatmentDesc}><br>
+            <input type="text" id="treatmentDesc" name="treatmentDesc" value="${treatmentDesc}"><br> 
 
             <label for="treatmentStartDate">Treatment Start Date:</label>
             <input type="date" id="treatmentStartDate" name="treatmentStartDate"><br>
         
 
             <label for="image">Upload Image:</label> 
-            <input type="file" id="image2" name="image"><br>
+            <input type="file" id="image3" name="image"><br>
         
             <div class="button-container">
                 <button type="submit" onclick="submitNewPest(event)" class="submit-new-pest">Submit</button>
@@ -1149,18 +1149,22 @@ function fetchFieldNames3() {
 
 document.getElementsByClassName("autofill-pest-form")[0].addEventListener('click', function() { 
     const selectedSolution = document.querySelector('input[name="option"]:checked').value;
-    const pestName = document.getElementById("pestName").value;
-    const pestDescription = document.getElementById("pestDescription").value 
-
-    getTreatmentPlan = selectedSolution.split('-')[0];
-    getTreatmentDesc = selectedSolution.split('-')[1]; 
-    // getPestName = pestName.split(':')[1]
-    getPestName = pestName.split(':')[1]
-    getPestDescription = pestDescription 
-
-    console.log(getPestName , getPestDescription) 
+    const pestDescription = document.getElementById("pestDescription").textContent 
+    
+    //pest name 
+    const pestNameLabel = document.getElementById("pestName");
+    const pestName = pestNameLabel.textContent
  
-    // openPopupAutoFillPest(pestName,pestDescription,treatmentPlan,treatmentDesc);   
+    getTreatmentPlan = selectedSolution.split(':')[0];   
+    getTreatmentDesc = selectedSolution.split(':')[1]; 
+    getPestName = pestName.split(':')[1]  
+    getPestDescription = pestDescription 
+ 
+
+    console.log(getTreatmentDesc) 
+
+    openPopupAutoFillPest(getPestName,getPestDescription,getTreatmentPlan,getTreatmentDesc);   
+
 });  
 
  
@@ -1174,14 +1178,73 @@ function openPopupAutoFillPest(pestName,pestDescription,treatmentPlan,treatmentD
 
 function generateAutoFillPestForm(pestName,pestDescription,treatmentPlan,treatmentDesc){
     const container = document.getElementsByClassName('popup-pest-autofill')[0]; 
-    const form = createFormCropRecommendation(pestName,pestDescription,treatmentPlan,treatmentDesc);
+    const form = createFormPestDetection(pestName,pestDescription,treatmentPlan,treatmentDesc);
     container.appendChild(form);
 }
   
 
+function submitNewPest(event){    
+    event.preventDefault(); 
+    
+    const form = document.getElementById('pestDetection2');
+    console.log(form)
+
+    // Access the input fields by their IDs
+    const field = form.querySelector('#fieldRecom').value; 
+    const name = form.querySelector('#name').value; 
+    const pestDesc = form.querySelector('#pestDesc').value; 
+    const treatment = form.querySelector('#treatment').value; 
+    const treatmentDesc = form.querySelector('#treatmentDesc').value; 
+    const treatmentStartDate = form.querySelector('#treatmentStartDate').value;  
+ 
+
+    if (!field || !name || !pestDesc || !treatment || !treatmentDesc || !treatmentStartDate ) {
+        alert('Please fill in all required fields.');
+        return; // Exit the function
+    }
+
+    const image = document.getElementById('image3').files[0];
+
+    fetchUserID()
+    .then(user_userID => { 
+        const userID = user_userID[0].userID;
+        console.log(userID);
+
+        // Create FormData object and append form data
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('field', field);
+        formData.append('pestDesc', pestDesc);
+        formData.append('treatment', treatment);
+        formData.append('treatmentDesc', treatmentDesc);
+        formData.append('treatmentStartDate', treatmentStartDate);
+        formData.append('image', image); // Append image file
+        formData.append('userID', userID);
 
 
+        // Submit the form data to the API 
+        return fetch('/submit_pest', {
+            method: 'POST',
+            body: formData // Use FormData object as the body 
+        });  
+    })
+    .then(response => {
+        if (response.ok) {  
+            // Form submitted successfully 
+            alert('Form submitted successfully!');
+            refetchData() 
+            closePopup() 
+        } else {
+            throw new Error('Error submitting form.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    }); 
+   
+}
 
+ 
 // Autofill form data ends here ------------------------------
 
 var pestID;

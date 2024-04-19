@@ -491,10 +491,10 @@ app.post('/submit_pest', upload.single('image'), (req, res) => {
             console.log('Data inserted');
 
             db.query(sql, values, (dbErr, result) => {
-                if (dbErr) {
+                if (dbErr) { 
                     console.error('Error inserting data into database:', dbErr);
                     return res.status(500).json({ message: 'Error submitting form.' });
-                }
+                } 
                 console.log('Form data inserted successfully');
                 res.status(200).json({ message: 'Form submitted successfully!' });
             });

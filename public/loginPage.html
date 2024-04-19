@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crop Management System</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
   <style>
     
     .login-body {
@@ -85,18 +86,36 @@
       color: #251e43;
       text-decoration: none;
     }
-
+ 
     .forgot-password:hover {
       text-decoration: underline;
     }
+
+    .img {
+    width: 200px; /* Adjust the width as needed */
+    height: auto;
+    border: 2px solid #fff; /* Add a border around the image */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+/* Apply styles to make the image rounded */
+.rounded-circle {
+    border-radius: 50%; /* Ensure the image is rounded */
+}
+
+/* Apply styles specific to the "logo" class */
+.logo {
+    display: block; /* Ensure the image behaves as a block element */
+    margin: 0 auto; /* Center the image horizontally */
+}
   </style>
  
 </head> 
 <body class="login-body">
  
     <div class="login-container">
-        <h2>Crop Management System</h2>
-        
+        <img class="img  rounded-circle  logo" src="img/logo.jpg" alt="Description of your image">
+        <h2>Crop Management System</h2>      
         <form onsubmit="return false;" id="form"> 
             <input type="text" class="form-control" id="username"  autocomplete="off" placeholder="Username" required>
             <input type="password" class="form-control" id="password" placeholder="Password"  autocomplete="off" required>

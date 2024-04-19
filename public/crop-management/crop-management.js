@@ -60,7 +60,7 @@ function populateData(){
     });  
 }   
 
-function rePopulateData(){
+function rePopulateData(){ 
     fetchCropData() 
     .then(data => { 
         // adding some delay to ensure jquery is fully loaded 
@@ -71,7 +71,7 @@ function rePopulateData(){
             //the table
             var table = $('#example').DataTable(); 
             
-            table.destroy();
+            table.clear(); 
     
             // Map data and create rows 
             data.forEach(item => {
@@ -84,7 +84,7 @@ function rePopulateData(){
                     <td>${item.fieldName}</td>
                     <td><a href="#" class="table-link" onclick="showCropPlan('${item.field_crop_id}')">${item.cropName}</a></td>  
                     <td>${item.coveredArea}</td>   
-                </tr>`;
+                </tr>`; 
      
                 // Add the row to the table
                 table.row.add($(row).get(0));
@@ -95,7 +95,7 @@ function rePopulateData(){
     }) 
     .catch(error => {
         console.error('Error fetching equipment data:', error);
-    });  
+    });   
 }   
  
 
@@ -721,7 +721,6 @@ function createFormCropRecommendation(cropName) {
 
     });
 
-
     return form; 
 } 
 
@@ -804,16 +803,18 @@ function insertCropDataIntoDatabase(form) {
             throw new Error('Network response was not ok');  
         }
         return response.json();
-    })
+    })  
     .then(data => {
         console.log('Form data inserted successfully:', data);
+        alert('Form submitted successfully!');
+        rePopulateData()
+        closePopup() 
         // Handle successful insertion
     })
     .catch(error => {
         console.error('Error inserting form data into database:', error);
         // Handle the error
     }); 
-
 }
 
 // dynamic form for auto fill generate plan -------------------------------------
@@ -895,7 +896,7 @@ function insertPlanDataIntoDatabase(forms) {
 
         // Make a POST request to the /insertCropPlan endpoint
         fetch('/insertCropPlan', {
-            method: 'POST',
+            method: 'POST',  
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -904,18 +905,22 @@ function insertPlanDataIntoDatabase(forms) {
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');  
-            }
+            } 
             return response.json();
         })
         .then(data => {
             console.log('Form data inserted successfully:', data);
-            // Handle successful insertion
+            // Handle successful insertion 
         })
         .catch(error => {
             console.error('Error inserting form data into database:', error);
-            // Handle the error
-        });
+            // Handle the error 
+        });  
     });
+    alert("Data has been successfully inserted !")
+
+    rePopulateDataPlan(fieldCropID)
+    closePopup() 
 }
 
 
@@ -927,7 +932,7 @@ function updateEntirePlanStatus(fieldCropID){
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ fieldCropID }), 
-            })
+            }) 
             .then(response => {
                 if (!response.ok) {  
                     throw new Error('Network response was not ok');

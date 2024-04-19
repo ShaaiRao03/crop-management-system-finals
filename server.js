@@ -461,7 +461,7 @@ app.post('/getPestInfoByID', (req, res) => {
 app.post('/submit_pest', upload.single('image'), (req, res) => {
     // Access form data
     console.log('insert statement starts');
-    const { name, treatment, field, treatmentStartDate, pestDesc, pic, treatmentDesc, userID } = req.body;
+    const { name, treatment, field, treatmentStartDate, pestDesc, treatmentDesc, userID } = req.body;
 
     const imageFile = req.file; // Access uploaded image file from req.file
 

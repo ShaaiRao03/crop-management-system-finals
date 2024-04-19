@@ -336,7 +336,7 @@ document.getElementById('pestForm').addEventListener('submit', function(event) {
         return; // Exit the function
     }
 
-    const image = document.getElementById('image').files[0];
+    const image = document.getElementById('image2').files[0];
 
     fetchUserID()
     .then(user_userID => { 
@@ -353,6 +353,8 @@ document.getElementById('pestForm').addEventListener('submit', function(event) {
         formData.append('treatmentStartDate', treatmentStartDate);
         // formData.append('pic', pic);
         formData.append('image', image); // Append image file
+        formData.append('userID', userID);
+
 
         // Submit the form data to the API 
         return fetch('/submit_pest', {
@@ -485,6 +487,7 @@ function previewImage() {
     var input = document.getElementById('image');
     var preview = document.getElementById('preview');
     var file = input.files[0];
+ 
 
     if (file) { 
 
